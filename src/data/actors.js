@@ -1,0 +1,60 @@
+export const actors = [
+  {
+    id: 'united-states',
+    name: 'United States',
+    type: 'great-power',
+    summary:
+      'Uses market scale, treaty design, domestic regulation, export controls, sanctions, standards, and institutional leadership to shape international economic rules.',
+    topicIds: [
+      'united-states',
+      'digital-trade-ecommerce',
+      'wto-reform',
+      'monetary-financial-regulation',
+      'ai-governance',
+    ],
+  },
+  {
+    id: 'european-union',
+    name: 'European Union',
+    type: 'great-power',
+    summary:
+      'Projects regulatory preferences through market access, internal legislation, adequacy and equivalence decisions, trade agreements, and institutional diplomacy.',
+    topicIds: [
+      'european-union',
+      'digital-trade-ecommerce',
+      'cyber-data-governance',
+      'ai-governance',
+      'international-investment',
+    ],
+  },
+  {
+    id: 'china',
+    name: 'China',
+    type: 'great-power',
+    summary:
+      'Combines participation in existing institutions with domestic regulatory development, standards activity, development initiatives, and alternative institutional projects.',
+    topicIds: [
+      'china',
+      'digital-trade-ecommerce',
+      'wto-reform',
+      'international-investment',
+      'monetary-financial-regulation',
+    ],
+  },
+  {
+    id: 'singapore',
+    name: 'Singapore',
+    type: 'middle-power',
+    summary:
+      'Acts as a digital economy rule entrepreneur through digital economy agreements, paperless trade initiatives, and coalition-building.',
+    topicIds: ['middle-small-powers', 'digital-trade-ecommerce', 'cyber-data-governance'],
+  },
+  {
+    id: 'new-zealand',
+    name: 'New Zealand',
+    type: 'middle-power',
+    summary:
+      'Uses coalition-building and digital economy agreements to influence rules beyond its market size.',
+    topicIds: ['middle-small-powers', 'digital-trade-ecommerce'],
+  },
+];
