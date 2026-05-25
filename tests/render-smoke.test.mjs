@@ -20,6 +20,14 @@ test('view renderers include core portal sections', () => {
   assert.match(renderDatabase(), /Rule-Making Records/);
 });
 
+test('stylesheet includes database interface selectors', async () => {
+  const css = await readFile(new URL('../src/styles.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.filters\b/);
+  assert.match(css, /\.record-row\b/);
+  assert.match(css, /\.timeline-list\b/);
+});
+
 test('database renderer escapes unsafe query text', () => {
   const originalLocation = globalThis.location;
   globalThis.location = { hash: '#/database?q=<script>' };
