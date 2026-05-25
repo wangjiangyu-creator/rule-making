@@ -25,13 +25,38 @@ function recordsForActor(actorId) {
 
 function renderTopicLinks(topicIds) {
   return asList(topicIds)
-    .map((topicId) => {
-      const topic = topics.find((item) => item.id === topicId);
+    .map((item) => {
+      const topicId = typeof item === 'string' ? item : item.id;
+      const count = typeof item === 'string' ? null : item.count;
+      const topic = topics.find((entry) => entry.id === topicId);
       const label = topic?.title ?? topic?.shortTitle ?? humanizeId(topicId);
 
-      return `<a href="#/topics/${escapeHtml(topicId)}">${escapeHtml(label)}</a>`;
+      return `<a href="#/topics/${escapeHtml(topicId)}">${escapeHtml(label)}${count ? ` (${count})` : ''}</a>`;
     })
     .join(', ');
+}
+
+function summarizeTopics(linkedRecords) {
+  const countsByTopicId = new Map();
+
+  for (const record of linkedRecords) {
+    for (const topicId of asList(record.topics)) {
+      countsByTopicId.set(topicId, (countsByTopicId.get(topicId) ?? 0) + 1);
+    }
+  }
+
+  return [...countsByTopicId.entries()]
+    .map(([id, count]) => ({ id, count }))
+    .sort((left, right) => {
+      if (right.count !== left.count) {
+        return right.count - left.count;
+      }
+
+      const leftLabel = topics.find((topic) => topic.id === left.id)?.title ?? left.id;
+      const rightLabel = topics.find((topic) => topic.id === right.id)?.title ?? right.id;
+
+      return leftLabel.localeCompare(rightLabel);
+    });
 }
 
 function renderDimensionLinks(items) {
@@ -116,6 +141,7 @@ export function renderActorDetail(actorId) {
 
   const linkedRecords = recordsForActor(actor.id);
   const linkedDimensions = summarizeDimensions(linkedRecords);
+  const linkedTopics = summarizeTopics(linkedRecords);
 
   return `
     <section class="page-hero">
@@ -126,6 +152,10 @@ export function renderActorDetail(actorId) {
     <section>
       <h2>Linked topics</h2>
       <p>${renderTopicLinks(actor.topicIds)}</p>
+    </section>
+    <section>
+      <h2>Topic distribution</h2>
+      <p>${renderTopicLinks(linkedTopics)}</p>
     </section>
     <section>
       <h2>Rule-making dimensions</h2>

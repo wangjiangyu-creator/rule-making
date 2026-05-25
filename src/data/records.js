@@ -2,6 +2,7 @@ import { recordDimensionsById } from './record-dimensions.js';
 import { britainBatchRecords } from './records-britain-batch.js';
 import { thirdBatchRecords } from './records-third-batch.js';
 import { fourthBatchRecords } from './records-fourth-batch.js';
+import { fifthBatchRecords } from './records-fifth-batch.js';
 
 const baseRecords = [
   {
@@ -810,6 +811,7 @@ const baseRecords = [
   ...britainBatchRecords,
   ...thirdBatchRecords,
   ...fourthBatchRecords,
+  ...fifthBatchRecords,
 ];
 
 export const records = baseRecords.map((record) => ({
