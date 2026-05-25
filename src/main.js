@@ -19,6 +19,7 @@ function route() {
       </div>
     </section>
   `;
+  app.focus();
 }
 
 window.addEventListener('hashchange', route);
