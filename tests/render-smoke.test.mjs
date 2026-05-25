@@ -26,6 +26,7 @@ test('stylesheet includes database interface selectors', async () => {
   assert.match(css, /\.filters\b/);
   assert.match(css, /\.record-row\b/);
   assert.match(css, /\.timeline-list\b/);
+  assert.match(css, /overflow-wrap\s*:/);
 });
 
 test('database renderer escapes unsafe query text', () => {
