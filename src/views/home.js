@@ -56,7 +56,6 @@ export function renderHome() {
 
   return `
     <section class="page-hero">
-      <p class="site-attribution">This website was created with Codex by Professor Wang Jiangyu of CityUHK.</p>
       <p class="eyebrow">International economic governance</p>
       <h1>Great Powers and Rule-Making</h1>
       <p class="lede">
