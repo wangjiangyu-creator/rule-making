@@ -57,18 +57,41 @@ export function recordSearchText(record) {
     .join(' ');
 }
 
+function hasFilterValue(value) {
+  return String(value ?? '').trim() !== '';
+}
+
+function comparableDateValue(value) {
+  const text = String(value ?? '').trim();
+
+  if (/^\d{4}$/.test(text)) return `${text}-01-01`;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) return text;
+  return '';
+}
+
+function comparableRecordDate(record) {
+  return comparableDateValue(record.date) || comparableDateValue(record.year);
+}
+
 export function filterRecords(records, filters = {}) {
   const query = normalizeText(filters.query);
   const queryTokens = query.split(' ').filter(Boolean);
+  const dateFrom = comparableDateValue(filters.dateFrom);
+  const dateTo = comparableDateValue(filters.dateTo);
 
   return records.filter((record) => {
     const searchText = recordSearchText(record);
+    const recordDate = dateFrom || dateTo ? comparableRecordDate(record) : '';
 
     if (queryTokens.length > 0 && !queryTokens.every((token) => searchText.includes(token))) return false;
     if (filters.recordType && record.recordType !== filters.recordType) return false;
     if (filters.topic && !asList(record.topics).includes(filters.topic)) return false;
     if (filters.actor && !asList(record.actors).includes(filters.actor)) return false;
     if (filters.institution && !asList(record.institutions).includes(filters.institution)) return false;
+    if (filters.jurisdiction && !asList(record.jurisdictions).includes(filters.jurisdiction)) return false;
+    if (hasFilterValue(filters.year) && String(record.year) !== String(filters.year)) return false;
+    if (dateFrom && (!recordDate || recordDate < dateFrom)) return false;
+    if (dateTo && (!recordDate || recordDate > dateTo)) return false;
     if (filters.languageStatus && record.languageStatus !== filters.languageStatus) return false;
     if (filters.sourceAuthority && record.sourceAuthority !== filters.sourceAuthority) return false;
     return true;

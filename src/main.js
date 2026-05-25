@@ -92,12 +92,11 @@ function bindForms() {
 
         const formData = new FormData(form);
         const params = new URLSearchParams();
-        const fields = ['q', 'topic', 'actor', 'institution', 'recordType', 'languageStatus', 'sourceAuthority'];
 
-        for (const field of fields) {
-          const value = String(formData.get(field) ?? '').trim();
+        for (const [field, rawValue] of formData) {
+          const value = String(rawValue ?? '').trim();
 
-          if (value) params.set(field, value);
+          if (field && value) params.set(field, value);
         }
 
         globalThis.location.hash = params.toString() ? `#/database?${params.toString()}` : '#/database';

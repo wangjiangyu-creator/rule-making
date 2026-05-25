@@ -41,7 +41,17 @@ function currentFilters() {
     recordType: params.get('recordType') ?? '',
     languageStatus: params.get('languageStatus') ?? '',
     sourceAuthority: params.get('sourceAuthority') ?? '',
+    jurisdiction: params.get('jurisdiction') ?? '',
+    dateFrom: params.get('dateFrom') ?? '',
+    dateTo: params.get('dateTo') ?? '',
+    year: params.get('year') ?? '',
   };
+}
+
+function uniqueSortedOptions(values, sort = (left, right) => left.localeCompare(right)) {
+  return [...new Set(values.map((value) => String(value ?? '').trim()).filter(Boolean))]
+    .sort(sort)
+    .map((value) => ({ value, label: value }));
 }
 
 function renderOption(value, label, selectedValue) {
@@ -62,7 +72,21 @@ function renderSelect(name, label, options, selectedValue, emptyLabel) {
   `;
 }
 
+function renderDateInput(name, label, selectedValue) {
+  return `
+    <label>
+      <span>${escapeHtml(label)}</span>
+      <input name="${escapeHtml(name)}" type="date" value="${escapeHtml(selectedValue)}">
+    </label>
+  `;
+}
+
 function renderFilterForm(filters) {
+  const jurisdictionOptions = uniqueSortedOptions(records.flatMap((record) => asList(record.jurisdictions)));
+  const yearOptions = uniqueSortedOptions(records.map((record) => record.year), (left, right) =>
+    right.localeCompare(left),
+  );
+
   return `
     <form class="filter-form" data-filter-form>
       <label>
@@ -90,6 +114,10 @@ function renderFilterForm(filters) {
         filters.institution,
         'All institutions',
       )}
+      ${renderSelect('jurisdiction', 'Jurisdiction', jurisdictionOptions, filters.jurisdiction, 'All jurisdictions')}
+      ${renderSelect('year', 'Year', yearOptions, filters.year, 'All years')}
+      ${renderDateInput('dateFrom', 'Date from', filters.dateFrom)}
+      ${renderDateInput('dateTo', 'Date to', filters.dateTo)}
       ${renderSelect(
         'recordType',
         'Record type',
@@ -185,6 +213,10 @@ export function renderDatabase() {
       topic: filters.topic,
       actor: filters.actor,
       institution: filters.institution,
+      jurisdiction: filters.jurisdiction,
+      dateFrom: filters.dateFrom,
+      dateTo: filters.dateTo,
+      year: filters.year,
       recordType: filters.recordType,
       languageStatus: filters.languageStatus,
       sourceAuthority: filters.sourceAuthority,

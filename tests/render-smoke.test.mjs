@@ -21,6 +21,15 @@ test('view renderers include core portal sections', () => {
   assert.match(renderDatabase(), /Rule-Making Records/);
 });
 
+test('database renderer includes jurisdiction and date filter controls', () => {
+  const html = renderDatabase();
+
+  assert.match(html, /name="jurisdiction"/);
+  assert.match(html, /name="dateFrom"/);
+  assert.match(html, /name="dateTo"/);
+  assert.match(html, /name="year"/);
+});
+
 test('stylesheet includes database interface selectors', async () => {
   const css = await readFile(new URL('../src/styles.css', import.meta.url), 'utf8');
 
@@ -83,6 +92,122 @@ test('record detail renders unsafe source URLs as plain text', () => {
     assert.match(html, /\(invalid source URL\)/);
   } finally {
     records.pop();
+  }
+});
+
+test('database filter form submits named jurisdiction and date fields', async () => {
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  const originalLocation = globalThis.location;
+  const originalFormData = globalThis.FormData;
+  const formValues = {
+    q: '',
+    topic: '',
+    actor: '',
+    institution: '',
+    recordType: '',
+    languageStatus: '',
+    sourceAuthority: '',
+    jurisdiction: 'China',
+    dateFrom: '2020-01-01',
+    dateTo: '2020-12-31',
+    year: '2020',
+  };
+  const app = {
+    innerHTML: '',
+    focus() {},
+  };
+  let submitHandler;
+  const filterForm = {
+    hasAttribute(attribute) {
+      return attribute === 'data-filter-form';
+    },
+    addEventListener(event, handler) {
+      if (event === 'submit') {
+        submitHandler = handler;
+      }
+    },
+  };
+
+  class FakeFormData {
+    constructor(form) {
+      assert.equal(form, filterForm);
+    }
+
+    get(field) {
+      return formValues[field] ?? '';
+    }
+
+    entries() {
+      return Object.entries(formValues)[Symbol.iterator]();
+    }
+
+    [Symbol.iterator]() {
+      return this.entries();
+    }
+  }
+
+  globalThis.document = {
+    querySelector(selector) {
+      assert.equal(selector, '#app');
+      return app;
+    },
+    querySelectorAll(selector) {
+      assert.equal(selector, 'form');
+      return [filterForm];
+    },
+  };
+  globalThis.window = {
+    addEventListener() {},
+    scrollTo() {},
+    requestAnimationFrame(callback) {
+      callback();
+    },
+  };
+  globalThis.location = { hash: '#/database' };
+  globalThis.FormData = FakeFormData;
+
+  try {
+    const moduleUrl = new URL('../src/main.js', import.meta.url);
+    moduleUrl.search = `filter-form-smoke=${Date.now()}`;
+
+    await import(moduleUrl.href);
+    assert.equal(typeof submitHandler, 'function');
+
+    submitHandler({ preventDefault() {} });
+
+    assert.match(globalThis.location.hash, /^#\/database\?/);
+
+    const params = new URLSearchParams(globalThis.location.hash.split('?')[1]);
+
+    assert.equal(params.get('jurisdiction'), 'China');
+    assert.equal(params.get('dateFrom'), '2020-01-01');
+    assert.equal(params.get('dateTo'), '2020-12-31');
+    assert.equal(params.get('year'), '2020');
+  } finally {
+    if (originalDocument === undefined) {
+      delete globalThis.document;
+    } else {
+      globalThis.document = originalDocument;
+    }
+
+    if (originalWindow === undefined) {
+      delete globalThis.window;
+    } else {
+      globalThis.window = originalWindow;
+    }
+
+    if (originalLocation === undefined) {
+      delete globalThis.location;
+    } else {
+      globalThis.location = originalLocation;
+    }
+
+    if (originalFormData === undefined) {
+      delete globalThis.FormData;
+    } else {
+      globalThis.FormData = originalFormData;
+    }
   }
 });
 

@@ -219,6 +219,41 @@ test('search helpers filter records by query, topic, and actor', () => {
   );
 });
 
+test('search helpers filter records by jurisdiction', () => {
+  const chinaResults = filterRecords(records, { jurisdiction: 'China' });
+
+  assert.ok(chinaResults.length > 0, 'China jurisdiction filter returns records');
+  assert.ok(
+    chinaResults.every((record) => record.jurisdictions.includes('China')),
+    'jurisdiction filter only returns records whose jurisdictions include China',
+  );
+  assert.ok(
+    chinaResults.some((record) => record.id === 'china-data-security-law-2021'),
+    'China jurisdiction filter includes the China Data Security Law record',
+  );
+});
+
+test('search helpers filter records by date range', () => {
+  const dateResults = filterRecords(records, { dateFrom: '2020-01-01', dateTo: '2020-12-31' });
+  const resultIds = dateResults.map((record) => record.id);
+
+  assert.ok(resultIds.includes('depa-agreement-2020'), 'date range includes the DEPA record');
+  assert.ok(resultIds.includes('usmca-digital-trade-chapter-2020'), 'date range includes the USMCA record');
+  assert.ok(
+    !resultIds.includes('china-data-security-law-2021'),
+    'date range excludes the 2021 China Data Security Law record',
+  );
+});
+
+test('search helpers filter records by year', () => {
+  const yearResults = filterRecords(records, { year: '2020' });
+  const resultIds = yearResults.map((record) => record.id);
+
+  assert.ok(resultIds.includes('depa-agreement-2020'), 'year filter includes the DEPA record');
+  assert.ok(resultIds.includes('usmca-digital-trade-chapter-2020'), 'year filter includes the USMCA record');
+  assert.ok(yearResults.every((record) => record.year === 2020), 'year filter only returns 2020 records');
+});
+
 test('search helpers include source-link labels in query text', () => {
   const queryResults = filterRecords(records, { query: 'USTR' });
 
