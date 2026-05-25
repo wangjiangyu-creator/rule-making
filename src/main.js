@@ -63,7 +63,9 @@ function route() {
   }
 
   bindForms();
-  app.focus();
+  app.focus({ preventScroll: true });
+  window.scrollTo(0, 0);
+  window.requestAnimationFrame?.(() => window.scrollTo(0, 0));
 }
 
 function bindForms() {

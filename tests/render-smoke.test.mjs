@@ -6,10 +6,11 @@ import { renderTopics } from '../src/views/topics.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
 import { records } from '../src/data/records.js';
 
-test('index renders the static app mount and script', async () => {
+test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
+  assert.match(html, /href="\.\/src\/styles\.css"/);
   assert.match(html, /src="\.\/src\/main\.js"/);
   assert.match(html, /Great Powers and Rule-Making/);
 });
@@ -91,12 +92,12 @@ test('main renders hero content and focuses the app on route changes', async () 
   const originalLocation = globalThis.location;
   const app = {
     innerHTML: '',
-    focusCount: 0,
-    focus() {
-      this.focusCount += 1;
+    focus(options) {
+      routeEvents.push(['focus', options]);
     },
   };
   let hashchangeHandler;
+  const routeEvents = [];
 
   globalThis.document = {
     querySelector(selector) {
@@ -110,6 +111,13 @@ test('main renders hero content and focuses the app on route changes', async () 
         hashchangeHandler = handler;
       }
     },
+    scrollTo(...args) {
+      routeEvents.push(['scrollTo', args]);
+    },
+    requestAnimationFrame(callback) {
+      routeEvents.push(['requestAnimationFrame']);
+      callback();
+    },
   };
   globalThis.location = { hash: '#/' };
 
@@ -122,13 +130,23 @@ test('main renders hero content and focuses the app on route changes', async () 
     assert.match(app.innerHTML, /Great Powers and Rule-Making/);
     assert.match(app.innerHTML, /#\/topics\/digital-trade-ecommerce/);
     assert.match(app.innerHTML, /#\/database/);
-    assert.equal(app.focusCount, 1);
+    assert.deepEqual(routeEvents.slice(0, 4), [
+      ['focus', { preventScroll: true }],
+      ['scrollTo', [0, 0]],
+      ['requestAnimationFrame'],
+      ['scrollTo', [0, 0]],
+    ]);
     assert.equal(typeof hashchangeHandler, 'function');
 
     globalThis.location.hash = '#/database';
     hashchangeHandler();
 
-    assert.equal(app.focusCount, 2);
+    assert.deepEqual(routeEvents.slice(4, 8), [
+      ['focus', { preventScroll: true }],
+      ['scrollTo', [0, 0]],
+      ['requestAnimationFrame'],
+      ['scrollTo', [0, 0]],
+    ]);
   } finally {
     if (originalDocument === undefined) {
       delete globalThis.document;
