@@ -1,0 +1,100 @@
+import { records } from '../data/records.js';
+import { timeline } from '../data/timeline.js';
+import { topics } from '../data/topics.js';
+import { formatDate, recordTypeLabel } from '../lib/format.js';
+import { sortRecordsNewestFirst } from '../lib/search.js';
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function renderRecentRecord(record) {
+  return `
+    <li class="record-row">
+      <p class="eyebrow">${escapeHtml(recordTypeLabel(record.recordType))}</p>
+      <h3><a href="#/records/${escapeHtml(record.id)}">${escapeHtml(record.title)}</a></h3>
+      <p>${escapeHtml(record.summary)}</p>
+    </li>
+  `;
+}
+
+function renderTopicCard(topic) {
+  return `
+    <article class="topic-card">
+      <p class="eyebrow">${topic.pilot ? 'Pilot topic' : 'Research topic'}</p>
+      <h3><a href="#/topics/${escapeHtml(topic.id)}">${escapeHtml(topic.title)}</a></h3>
+      <p>${escapeHtml(topic.summary)}</p>
+    </article>
+  `;
+}
+
+function renderTimelineItem(entry) {
+  return `
+    <li>
+      <time datetime="${escapeHtml(entry.date)}">${escapeHtml(formatDate(entry.date))}</time>
+      <span>${escapeHtml(entry.title)}</span>
+    </li>
+  `;
+}
+
+export function renderHome() {
+  const digitalTradeTopic = topics.find((topic) => topic.id === 'digital-trade-ecommerce');
+  const recentRecords = sortRecordsNewestFirst(records).slice(0, 5);
+  const digitalTradeTimeline = timeline
+    .filter((entry) => entry.topicId === 'digital-trade-ecommerce')
+    .slice(0, 5);
+
+  return `
+    <section class="page-hero">
+      <p class="eyebrow">International economic governance</p>
+      <h1>Great Powers and Rule-Making</h1>
+      <p class="lede">
+        A research portal and structured database on how great powers shape rules,
+        institutions, and bargaining agendas in the international economic system.
+      </p>
+      <form class="search-form" data-global-search>
+        <label for="global-search">Search the rule-making database</label>
+        <div class="button-row">
+          <input id="global-search" name="query" type="search" autocomplete="off">
+          <button class="button button-primary" type="submit">Search</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="feature-panel">
+      <p class="eyebrow">Pilot research module</p>
+      <h2>Digital Trade and E-commerce pilot</h2>
+      <p>${escapeHtml(digitalTradeTopic?.summary ?? '')}</p>
+      <div class="button-row">
+        <a class="button button-primary" href="#/topics/digital-trade-ecommerce">Open Digital Trade Pilot</a>
+        <a class="button button-secondary" href="#/database?topic=digital-trade-ecommerce">Filter Database</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Recent records</h2>
+      <ol class="record-list">
+        ${recentRecords.map(renderRecentRecord).join('')}
+      </ol>
+    </section>
+
+    <section>
+      <h2>Topic atlas</h2>
+      <div class="card-grid">
+        ${topics.map(renderTopicCard).join('')}
+      </div>
+    </section>
+
+    <section>
+      <h2>Digital trade timeline preview</h2>
+      <ol class="timeline-list">
+        ${digitalTradeTimeline.map(renderTimelineItem).join('')}
+      </ol>
+    </section>
+  `;
+}

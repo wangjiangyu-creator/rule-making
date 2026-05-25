@@ -1,6 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { renderHome } from '../src/views/home.js';
+import { renderTopics } from '../src/views/topics.js';
+import { renderDatabase } from '../src/views/database.js';
 
 test('index renders the static app mount and script', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
@@ -8,6 +11,30 @@ test('index renders the static app mount and script', async () => {
   assert.match(html, /<main\s+id="app"/);
   assert.match(html, /src="\.\/src\/main\.js"/);
   assert.match(html, /Great Powers and Rule-Making/);
+});
+
+test('view renderers include core portal sections', () => {
+  assert.match(renderHome(), /Digital Trade/);
+  assert.match(renderTopics(), /Research Topics/);
+  assert.match(renderDatabase(), /Rule-Making Records/);
+});
+
+test('database renderer escapes unsafe query text', () => {
+  const originalLocation = globalThis.location;
+  globalThis.location = { hash: '#/database?q=<script>' };
+
+  try {
+    const html = renderDatabase();
+
+    assert.doesNotMatch(html, /value="<script>"/);
+    assert.doesNotMatch(html, /<script>/);
+  } finally {
+    if (originalLocation === undefined) {
+      delete globalThis.location;
+    } else {
+      globalThis.location = originalLocation;
+    }
+  }
 });
 
 test('main renders hero content and focuses the app on route changes', async () => {
