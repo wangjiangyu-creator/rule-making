@@ -142,6 +142,14 @@ test('records include usable source and summary metadata', () => {
   }
 });
 
+test('every topic has at least one linked record', () => {
+  const linkedTopicIds = new Set(records.flatMap((record) => (Array.isArray(record.topics) ? record.topics : [])));
+
+  for (const topic of topics) {
+    assert.ok(linkedTopicIds.has(topic.id), `${topic.id} has at least one linked record`);
+  }
+});
+
 test('pilot corpus covers digital trade plus investment and financial rulemaking', () => {
   const digitalTradeRecords = records.filter((record) => record.topics.includes('digital-trade-ecommerce'));
 
@@ -208,6 +216,15 @@ test('search helpers filter records by query, topic, and actor', () => {
   assert.ok(
     chinaResults.every((record) => record.actors.includes('china')),
     'actor filter only returns China records',
+  );
+});
+
+test('search helpers include source-link labels in query text', () => {
+  const queryResults = filterRecords(records, { query: 'USTR' });
+
+  assert.ok(
+    queryResults.some((record) => record.id === 'usmca-digital-trade-chapter-2020'),
+    'USTR query finds the USMCA record because source labels are searchable',
   );
 });
 

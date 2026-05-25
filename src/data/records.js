@@ -276,4 +276,82 @@ export const records = [
     relatedRecordIds: [],
     tags: ['imf', 'capital-flows', 'institutional-view', 'financial-stability'],
   },
+  {
+    id: 'abbott-snidal-hard-soft-law-2000',
+    title: 'Hard and Soft Law in International Governance',
+    alternateTitle: 'International Organization article on hard and soft law',
+    recordType: 'academic-article',
+    date: '2000',
+    year: 2000,
+    actors: [],
+    jurisdictions: ['Global'],
+    institutions: [],
+    topics: ['theories-rulemaking'],
+    summary:
+      'Abbott and Snidal frame hard and soft law as alternative governance tools with different contracting, delegation, and sovereignty costs.',
+    sourceAuthority: 'academic-publisher',
+    languageStatus: 'english-only',
+    sourceLinks: [
+      {
+        label: 'Cambridge Core article page',
+        url: 'https://www.cambridge.org/core/journals/international-organization/article/abs/hard-and-soft-law-in-international-governance/EC8091A89687FDF7FC9027D1717538BF',
+      },
+    ],
+    citation:
+      'Kenneth W. Abbott and Duncan Snidal, "Hard and Soft Law in International Governance," International Organization 54, no. 3 (2000): 421-456.',
+    relatedRecordIds: [],
+    tags: ['hard-law', 'soft-law', 'international-governance', 'rulemaking-theory'],
+  },
+  {
+    id: 'reich-lebow-good-bye-hegemony-2014',
+    title: 'Good-Bye Hegemony! Power and Influence in the Global System',
+    alternateTitle: 'Good-Bye Hegemony!',
+    recordType: 'book-chapter',
+    date: '2014-03-23',
+    year: 2014,
+    actors: [],
+    jurisdictions: ['Global'],
+    institutions: [],
+    topics: ['great-powers'],
+    summary:
+      'Reich and Lebow question hegemonic-order accounts and distinguish material power from influence in global rulemaking and governance.',
+    sourceAuthority: 'academic-publisher',
+    languageStatus: 'english-only',
+    sourceLinks: [
+      {
+        label: 'Princeton University Press book page',
+        url: 'https://cart.press.princeton.edu/good-bye-hegemony-pb.html',
+      },
+    ],
+    citation:
+      'Simon Reich and Richard Ned Lebow, Good-Bye Hegemony! Power and Influence in the Global System (Princeton University Press, 2014).',
+    relatedRecordIds: [],
+    tags: ['great-powers', 'hegemony', 'global-order', 'power-and-influence'],
+  },
+  {
+    id: 'oecd-ai-principles-2019',
+    title: 'OECD AI Principles',
+    alternateTitle: 'Recommendation of the Council on Artificial Intelligence',
+    recordType: 'institutional-document',
+    date: '2019-05-22',
+    year: 2019,
+    actors: [],
+    jurisdictions: ['OECD members'],
+    institutions: ['oecd'],
+    topics: ['ai-governance'],
+    summary:
+      'The OECD AI Principles set intergovernmental standards for trustworthy AI, linking innovation policy with human-centred governance commitments.',
+    sourceAuthority: 'official-international-organization',
+    languageStatus: 'official-english',
+    sourceLinks: [
+      {
+        label: 'OECD AI Principles official page',
+        url: 'https://www.oecd.org/en/topics/ai-principles.html',
+      },
+    ],
+    citation:
+      'OECD, OECD AI Principles / Recommendation of the Council on Artificial Intelligence, adopted 22 May 2019.',
+    relatedRecordIds: [],
+    tags: ['oecd', 'ai-principles', 'trustworthy-ai', 'ai-governance'],
+  },
 ];

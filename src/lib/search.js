@@ -12,6 +12,12 @@ function asList(value) {
   return Array.isArray(value) ? value : [];
 }
 
+function sourceLinkLabels(sourceLinks) {
+  return asList(sourceLinks).map((sourceLink) =>
+    sourceLink && typeof sourceLink === 'object' ? sourceLink.label : undefined,
+  );
+}
+
 export function recordSearchText(record) {
   return [
     record.title,
@@ -26,6 +32,7 @@ export function recordSearchText(record) {
     ...asList(record.institutions),
     ...asList(record.topics),
     ...asList(record.tags),
+    ...sourceLinkLabels(record.sourceLinks),
   ]
     .map((value) => normalizeText(value))
     .filter(Boolean)
