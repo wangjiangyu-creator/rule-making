@@ -4,6 +4,8 @@ import { recordTypes, languageStatuses, sourceAuthorities } from '../src/data/sc
 import { topics } from '../src/data/topics.js';
 import { actors } from '../src/data/actors.js';
 import { institutions } from '../src/data/institutions.js';
+import { records } from '../src/data/records.js';
+import { timeline } from '../src/data/timeline.js';
 
 const expectedRecordTypes = [
   'treaty-agreement',
@@ -90,6 +92,78 @@ test('actor and institution topic references resolve', () => {
   for (const institution of institutions) {
     for (const topicId of institution.topicIds) {
       assert.ok(topicIds.has(topicId), `${institution.id} references ${topicId}`);
+    }
+  }
+});
+
+test('records use valid schema values and resolved references', () => {
+  const topicIds = new Set(topics.map((topic) => topic.id));
+  const actorIds = new Set(actors.map((actor) => actor.id));
+  const institutionIds = new Set(institutions.map((institution) => institution.id));
+  const recordIds = new Set(records.map((record) => record.id));
+
+  assertUniqueIds(records, 'record');
+
+  for (const record of records) {
+    assert.ok(recordTypes.includes(record.recordType), `${record.id} has valid recordType`);
+    assert.ok(languageStatuses.includes(record.languageStatus), `${record.id} has valid languageStatus`);
+    assert.ok(sourceAuthorities.includes(record.sourceAuthority), `${record.id} has valid sourceAuthority`);
+
+    for (const topicId of record.topics) {
+      assert.ok(topicIds.has(topicId), `${record.id} references topic ${topicId}`);
+    }
+
+    for (const actorId of record.actors) {
+      assert.ok(actorIds.has(actorId), `${record.id} references actor ${actorId}`);
+    }
+
+    for (const institutionId of record.institutions) {
+      assert.ok(institutionIds.has(institutionId), `${record.id} references institution ${institutionId}`);
+    }
+
+    for (const relatedRecordId of record.relatedRecordIds) {
+      assert.ok(recordIds.has(relatedRecordId), `${record.id} references record ${relatedRecordId}`);
+    }
+  }
+});
+
+test('records include usable source and summary metadata', () => {
+  for (const record of records) {
+    assert.ok(record.title.length > 5, `${record.id} has a descriptive title`);
+    assert.ok(record.summary.length > 30, `${record.id} has a descriptive summary`);
+    assert.ok(record.sourceLinks.length > 0, `${record.id} has at least one source link`);
+
+    for (const sourceLink of record.sourceLinks) {
+      assert.ok(sourceLink.label.length > 3, `${record.id} source link has a label`);
+      assert.ok(sourceLink.url.startsWith('https://'), `${record.id} source link uses HTTPS`);
+    }
+  }
+});
+
+test('pilot corpus covers digital trade plus investment and financial rulemaking', () => {
+  const digitalTradeRecords = records.filter((record) => record.topics.includes('digital-trade-ecommerce'));
+
+  assert.ok(digitalTradeRecords.length >= 7, 'digital trade pilot has at least seven records');
+  assert.ok(
+    records.some((record) => record.topics.includes('international-investment')),
+    'corpus includes international investment record',
+  );
+  assert.ok(
+    records.some((record) => record.topics.includes('monetary-financial-regulation')),
+    'corpus includes monetary and financial regulation record',
+  );
+});
+
+test('timeline entries resolve to topic and record ids', () => {
+  const topicIds = new Set(topics.map((topic) => topic.id));
+  const recordIds = new Set(records.map((record) => record.id));
+
+  for (const entry of timeline) {
+    assert.ok(topicIds.has(entry.topicId), `${entry.title} references topic ${entry.topicId}`);
+    assert.ok(entry.relatedIds.length > 0, `${entry.title} has related records`);
+
+    for (const relatedId of entry.relatedIds) {
+      assert.ok(recordIds.has(relatedId), `${entry.title} references record ${relatedId}`);
     }
   }
 });
