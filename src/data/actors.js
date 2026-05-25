@@ -57,4 +57,12 @@ export const actors = [
       'Uses coalition-building and digital economy agreements to influence rules beyond its market size.',
     topicIds: ['middle-small-powers', 'digital-trade-ecommerce'],
   },
+  {
+    id: 'chile',
+    name: 'Chile',
+    type: 'middle-power',
+    summary:
+      'Participates in digital economy rule-making through digital trade agreements, cross-regional coalitions, and practical cooperation on paperless commerce.',
+    topicIds: ['middle-small-powers', 'digital-trade-ecommerce'],
+  },
 ];

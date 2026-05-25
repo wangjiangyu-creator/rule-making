@@ -167,3 +167,23 @@ test('timeline entries resolve to topic and record ids', () => {
     }
   }
 });
+
+test('OECD digital trade record uses the official publication date', () => {
+  const oecdRecord = records.find((record) => record.id === 'oecd-digital-trade-inventory-2023');
+
+  assert.ok(oecdRecord, 'OECD digital trade record exists');
+  assert.equal(oecdRecord.date, '2023-01-10');
+});
+
+test('DEPA record includes Chile with a resolved actor profile', () => {
+  const chileActor = actors.find((actor) => actor.id === 'chile');
+  const depaRecord = records.find((record) => record.id === 'depa-agreement-2020');
+
+  assert.ok(chileActor, 'Chile actor exists');
+  assert.equal(chileActor.name, 'Chile');
+  assert.equal(chileActor.type, 'middle-power');
+  assert.ok(chileActor.topicIds.includes('middle-small-powers'));
+  assert.ok(chileActor.topicIds.includes('digital-trade-ecommerce'));
+  assert.ok(depaRecord, 'DEPA record exists');
+  assert.deepEqual([...depaRecord.actors].sort(), ['chile', 'new-zealand', 'singapore']);
+});
