@@ -211,9 +211,34 @@ test('search helpers filter records by query, topic, and actor', () => {
   );
 });
 
+test('search helpers tolerate missing list fields when filtering', () => {
+  const partialRecords = [
+    {
+      title: 'Partial',
+      summary: 'Digital source record',
+      recordType: 'research-report',
+      sourceAuthority: 'think-tank',
+      languageStatus: 'english-only',
+      year: 2024,
+    },
+  ];
+
+  assert.deepEqual(filterRecords(partialRecords, { topic: 'digital-trade-ecommerce' }), []);
+});
+
+test('search helpers match multi-word queries across searchable fields', () => {
+  const queryResults = filterRecords(records, { query: 'digital source' });
+
+  assert.ok(
+    queryResults.some((record) => record.id === 'usmca-digital-trade-chapter-2020'),
+    'tokenized query finds the USMCA source code record',
+  );
+});
+
 test('format helpers provide readable labels and dates', () => {
   assert.equal(recordTypeLabel('negotiation-record'), 'Negotiation record');
   assert.equal(formatDate('2020-06-12'), 'Jun 12, 2020');
+  assert.equal(formatDate('2020'), '2020');
 });
 
 test('sortRecordsNewestFirst returns a new array with the latest record first', () => {

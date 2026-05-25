@@ -31,6 +31,7 @@ export function humanizeId(value) {
 
 export function formatDate(value) {
   if (!value) return '';
+  if (typeof value === 'string' && /^\d{4}$/.test(value)) return value;
 
   const date = new Date(`${value}T00:00:00Z`);
   if (Number.isNaN(date.getTime())) return value;
