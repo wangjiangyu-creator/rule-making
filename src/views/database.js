@@ -149,11 +149,32 @@ function renderRecordRow(record) {
 }
 
 function renderSourceLink(sourceLink) {
+  const href = sanitizeSourceHref(sourceLink.url);
+
+  if (!href) {
+    return `
+      <li>
+        ${escapeHtml(sourceLink.label)} <span class="source-url-invalid">(invalid source URL)</span>
+      </li>
+    `;
+  }
+
   return `
     <li>
-      <a href="${escapeHtml(sourceLink.url)}" rel="noreferrer" target="_blank">${escapeHtml(sourceLink.label)}</a>
+      <a href="${escapeHtml(href)}" rel="noreferrer" target="_blank">${escapeHtml(sourceLink.label)}</a>
     </li>
   `;
+}
+
+function sanitizeSourceHref(value) {
+  try {
+    const parsedUrl = new URL(String(value ?? '').trim());
+    const allowedProtocols = new Set(['http:', 'https:', 'mailto:']);
+
+    return allowedProtocols.has(parsedUrl.protocol) ? parsedUrl.href : '';
+  } catch {
+    return '';
+  }
 }
 
 export function renderDatabase() {

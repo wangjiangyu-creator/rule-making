@@ -3,7 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { renderHome } from '../src/views/home.js';
 import { renderTopics } from '../src/views/topics.js';
-import { renderDatabase } from '../src/views/database.js';
+import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
+import { records } from '../src/data/records.js';
 
 test('index renders the static app mount and script', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
@@ -34,6 +35,44 @@ test('database renderer escapes unsafe query text', () => {
     } else {
       globalThis.location = originalLocation;
     }
+  }
+});
+
+test('record detail renders unsafe source URLs as plain text', () => {
+  const unsafeRecord = {
+    id: 'unsafe-source-url-regression',
+    title: 'Unsafe Source URL Regression',
+    recordType: 'official-statement',
+    date: '2026-01-01',
+    year: 2026,
+    actors: [],
+    jurisdictions: [],
+    institutions: [],
+    topics: [],
+    summary: 'A regression fixture for unsafe source URL rendering.',
+    sourceAuthority: 'official-government',
+    languageStatus: 'official-english',
+    sourceLinks: [
+      {
+        label: 'Unsafe Source',
+        url: 'javascript:alert(1)',
+      },
+    ],
+    citation: 'Unsafe source URL regression fixture.',
+    relatedRecordIds: [],
+    tags: [],
+  };
+
+  records.push(unsafeRecord);
+
+  try {
+    const html = renderRecordDetail(unsafeRecord.id);
+
+    assert.doesNotMatch(html, /href="javascript:alert\(1\)"/);
+    assert.match(html, /Unsafe Source/);
+    assert.match(html, /\(invalid source URL\)/);
+  } finally {
+    records.pop();
   }
 });
 
