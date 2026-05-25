@@ -6,6 +6,8 @@ import { actors } from '../src/data/actors.js';
 import { institutions } from '../src/data/institutions.js';
 import { records } from '../src/data/records.js';
 import { timeline } from '../src/data/timeline.js';
+import { formatDate, recordTypeLabel } from '../src/lib/format.js';
+import { filterRecords, sortRecordsNewestFirst } from '../src/lib/search.js';
 
 const expectedRecordTypes = [
   'treaty-agreement',
@@ -186,4 +188,45 @@ test('DEPA record includes Chile with a resolved actor profile', () => {
   assert.ok(chileActor.topicIds.includes('digital-trade-ecommerce'));
   assert.ok(depaRecord, 'DEPA record exists');
   assert.deepEqual([...depaRecord.actors].sort(), ['chile', 'new-zealand', 'singapore']);
+});
+
+test('search helpers filter records by query, topic, and actor', () => {
+  const queryResults = filterRecords(records, { query: 'source code' });
+  const investmentResults = filterRecords(records, { topic: 'international-investment' });
+  const chinaResults = filterRecords(records, { actor: 'china' });
+
+  assert.deepEqual(
+    queryResults.map((record) => record.id),
+    ['usmca-digital-trade-chapter-2020'],
+  );
+  assert.ok(investmentResults.length > 0, 'international investment filter returns records');
+  assert.ok(
+    investmentResults.every((record) => record.topics.includes('international-investment')),
+    'topic filter only returns international investment records',
+  );
+  assert.ok(chinaResults.length > 0, 'China actor filter returns records');
+  assert.ok(
+    chinaResults.every((record) => record.actors.includes('china')),
+    'actor filter only returns China records',
+  );
+});
+
+test('format helpers provide readable labels and dates', () => {
+  assert.equal(recordTypeLabel('negotiation-record'), 'Negotiation record');
+  assert.equal(formatDate('2020-06-12'), 'Jun 12, 2020');
+});
+
+test('sortRecordsNewestFirst returns a new array with the latest record first', () => {
+  const input = [
+    { id: 'older-date', date: '2020-06-12', year: 2020 },
+    { id: 'latest-date', date: '2022-10-19', year: 2022 },
+    { id: 'year-only', year: 2021 },
+  ];
+  const originalOrder = input.map((record) => record.id);
+
+  const sorted = sortRecordsNewestFirst(input);
+
+  assert.notEqual(sorted, input);
+  assert.deepEqual(input.map((record) => record.id), originalOrder);
+  assert.equal(sorted[0].id, 'latest-date');
 });
