@@ -7,7 +7,7 @@ import { institutions } from '../src/data/institutions.js';
 import { records } from '../src/data/records.js';
 import { timeline } from '../src/data/timeline.js';
 import { formatDate, recordTypeLabel } from '../src/lib/format.js';
-import { filterRecords, sortRecordsNewestFirst } from '../src/lib/search.js';
+import { filterRecords, recordSearchText, sortRecordsNewestFirst } from '../src/lib/search.js';
 
 const expectedRecordTypes = [
   'treaty-agreement',
@@ -164,6 +164,47 @@ test('pilot corpus covers digital trade plus investment and financial rulemaking
   );
 });
 
+test('second content batch adds official rulemaking materials across the portal map', () => {
+  const expectedIds = [
+    'cptpp-electronic-commerce-chapter-2018',
+    'rcep-electronic-commerce-chapter-2020',
+    'wto-agreement-electronic-commerce-2024',
+    'singapore-australia-digital-economy-agreement-2020',
+    'eu-data-act-2023',
+    'eu-general-data-protection-regulation-2016',
+    'china-personal-information-protection-law-2021',
+    'cjeu-schrems-ii-2020',
+    'eu-artificial-intelligence-act-2024',
+    'un-general-assembly-ai-resolution-78-265-2024',
+    'g7-hiroshima-ai-process-code-conduct-2023',
+    'wto-investment-facilitation-development-agreement-2024',
+    'fsb-crypto-asset-recommendations-2023',
+    'basel-iii-finalising-post-crisis-reforms-2017',
+    'wto-world-trade-report-digital-technologies-2018',
+    'wto-mc12-outcome-document-2022',
+  ];
+  const recordIds = new Set(records.map((record) => record.id));
+  const digitalTradeRecords = records.filter((record) => record.topics.includes('digital-trade-ecommerce'));
+  const officialOrCourtRecords = expectedIds
+    .map((id) => records.find((record) => record.id === id))
+    .filter(Boolean);
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
+  }
+
+  assert.ok(digitalTradeRecords.length >= 13, 'digital trade pilot has at least thirteen records');
+  assert.equal(officialOrCourtRecords.length, expectedIds.length);
+  assert.ok(
+    officialOrCourtRecords.every((record) =>
+      ['official-international-organization', 'official-government', 'official-court-tribunal'].includes(
+        record.sourceAuthority,
+      ),
+    ),
+    'second batch is anchored in official or court sources',
+  );
+});
+
 test('timeline entries resolve to topic and record ids', () => {
   const topicIds = new Set(topics.map((topic) => topic.id));
   const recordIds = new Set(records.map((record) => record.id));
@@ -203,9 +244,13 @@ test('search helpers filter records by query, topic, and actor', () => {
   const investmentResults = filterRecords(records, { topic: 'international-investment' });
   const chinaResults = filterRecords(records, { actor: 'china' });
 
-  assert.deepEqual(
-    queryResults.map((record) => record.id),
-    ['usmca-digital-trade-chapter-2020'],
+  assert.ok(
+    queryResults.some((record) => record.id === 'usmca-digital-trade-chapter-2020'),
+    'source code query finds the USMCA record',
+  );
+  assert.ok(
+    queryResults.every((record) => recordSearchText(record).includes('source code')),
+    'source code query only returns records whose searchable text contains both terms',
   );
   assert.ok(investmentResults.length > 0, 'international investment filter returns records');
   assert.ok(

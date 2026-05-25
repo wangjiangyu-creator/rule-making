@@ -58,4 +58,58 @@ export const institutions = [
       'Influences development finance, investment climate, digital development, and regulatory-capacity agendas.',
     topicIds: ['international-investment', 'digital-trade-ecommerce', 'monetary-financial-regulation'],
   },
+  {
+    id: 'asean',
+    name: 'Association of Southeast Asian Nations',
+    shortName: 'ASEAN',
+    type: 'regional-organization',
+    summary:
+      'Provides a regional platform for trade, investment, digital economy, and connectivity rule-making in Southeast Asia and wider Asian agreements.',
+    topicIds: ['middle-small-powers', 'digital-trade-ecommerce', 'international-investment'],
+  },
+  {
+    id: 'un',
+    name: 'United Nations',
+    shortName: 'UN',
+    type: 'international-organization',
+    summary:
+      'Sets broad multilateral agendas through General Assembly resolutions, specialized bodies, treaty processes, and technical institutions.',
+    topicIds: ['ai-governance', 'cyber-data-governance', 'international-investment'],
+  },
+  {
+    id: 'g7',
+    name: 'Group of Seven',
+    shortName: 'G7',
+    type: 'forum',
+    summary:
+      'Coordinates major advanced-economy positions on economic security, digital governance, AI, finance, and standards.',
+    topicIds: ['great-powers', 'ai-governance', 'digital-trade-ecommerce', 'monetary-financial-regulation'],
+  },
+  {
+    id: 'fsb',
+    name: 'Financial Stability Board',
+    shortName: 'FSB',
+    type: 'standard-setting-body',
+    summary:
+      'Coordinates international financial stability standards and policy recommendations for banking, markets, payment systems, and crypto-assets.',
+    topicIds: ['monetary-financial-regulation', 'cyber-data-governance'],
+  },
+  {
+    id: 'basel-committee',
+    name: 'Basel Committee on Banking Supervision',
+    shortName: 'BCBS',
+    type: 'standard-setting-body',
+    summary:
+      'Develops global prudential banking standards that shape national financial regulation through soft-law implementation.',
+    topicIds: ['monetary-financial-regulation'],
+  },
+  {
+    id: 'cjeu',
+    name: 'Court of Justice of the European Union',
+    shortName: 'CJEU',
+    type: 'court',
+    summary:
+      'Interprets EU law in ways that shape cross-border data transfer, platform governance, market access, and external regulatory effects.',
+    topicIds: ['european-union', 'cyber-data-governance', 'digital-trade-ecommerce'],
+  },
 ];

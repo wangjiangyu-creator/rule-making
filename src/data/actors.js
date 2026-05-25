@@ -65,4 +65,20 @@ export const actors = [
       'Participates in digital economy rule-making through digital trade agreements, cross-regional coalitions, and practical cooperation on paperless commerce.',
     topicIds: ['middle-small-powers', 'digital-trade-ecommerce'],
   },
+  {
+    id: 'australia',
+    name: 'Australia',
+    type: 'middle-power',
+    summary:
+      'Uses trade agreement design, WTO coalition work, standards cooperation, and digital economy partnerships to influence economic rule-making.',
+    topicIds: ['middle-small-powers', 'digital-trade-ecommerce', 'wto-reform', 'ai-governance'],
+  },
+  {
+    id: 'japan',
+    name: 'Japan',
+    type: 'great-power',
+    summary:
+      'Shapes international economic rules through mega-regional trade agreements, G7 agenda-setting, WTO coalition work, development finance, and standards diplomacy.',
+    topicIds: ['great-powers', 'digital-trade-ecommerce', 'wto-reform', 'ai-governance'],
+  },
 ];
