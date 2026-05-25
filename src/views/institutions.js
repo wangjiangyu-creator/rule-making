@@ -1,6 +1,8 @@
+import { dimensionById, summarizeDimensions } from '../lib/dimensions.js';
 import { institutions } from '../data/institutions.js';
 import { records } from '../data/records.js';
 import { topics } from '../data/topics.js';
+import { attributionDisplay } from '../lib/attribution.js';
 import { formatDate, humanizeId, recordTypeLabel } from '../lib/format.js';
 import { sortRecordsNewestFirst } from '../lib/search.js';
 
@@ -32,7 +34,22 @@ function renderTopicLinks(topicIds) {
     .join(', ');
 }
 
+function renderDimensionLinks(items) {
+  return asList(items)
+    .map((item) => {
+      const dimensionId = typeof item === 'string' ? item : item.id;
+      const count = typeof item === 'string' ? null : item.count;
+      const dimension = dimensionById.get(dimensionId);
+      const label = dimension?.title ?? humanizeId(dimensionId);
+
+      return `<a href="#/dimensions/${escapeHtml(dimensionId)}">${escapeHtml(label)}${count ? ` (${count})` : ''}</a>`;
+    })
+    .join(', ');
+}
+
 function renderRecordRow(record) {
+  const attribution = attributionDisplay(record);
+
   return `
     <article class="record-row">
       <p class="eyebrow">
@@ -40,7 +57,14 @@ function renderRecordRow(record) {
         ${record.date || record.year ? ` | ${escapeHtml(formatDate(record.date ?? record.year))}` : ''}
       </p>
       <h3><a href="#/records/${escapeHtml(record.id)}">${escapeHtml(record.title)}</a></h3>
+      ${attribution ? `<p class="record-attribution">${escapeHtml(attribution)}</p>` : ''}
       <p>${escapeHtml(record.summary)}</p>
+      <p class="record-taxonomy">
+        ${renderTopicLinks(record.topics)}
+      </p>
+      <p class="record-taxonomy">
+        ${renderDimensionLinks(record.dimensions)}
+      </p>
     </article>
   `;
 }
@@ -91,6 +115,7 @@ export function renderInstitutionDetail(institutionId) {
   }
 
   const linkedRecords = recordsForInstitution(institution.id);
+  const linkedDimensions = summarizeDimensions(linkedRecords);
 
   return `
     <section class="page-hero">
@@ -101,6 +126,10 @@ export function renderInstitutionDetail(institutionId) {
     <section>
       <h2>Linked topics</h2>
       <p>${renderTopicLinks(institution.topicIds)}</p>
+    </section>
+    <section>
+      <h2>Rule-making dimensions</h2>
+      <p>${renderDimensionLinks(linkedDimensions)}</p>
     </section>
     <section>
       <h2>Linked records</h2>

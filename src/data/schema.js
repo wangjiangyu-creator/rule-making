@@ -31,3 +31,20 @@ export const sourceAuthorities = [
   'think-tank',
   'professional-commentary',
 ];
+
+export const sourceLinkTypes = [
+  'official-page',
+  'full-text',
+  'pdf',
+  'html-text',
+  'metadata',
+  'summary',
+  'press-release',
+  'working-paper',
+  'commentary',
+];
+
+export const authorKinds = [
+  'person',
+  'institution',
+];

@@ -243,6 +243,24 @@ main > section > h2 {
   margin: 0.75rem 0 0;
 }
 
+.record-taxonomy {
+  color: var(--color-muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9rem;
+}
+
+.record-attribution {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9rem;
+}
+
+.record-attribution-detail {
+  margin-top: 1rem;
+  font-size: 0.98rem;
+}
+
 .record-list,
 .compact-list,
 .clean-list,
@@ -306,6 +324,67 @@ main > section > h2 {
   color: var(--color-muted);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 0.9rem;
+}
+
+.timeline-entry {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.timeline-entry-title {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.source-dossier {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.source-dossier-group {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.source-dossier-list {
+  gap: 0.75rem;
+}
+
+.source-dossier-row {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.source-dossier-link,
+.source-note {
+  margin: 0;
+}
+
+.source-badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.source-note {
+  color: var(--color-muted);
+  font-size: 0.95rem;
 }
 
 .filters,

@@ -1,8 +1,10 @@
 import { actors } from '../data/actors.js';
+import { dimensions } from '../data/dimensions.js';
 import { institutions } from '../data/institutions.js';
 import { topics } from '../data/topics.js';
 
 const actorById = new Map(actors.map((actor) => [actor.id, actor]));
+const dimensionById = new Map(dimensions.map((dimension) => [dimension.id, dimension]));
 const institutionById = new Map(institutions.map((institution) => [institution.id, institution]));
 const topicById = new Map(topics.map((topic) => [topic.id, topic]));
 
@@ -26,6 +28,10 @@ function sourceLinkLabels(sourceLinks) {
   );
 }
 
+function authorNames(authors) {
+  return asList(authors).map((author) => author?.name);
+}
+
 function relatedEntityLabels(ids, lookup, fields) {
   return asList(ids).flatMap((id) => {
     const item = lookup.get(id);
@@ -41,6 +47,8 @@ export function recordSearchText(record) {
     record.recordType,
     record.sourceAuthority,
     record.languageStatus,
+    record.publisher,
+    ...authorNames(record.authors),
     record.year,
     ...asList(record.actors),
     ...relatedEntityLabels(record.actors, actorById, ['name']),
@@ -49,6 +57,8 @@ export function recordSearchText(record) {
     ...relatedEntityLabels(record.institutions, institutionById, ['name', 'shortName']),
     ...asList(record.topics),
     ...relatedEntityLabels(record.topics, topicById, ['title', 'shortTitle']),
+    ...asList(record.dimensions),
+    ...relatedEntityLabels(record.dimensions, dimensionById, ['title', 'shortTitle']),
     ...asList(record.tags),
     ...sourceLinkLabels(record.sourceLinks),
   ]
@@ -65,6 +75,7 @@ function comparableDateValue(value) {
   const text = String(value ?? '').trim();
 
   if (/^\d{4}$/.test(text)) return `${text}-01-01`;
+  if (/^\d{4}-\d{2}$/.test(text)) return `${text}-01`;
   if (/^\d{4}-\d{2}-\d{2}$/.test(text)) return text;
   return '';
 }
@@ -86,6 +97,7 @@ export function filterRecords(records, filters = {}) {
     if (queryTokens.length > 0 && !queryTokens.every((token) => searchText.includes(token))) return false;
     if (filters.recordType && record.recordType !== filters.recordType) return false;
     if (filters.topic && !asList(record.topics).includes(filters.topic)) return false;
+    if (filters.dimension && !asList(record.dimensions).includes(filters.dimension)) return false;
     if (filters.actor && !asList(record.actors).includes(filters.actor)) return false;
     if (filters.institution && !asList(record.institutions).includes(filters.institution)) return false;
     if (filters.jurisdiction && !asList(record.jurisdictions).includes(filters.jurisdiction)) return false;

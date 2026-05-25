@@ -1,8 +1,10 @@
 import { renderActorDetail, renderActors } from './views/actors.js';
 import { renderDatabase, renderRecordDetail } from './views/database.js';
+import { renderDimensionDetail, renderDimensions } from './views/dimensions.js';
 import { renderHome } from './views/home.js';
 import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js';
 import { renderSourcesMethod } from './views/sources.js';
+import { renderTimelinePage } from './views/timeline.js';
 import { renderTopicDetail, renderTopics } from './views/topics.js';
 
 const app = document.querySelector('#app');
@@ -40,6 +42,12 @@ function route() {
 
   if (parts.length === 0 || section === 'home') {
     app.innerHTML = renderHome();
+  } else if (section === 'dimensions' && id) {
+    app.innerHTML = renderDimensionDetail(id);
+  } else if (section === 'dimensions') {
+    app.innerHTML = renderDimensions();
+  } else if (section === 'timeline') {
+    app.innerHTML = renderTimelinePage();
   } else if (section === 'topics' && id) {
     app.innerHTML = renderTopicDetail(id);
   } else if (section === 'topics') {

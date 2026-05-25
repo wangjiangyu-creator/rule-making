@@ -21,6 +21,18 @@ const authorityLabels = {
   'professional-commentary': 'Professional commentary',
 };
 
+const sourceLinkTypeLabels = {
+  'official-page': 'Official page',
+  'full-text': 'Full text',
+  'pdf': 'PDF',
+  'html-text': 'HTML text',
+  'metadata': 'Metadata',
+  'summary': 'Summary',
+  'press-release': 'Press release',
+  'working-paper': 'Working paper',
+  'commentary': 'Commentary',
+};
+
 export function humanizeId(value) {
   return String(value ?? '')
     .split('-')
@@ -32,6 +44,17 @@ export function humanizeId(value) {
 export function formatDate(value) {
   if (!value) return '';
   if (typeof value === 'string' && /^\d{4}$/.test(value)) return value;
+  if (typeof value === 'string' && /^\d{4}-\d{2}$/.test(value)) {
+    const [year, month] = value.split('-').map(Number);
+    const date = new Date(Date.UTC(year, month - 1, 1));
+    if (Number.isNaN(date.getTime())) return value;
+
+    return new Intl.DateTimeFormat('en', {
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }).format(date);
+  }
 
   const date = new Date(`${value}T00:00:00Z`);
   if (Number.isNaN(date.getTime())) return value;
@@ -50,4 +73,8 @@ export function recordTypeLabel(value) {
 
 export function authorityLabel(value) {
   return authorityLabels[value] ?? humanizeId(value);
+}
+
+export function sourceLinkTypeLabel(value) {
+  return sourceLinkTypeLabels[value] ?? humanizeId(value);
 }

@@ -77,6 +77,15 @@ export const institutions = [
     topicIds: ['ai-governance', 'cyber-data-governance', 'international-investment'],
   },
   {
+    id: 'unesco',
+    name: 'United Nations Educational, Scientific and Cultural Organization',
+    shortName: 'UNESCO',
+    type: 'international-organization',
+    summary:
+      'Develops global normative instruments and implementation tools on ethics, education, culture, science, and emerging technologies, including AI governance.',
+    topicIds: ['ai-governance'],
+  },
+  {
     id: 'g7',
     name: 'Group of Seven',
     shortName: 'G7',
@@ -111,5 +120,86 @@ export const institutions = [
     summary:
       'Interprets EU law in ways that shape cross-border data transfer, platform governance, market access, and external regulatory effects.',
     topicIds: ['european-union', 'cyber-data-governance', 'digital-trade-ecommerce'],
+  },
+  {
+    id: 'council-of-europe',
+    name: 'Council of Europe',
+    shortName: 'CoE',
+    type: 'regional-organization',
+    summary:
+      'Develops treaty-based and soft-law instruments on human rights, data protection, cybercrime, and artificial intelligence governance.',
+    topicIds: ['cyber-data-governance', 'ai-governance', 'european-union'],
+  },
+  {
+    id: 'apec',
+    name: 'Asia-Pacific Economic Cooperation',
+    shortName: 'APEC',
+    type: 'forum',
+    summary:
+      'Provides an Asia-Pacific forum for voluntary privacy, data transfer, digital economy, and trade facilitation frameworks.',
+    topicIds: ['middle-small-powers', 'digital-trade-ecommerce', 'cyber-data-governance'],
+  },
+  {
+    id: 'icsid',
+    name: 'International Centre for Settlement of Investment Disputes',
+    shortName: 'ICSID',
+    type: 'international-organization',
+    summary:
+      'Administers investor-state dispute settlement under the ICSID Convention and related arbitration, mediation, and fact-finding rules.',
+    topicIds: ['international-investment'],
+  },
+  {
+    id: 'unctad',
+    name: 'United Nations Conference on Trade and Development',
+    shortName: 'UNCTAD',
+    type: 'international-organization',
+    summary:
+      'Produces investment policy research, development-oriented trade analysis, digital economy reports, and international investment agreement data.',
+    topicIds: ['international-investment', 'digital-trade-ecommerce', 'wto-reform'],
+  },
+  {
+    id: 'iosco',
+    name: 'International Organization of Securities Commissions',
+    shortName: 'IOSCO',
+    type: 'standard-setting-body',
+    summary:
+      'Develops international securities regulation principles and works with CPMI on financial market infrastructure standards.',
+    topicIds: ['monetary-financial-regulation'],
+  },
+  {
+    id: 'cpmi',
+    name: 'Committee on Payments and Market Infrastructures',
+    shortName: 'CPMI',
+    type: 'standard-setting-body',
+    summary:
+      'Develops payment, clearing, settlement, and financial market infrastructure standards through the Bank for International Settlements.',
+    topicIds: ['monetary-financial-regulation'],
+  },
+  {
+    id: 'nist',
+    name: 'National Institute of Standards and Technology',
+    shortName: 'NIST',
+    type: 'regulator',
+    summary:
+      'Develops technical standards and risk-management frameworks with international influence, including cybersecurity and artificial intelligence guidance.',
+    topicIds: ['united-states', 'ai-governance', 'cyber-data-governance'],
+  },
+  {
+    id: 'ustr',
+    name: 'Office of the United States Trade Representative',
+    shortName: 'USTR',
+    type: 'government-agency',
+    summary:
+      'Leads US trade negotiation and trade policy implementation, including digital trade chapters, WTO policy, and foreign trade barrier reporting.',
+    topicIds: ['united-states', 'digital-trade-ecommerce', 'wto-reform'],
+  },
+  {
+    id: 'us-state-department',
+    name: 'United States Department of State',
+    shortName: 'State Department',
+    type: 'government-agency',
+    summary:
+      'Conducts US diplomacy on cyberspace, digital policy, data governance, technology standards, and international institutional coordination.',
+    topicIds: ['united-states', 'cyber-data-governance', 'ai-governance'],
   },
 ];

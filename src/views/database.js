@@ -1,10 +1,13 @@
 import { actors } from '../data/actors.js';
+import { dimensions } from '../data/dimensions.js';
 import { institutions } from '../data/institutions.js';
 import { records } from '../data/records.js';
 import { languageStatuses, recordTypes, sourceAuthorities } from '../data/schema.js';
 import { topics } from '../data/topics.js';
-import { authorityLabel, formatDate, humanizeId, recordTypeLabel } from '../lib/format.js';
+import { attributionDisplay, authorDisplay } from '../lib/attribution.js';
+import { authorityLabel, formatDate, humanizeId, recordTypeLabel, sourceLinkTypeLabel } from '../lib/format.js';
 import { filterRecords, sortRecordsNewestFirst } from '../lib/search.js';
+import { groupSourceLinks } from '../lib/sources.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -36,6 +39,7 @@ function currentFilters() {
   return {
     query: params.get('q') ?? '',
     topic: params.get('topic') ?? '',
+    dimension: params.get('dimension') ?? '',
     actor: params.get('actor') ?? '',
     institution: params.get('institution') ?? '',
     recordType: params.get('recordType') ?? '',
@@ -101,6 +105,13 @@ function renderFilterForm(filters) {
         'All topics',
       )}
       ${renderSelect(
+        'dimension',
+        'Dimension',
+        dimensions.map((dimension) => ({ value: dimension.id, label: dimension.title })),
+        filters.dimension,
+        'All dimensions',
+      )}
+      ${renderSelect(
         'actor',
         'Actor',
         actors.map((actor) => ({ value: actor.id, label: actor.name })),
@@ -161,6 +172,8 @@ function renderLinkedItems(ids, items, routeBase, labelSelector = (item) => item
 }
 
 function renderRecordRow(record) {
+  const attribution = attributionDisplay(record);
+
   return `
     <article class="record-row">
       <p class="eyebrow">
@@ -168,29 +181,51 @@ function renderRecordRow(record) {
         ${record.date || record.year ? ` | ${escapeHtml(formatDate(record.date ?? record.year))}` : ''}
       </p>
       <h3><a href="#/records/${escapeHtml(record.id)}">${escapeHtml(record.title)}</a></h3>
+      ${attribution ? `<p class="record-attribution">${escapeHtml(attribution)}</p>` : ''}
       <p>${escapeHtml(record.summary)}</p>
-      <p>
+      <p class="record-taxonomy">
         ${renderLinkedItems(record.topics, topics, 'topics', (topic) => topic.shortTitle ?? topic.title)}
+      </p>
+      <p class="record-taxonomy">
+        ${renderLinkedItems(record.dimensions, dimensions, 'dimensions', (dimension) => dimension.shortTitle ?? dimension.title)}
       </p>
     </article>
   `;
 }
 
-function renderSourceLink(sourceLink) {
-  const href = sanitizeSourceHref(sourceLink.url);
+function renderSourceBadge(label) {
+  return `<span class="source-badge">${escapeHtml(label)}</span>`;
+}
 
-  if (!href) {
-    return `
-      <li>
-        ${escapeHtml(sourceLink.label)} <span class="source-url-invalid">(invalid source URL)</span>
-      </li>
-    `;
-  }
+function renderSourceDossierRow(sourceLink) {
+  const href = sanitizeSourceHref(sourceLink.url);
+  const linkMarkup = href
+    ? `<a href="${escapeHtml(href)}" rel="noreferrer" target="_blank">${escapeHtml(sourceLink.label)}</a>`
+    : `${escapeHtml(sourceLink.label)} <span class="source-url-invalid">(invalid source URL)</span>`;
+
+  const badges = [
+    sourceLinkTypeLabel(sourceLink.linkType),
+    authorityLabel(sourceLink.authority),
+    humanizeId(sourceLink.languageStatus),
+  ];
 
   return `
-    <li>
-      <a href="${escapeHtml(href)}" rel="noreferrer" target="_blank">${escapeHtml(sourceLink.label)}</a>
+    <li class="source-dossier-row">
+      <p class="source-dossier-link">${linkMarkup}</p>
+      <p class="source-badge-list">${badges.map(renderSourceBadge).join('')}</p>
+      ${sourceLink.note ? `<p class="source-note">${escapeHtml(sourceLink.note)}</p>` : ''}
     </li>
+  `;
+}
+
+function renderSourceDossierGroup(group) {
+  return `
+    <section class="source-dossier-group">
+      <h3>${escapeHtml(group.title)}</h3>
+      <ul class="clean-list source-dossier-list">
+        ${group.links.map(renderSourceDossierRow).join('')}
+      </ul>
+    </section>
   `;
 }
 
@@ -211,6 +246,7 @@ export function renderDatabase() {
     filterRecords(records, {
       query: filters.query,
       topic: filters.topic,
+      dimension: filters.dimension,
       actor: filters.actor,
       institution: filters.institution,
       jurisdiction: filters.jurisdiction,
@@ -267,6 +303,9 @@ export function renderRecordDetail(recordId) {
   }
 
   const formattedDate = record.date || record.year ? formatDate(record.date ?? record.year) : 'Date not listed';
+  const attribution = attributionDisplay(record);
+  const authors = authorDisplay(record.authors);
+  const sourceGroups = groupSourceLinks(record);
 
   return `
     <article class="record-detail">
@@ -274,6 +313,7 @@ export function renderRecordDetail(recordId) {
         <p class="eyebrow">${escapeHtml(recordTypeLabel(record.recordType))}</p>
         <h1>${escapeHtml(record.title)}</h1>
         ${record.alternateTitle ? `<p class="lede">${escapeHtml(record.alternateTitle)}</p>` : ''}
+        ${attribution ? `<p class="record-attribution record-attribution-detail">${escapeHtml(attribution)}</p>` : ''}
       </section>
 
       <section>
@@ -284,6 +324,8 @@ export function renderRecordDetail(recordId) {
       <section>
         <h2>Metadata</h2>
         <dl>
+          ${authors ? `<dt>Authors</dt><dd>${escapeHtml(authors)}</dd>` : ''}
+          ${record.publisher ? `<dt>Publisher</dt><dd>${escapeHtml(record.publisher)}</dd>` : ''}
           <dt>Date</dt>
           <dd>${escapeHtml(formattedDate)}</dd>
           <dt>Source authority</dt>
@@ -292,6 +334,8 @@ export function renderRecordDetail(recordId) {
           <dd>${escapeHtml(humanizeId(record.languageStatus))}</dd>
           <dt>Topics</dt>
           <dd>${renderLinkedItems(record.topics, topics, 'topics', (topic) => topic.title)}</dd>
+          <dt>Dimensions</dt>
+          <dd>${renderLinkedItems(record.dimensions, dimensions, 'dimensions', (dimension) => dimension.title)}</dd>
           <dt>Actors</dt>
           <dd>${renderLinkedItems(record.actors, actors, 'actors')}</dd>
           <dt>Institutions</dt>
@@ -300,10 +344,10 @@ export function renderRecordDetail(recordId) {
       </section>
 
       <section>
-        <h2>Sources</h2>
-        <ul>
-          ${asList(record.sourceLinks).map(renderSourceLink).join('')}
-        </ul>
+        <h2>Source dossier</h2>
+        <div class="source-dossier">
+          ${sourceGroups.map(renderSourceDossierGroup).join('')}
+        </div>
       </section>
 
       <section>

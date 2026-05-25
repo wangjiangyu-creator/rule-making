@@ -1,4 +1,9 @@
-export const records = [
+import { recordDimensionsById } from './record-dimensions.js';
+import { britainBatchRecords } from './records-britain-batch.js';
+import { thirdBatchRecords } from './records-third-batch.js';
+import { fourthBatchRecords } from './records-fourth-batch.js';
+
+const baseRecords = [
   {
     id: 'wto-work-programme-electronic-commerce-1998',
     title: 'WTO Work Programme on Electronic Commerce',
@@ -14,14 +19,22 @@ export const records = [
       'The WTO General Council established a work programme to examine trade-related issues arising from global electronic commerce across WTO bodies.',
     sourceAuthority: 'official-international-organization',
     languageStatus: 'official-english',
+    authors: [
+      { name: 'WTO General Council', kind: 'institution' },
+    ],
+    publisher: 'World Trade Organization',
     sourceLinks: [
       {
         label: 'WTO Work Programme page',
         url: 'https://www.wto.org/english/tratop_e/ecom_e/ecom_work_programme_e.htm',
+        linkType: 'official-page',
+        note: 'WTO topic page summarizing the work programme and related materials.',
       },
       {
         label: 'WTO Docs PDF WT/L/274',
         url: 'https://docs.wto.org/dol2fe/Pages/SS/directdoc.aspx?filename=q:/WT/L/274.pdf&Open=True',
+        linkType: 'pdf',
+        note: 'Controlling General Council document text.',
       },
     ],
     citation: 'WTO Work Programme on Electronic Commerce, WT/L/274.',
@@ -152,14 +165,24 @@ export const records = [
       'China adopted a national data security framework that classifies data, regulates data processing, and links domestic governance to cross-border data concerns.',
     sourceAuthority: 'official-government',
     languageStatus: 'official-original',
+    authors: [
+      { name: "Standing Committee of the National People's Congress", kind: 'institution' },
+    ],
+    publisher: "National People's Congress of the People's Republic of China",
     sourceLinks: [
       {
         label: 'NPC Chinese original',
         url: 'https://www.npc.gov.cn/npc/c2/c30834/202106/t20210610_311888.html',
+        linkType: 'html-text',
+        languageStatus: 'official-original',
+        note: "Chinese controlling text published by the National People's Congress.",
       },
       {
         label: 'NPC English translation',
         url: 'https://www.npc.gov.cn/englishnpc/c2759/c23934/202112/t20211209_385109.html',
+        linkType: 'html-text',
+        languageStatus: 'official-english',
+        note: 'Official English translation published on the NPC English site.',
       },
     ],
     citation: "Data Security Law of the People's Republic of China, adopted 10 June 2021.",
@@ -427,6 +450,7 @@ export const records = [
       'WTO Joint Statement Initiative participants circulated a concluded text for an Agreement on Electronic Commerce, making it a central record for plurilateral trade rule-making.',
     sourceAuthority: 'official-international-organization',
     languageStatus: 'official-english',
+    publisher: 'World Trade Organization',
     sourceLinks: [
       {
         label: 'WTO Joint Statement Initiative on e-commerce',
@@ -585,10 +609,23 @@ export const records = [
       'The EU AI Act creates a risk-based legal framework for AI systems and general-purpose AI models, giving the EU a major regulatory role in global AI governance.',
     sourceAuthority: 'official-government',
     languageStatus: 'official-english',
+    authors: [
+      { name: 'European Parliament', kind: 'institution' },
+      { name: 'Council of the European Union', kind: 'institution' },
+    ],
+    publisher: 'European Union',
     sourceLinks: [
       {
         label: 'EUR-Lex Regulation (EU) 2024/1689',
         url: 'https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng',
+        linkType: 'html-text',
+        note: 'Official legal text in EUR-Lex.',
+      },
+      {
+        label: 'European Commission AI Act policy page',
+        url: 'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai',
+        linkType: 'official-page',
+        note: 'Commission overview, implementation context, and supporting materials.',
       },
     ],
     citation: 'Regulation (EU) 2024/1689 of the European Parliament and of the Council of 13 June 2024.',
@@ -770,4 +807,12 @@ export const records = [
     relatedRecordIds: ['wto-work-programme-electronic-commerce-1998', 'wto-agreement-electronic-commerce-2024'],
     tags: ['wto', 'mc12', 'ministerial-conference', 'institutional-reform', 'negotiations'],
   },
+  ...britainBatchRecords,
+  ...thirdBatchRecords,
+  ...fourthBatchRecords,
 ];
+
+export const records = baseRecords.map((record) => ({
+  ...record,
+  dimensions: recordDimensionsById[record.id] ?? [],
+}));

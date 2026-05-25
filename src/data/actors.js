@@ -81,4 +81,17 @@ export const actors = [
       'Shapes international economic rules through mega-regional trade agreements, G7 agenda-setting, WTO coalition work, development finance, and standards diplomacy.',
     topicIds: ['great-powers', 'digital-trade-ecommerce', 'wto-reform', 'ai-governance'],
   },
+  {
+    id: 'united-kingdom',
+    name: 'United Kingdom',
+    type: 'great-power',
+    summary:
+      'Spans imperial Britain, postwar Britain, and the contemporary United Kingdom, shaping international economic rules through empire, finance, treaty practice, market access, standards diplomacy, and institutional statecraft.',
+    topicIds: [
+      'great-powers',
+      'britain-imperial-rulemaking',
+      'digital-trade-ecommerce',
+      'ai-governance',
+    ],
+  },
 ];

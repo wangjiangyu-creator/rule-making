@@ -1,3 +1,4 @@
+import { dimensions } from '../data/dimensions.js';
 import { languageStatuses, sourceAuthorities } from '../data/schema.js';
 import { authorityLabel, humanizeId } from '../lib/format.js';
 
@@ -50,6 +51,23 @@ export function renderSourcesMethod() {
       </p>
       <ul>
         ${languageStatuses.map((status) => `<li>${escapeHtml(humanizeId(status))}</li>`).join('')}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Analytical dimensions</h2>
+      <p>
+        The portal classifies records not only by topic and actor, but also by the
+        rule-making function they illuminate. These analytical dimensions allow
+        comparison across China, the United States, Europe, Britain, and middle powers.
+      </p>
+      <ul>
+        ${dimensions
+          .map(
+            (dimension) =>
+              `<li><strong>${escapeHtml(dimension.title)}.</strong> ${escapeHtml(dimension.summary)}</li>`,
+          )
+          .join('')}
       </ul>
     </section>
   `;

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { recordTypes, languageStatuses, sourceAuthorities } from '../src/data/schema.js';
+import { dimensions } from '../src/data/dimensions.js';
+import { authorKinds, recordTypes, languageStatuses, sourceAuthorities, sourceLinkTypes } from '../src/data/schema.js';
 import { topics } from '../src/data/topics.js';
 import { actors } from '../src/data/actors.js';
 import { institutions } from '../src/data/institutions.js';
@@ -43,9 +44,27 @@ const expectedSourceAuthorities = [
   'professional-commentary',
 ];
 
+const expectedSourceLinkTypes = [
+  'official-page',
+  'full-text',
+  'pdf',
+  'html-text',
+  'metadata',
+  'summary',
+  'press-release',
+  'working-paper',
+  'commentary',
+];
+
+const expectedAuthorKinds = [
+  'person',
+  'institution',
+];
+
 const expectedTopicIds = [
   'theories-rulemaking',
   'great-powers',
+  'britain-imperial-rulemaking',
   'united-states',
   'european-union',
   'china',
@@ -58,6 +77,14 @@ const expectedTopicIds = [
   'ai-governance',
 ];
 
+const expectedDimensionIds = [
+  'agenda-setting',
+  'coalition-consensus-building',
+  'legitimacy-management',
+  'norm-entrepreneurship-drafting-power',
+  'objective-setting',
+];
+
 function assertUniqueIds(items, label) {
   const ids = items.map((item) => item.id);
   assert.equal(new Set(ids).size, ids.length, `${label} ids must be unique`);
@@ -67,6 +94,8 @@ test('schema lists allowed categories', () => {
   assert.deepEqual(recordTypes, expectedRecordTypes);
   assert.deepEqual(languageStatuses, expectedLanguageStatuses);
   assert.deepEqual(sourceAuthorities, expectedSourceAuthorities);
+  assert.deepEqual(sourceLinkTypes, expectedSourceLinkTypes);
+  assert.deepEqual(authorKinds, expectedAuthorKinds);
   assert.ok(recordTypes.includes('negotiation-record'));
   assert.ok(languageStatuses.includes('official-bilingual'));
   assert.ok(sourceAuthorities.includes('official-international-organization'));
@@ -81,6 +110,37 @@ test('topics, actors, and institutions use stable unique ids', () => {
   assertUniqueIds(actors, 'actor');
   assertUniqueIds(institutions, 'institution');
   assert.ok(topics.some((topic) => topic.id === 'digital-trade-ecommerce' && topic.pilot));
+});
+
+test('records expose a stable dimensions classification layer', () => {
+  assert.deepEqual(
+    dimensions.map((dimension) => dimension.id).sort(),
+    expectedDimensionIds,
+  );
+
+  const dimensionIds = new Set(dimensions.map((dimension) => dimension.id));
+  const linkedDimensionIds = new Set();
+
+  for (const topic of topics) {
+    assert.ok(Array.isArray(topic.dimensionIds), `${topic.id} defines relevant dimensions`);
+    assert.ok(topic.dimensionIds.length >= 1, `${topic.id} has at least one relevant dimension`);
+
+    for (const dimensionId of topic.dimensionIds) {
+      assert.ok(dimensionIds.has(dimensionId), `${topic.id} references dimension ${dimensionId}`);
+    }
+  }
+
+  for (const record of records) {
+    assert.ok(Array.isArray(record.dimensions), `${record.id} exposes dimensions`);
+    assert.ok(record.dimensions.length >= 1, `${record.id} has at least one dimension`);
+
+    for (const dimensionId of record.dimensions) {
+      assert.ok(dimensionIds.has(dimensionId), `${record.id} references dimension ${dimensionId}`);
+      linkedDimensionIds.add(dimensionId);
+    }
+  }
+
+  assert.deepEqual([...linkedDimensionIds].sort(), expectedDimensionIds);
 });
 
 test('actor and institution topic references resolve', () => {
@@ -110,6 +170,13 @@ test('records use valid schema values and resolved references', () => {
     assert.ok(recordTypes.includes(record.recordType), `${record.id} has valid recordType`);
     assert.ok(languageStatuses.includes(record.languageStatus), `${record.id} has valid languageStatus`);
     assert.ok(sourceAuthorities.includes(record.sourceAuthority), `${record.id} has valid sourceAuthority`);
+    assert.ok(
+      record.date === undefined
+        || /^\d{4}$/.test(String(record.date))
+        || /^\d{4}-\d{2}$/.test(String(record.date))
+        || /^\d{4}-\d{2}-\d{2}$/.test(String(record.date)),
+      `${record.id} uses a supported date precision`,
+    );
 
     for (const topicId of record.topics) {
       assert.ok(topicIds.has(topicId), `${record.id} references topic ${topicId}`);
@@ -202,6 +269,466 @@ test('second content batch adds official rulemaking materials across the portal 
       ),
     ),
     'second batch is anchored in official or court sources',
+  );
+});
+
+test('third content batch gives every topic a substantive mixed-source shelf', () => {
+  const expectedIds = [
+    'krasner-structural-causes-regime-consequences-1982',
+    'goldstein-kahler-keohane-slaughter-legalization-world-politics-2000',
+    'keohane-after-hegemony-1984',
+    'braithwaite-drahos-global-business-regulation-2000',
+    'ikenberry-after-victory-2001',
+    'drezner-all-politics-is-global-2007',
+    'farrell-newman-weaponized-interdependence-2019',
+    'us-chips-and-science-act-2022',
+    'ustr-national-trade-estimate-report-2024',
+    'us-international-cyberspace-digital-policy-strategy-2024',
+    'us-japan-digital-trade-agreement-2019',
+    'bradford-brussels-effect-2020',
+    'eu-digital-markets-act-2022',
+    'eu-nis2-directive-2022',
+    'china-cybersecurity-law-2016',
+    'china-global-ai-governance-initiative-2023',
+    'china-generative-ai-measures-2023',
+    'saving-wto-middle-power-insiders-jsis-2023',
+    'developing-country-coalitions-wto-rolland-2010',
+    'apec-privacy-framework-2015',
+    'wto-mpia-2020',
+    'wto-mc13-abu-dhabi-ministerial-declaration-2024',
+    'chatham-house-reforming-wto-2020',
+    'uk-singapore-digital-economy-agreement-2022',
+    'un-cross-border-paperless-trade-framework-2016',
+    'wto-digital-trade-for-development-2023',
+    'cigi-data-digital-trade-regulation-2018',
+    'budapest-convention-cybercrime-2001',
+    'council-europe-convention-108-plus-2018',
+    'oecd-government-access-private-sector-data-2022',
+    'un-cybercrime-convention-2024',
+    'imf-articles-of-agreement-1944',
+    'cpmi-iosco-principles-financial-market-infrastructures-2012',
+    'fsb-key-attributes-resolution-regimes-2014',
+    'iosco-objectives-principles-securities-regulation-2017',
+    'icsid-convention-1965',
+    'icsid-rules-regulations-2022',
+    'unctad-world-investment-report-2025',
+    'cjeu-achmea-2018',
+    'nist-ai-risk-management-framework-2023',
+    'us-executive-order-ai-14110-2023',
+    'council-europe-ai-framework-convention-2024',
+    'bletchley-declaration-2023',
+  ];
+  const recordIds = new Set(records.map((record) => record.id));
+  const literatureTypes = new Set(['academic-article', 'book-chapter']);
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
+  }
+
+  assert.ok(records.length >= 70, 'database has at least seventy records after broad expansion');
+  assert.ok(records.filter((record) => literatureTypes.has(record.recordType)).length >= 12, 'database has a literature shelf');
+  assert.ok(records.filter((record) => record.sourceAuthority === 'think-tank').length >= 4, 'database includes think tank reports and analysis');
+
+  for (const topic of topics) {
+    const topicRecords = records.filter((record) => record.topics.includes(topic.id));
+    const topicRecordTypes = new Set(topicRecords.map((record) => record.recordType));
+
+    assert.ok(topicRecords.length >= 5, `${topic.id} has at least five records`);
+    assert.ok(topicRecordTypes.size >= 2, `${topic.id} has more than one material type`);
+  }
+});
+
+test('records use valid attribution fields when present', () => {
+  for (const record of records) {
+    if (record.authors) {
+      assert.ok(Array.isArray(record.authors), `${record.id} authors is an array`);
+      assert.ok(record.authors.length >= 1, `${record.id} authors is not empty`);
+
+      for (const author of record.authors) {
+        assert.ok(author.name.length >= 3, `${record.id} author has a display name`);
+        assert.ok(authorKinds.includes(author.kind), `${record.id} author uses a valid kind`);
+      }
+    }
+
+    if (record.publisher) {
+      assert.ok(record.publisher.length >= 3, `${record.id} publisher is descriptive`);
+    }
+  }
+});
+
+test('first-pass attribution records expose structured authors and publishers', () => {
+  const requiredIds = [
+    'wto-work-programme-electronic-commerce-1998',
+    'wto-agreement-electronic-commerce-2024',
+    'china-data-security-law-2021',
+    'eu-artificial-intelligence-act-2024',
+    'un-governing-ai-humanity-2024',
+    'krasner-structural-causes-regime-consequences-1982',
+    'goldstein-kahler-keohane-slaughter-legalization-world-politics-2000',
+    'keohane-after-hegemony-1984',
+    'steinberg-shadow-law-power-gatt-wto-2002',
+    'bradford-brussels-effect-2020',
+  ];
+
+  for (const recordId of requiredIds) {
+    const record = records.find((item) => item.id === recordId);
+    assert.ok(record.authors?.length || record.publisher, `${recordId} has first-pass attribution`);
+  }
+});
+
+test('records use valid structured source-link fields when present', () => {
+  for (const record of records) {
+    for (const sourceLink of record.sourceLinks) {
+      if (sourceLink.linkType) {
+        assert.ok(sourceLinkTypes.includes(sourceLink.linkType), `${record.id} uses valid source link type`);
+      }
+
+      if (sourceLink.authority) {
+        assert.ok(sourceAuthorities.includes(sourceLink.authority), `${record.id} uses valid per-link authority`);
+      }
+
+      if (sourceLink.languageStatus) {
+        assert.ok(languageStatuses.includes(sourceLink.languageStatus), `${record.id} uses valid per-link language status`);
+      }
+
+      if (sourceLink.note) {
+        assert.ok(sourceLink.note.length >= 12, `${record.id} source note is descriptive`);
+      }
+    }
+  }
+});
+
+test('first-pass dossier records expose structured source variants', () => {
+  const requiredIds = [
+    'wto-work-programme-electronic-commerce-1998',
+    'china-data-security-law-2021',
+    'eu-artificial-intelligence-act-2024',
+    'un-governing-ai-humanity-2024',
+  ];
+
+  for (const recordId of requiredIds) {
+    const record = records.find((item) => item.id === recordId);
+    assert.ok(record, `${recordId} exists`);
+    assert.ok(record.sourceLinks.some((link) => link.linkType), `${recordId} has typed source links`);
+    assert.ok(record.sourceLinks.some((link) => link.note), `${recordId} has source notes`);
+  }
+
+  const chinaDsl = records.find((item) => item.id === 'china-data-security-law-2021');
+  assert.ok(chinaDsl.sourceLinks.some((link) => link.languageStatus === 'official-original'));
+  assert.ok(chinaDsl.sourceLinks.some((link) => link.languageStatus === 'official-english'));
+});
+
+test('theories topic has a deep rule-making shelf across literatures and practice materials', () => {
+  const theoryRecords = records.filter((record) => record.topics.includes('theories-rulemaking'));
+  const theoryRecordIds = new Set(theoryRecords.map((record) => record.id));
+  const theoryRecordTypes = new Set(theoryRecords.map((record) => record.recordType));
+  const expectedIds = [
+    'ruggie-embedded-liberalism-postwar-order-1982',
+    'ruggie-multilateralism-anatomy-institution-1992',
+    'young-political-leadership-regime-formation-1991',
+    'krasner-state-power-structure-international-trade-1976',
+    'snidal-limits-hegemonic-stability-theory-1985',
+    'kindleberger-dominance-leadership-international-economy-1981',
+    'stein-hegemons-dilemma-1984',
+    'lake-leadership-hegemony-international-economy-1993',
+    'gilpin-war-change-world-politics-1981',
+    'haas-introduction-epistemic-communities-1992',
+    'haas-when-knowledge-is-power-1990',
+    'tallberg-power-of-the-chair-2010',
+    'gruber-ruling-the-world-2000',
+    'steil-battle-bretton-woods-2013',
+    'helleiner-forgotten-foundations-bretton-woods-2014',
+    'pedersen-cooperative-hegemony-2002',
+    'damro-market-power-europe-2012',
+    'manners-normative-power-europe-2002',
+    'meunier-nicolaidis-conflicted-trade-power-2006',
+    'bradford-brussels-effect-2020',
+    'ikenberry-liberal-leviathan-2011',
+    'hasenclever-mayer-rittberger-theories-international-regimes-1997',
+    'steinberg-trade-environment-negotiations-eu-nafta-wto-1997',
+    'steinberg-great-power-management-world-trading-system-1998',
+    'steinberg-shadow-law-power-gatt-wto-2002',
+    'steinberg-judicial-lawmaking-wto-2004',
+    'steinberg-zasloff-power-international-law-2006',
+    'goldstein-steinberg-negotiate-litigate-wto-2008',
+    'goldstein-steinberg-regulatory-shift-wto-2009',
+    'steinberg-hidden-world-wto-governance-reply-2009',
+    'steinberg-wanted-dead-or-alive-realism-international-law-2013',
+    'steinberg-international-trade-law-state-transformation-2013',
+    'hudec-enforcing-international-trade-law-1993',
+    'weiler-rule-of-lawyers-ethos-diplomats-wto-2001',
+    'howse-nicolaidis-legitimacy-global-governance-wto-step-too-far-2001',
+    'howse-politics-technocracy-back-multilateral-trading-regime-2002',
+    'shaffer-parliamentary-oversight-wto-rulemaking-2004',
+    'shaffer-power-governance-wto-comparative-institutional-approach-2005',
+    'wto-future-of-wto-institutional-challenges-2005',
+    'wolfe-decision-making-transparency-medieval-wto-2005',
+    'jackson-wto-international-organization-key-problems-2006',
+    'esty-good-governance-wto-administrative-law-2007',
+    'lang-scott-hidden-world-wto-governance-2009',
+    'steger-future-of-wto-institutional-reform-2009',
+    'stewart-badin-wto-global-administrative-law-2011',
+    'lang-world-trade-law-after-neoliberalism-2011',
+    'shaffer-how-wto-shapes-regulatory-governance-2015',
+    'raustiala-form-substance-international-agreements-2005',
+    'raustiala-architecture-international-cooperation-2002',
+    'keohane-nye-transgovernmental-relations-1974',
+    'franck-power-legitimacy-among-nations-1990',
+    'bodansky-concept-legitimacy-international-law-2008',
+    'brunnee-toope-legitimacy-legality-international-law-2010',
+    'kingsbury-krisch-stewart-emergence-global-administrative-law-2005',
+    'rosenau-governance-order-change-world-politics-1992',
+    'slaughter-real-new-world-order-1997',
+    'finkelstein-what-is-global-governance-1995',
+    'avant-finnemore-sell-who-governs-the-globe-2010',
+    'chayes-chayes-new-sovereignty-1995',
+    'pauwelyn-wessel-wouters-informal-international-lawmaking-2012',
+    'pauwelyn-wessel-wouters-introduction-informal-international-lawmaking-2012',
+    'abbott-snidal-governance-triangle-2009',
+    'alter-meunier-international-regime-complexity-2009',
+    'alter-raustiala-rise-international-regime-complexity-2018',
+    'black-polycentric-regulatory-regimes-legitimacy-accountability-2008',
+    'alvarez-international-organizations-law-makers-2006',
+    'emergence-private-authority-global-governance-2002',
+    'biersteker-hall-private-authority-global-governance-2002',
+    'abbott-genschel-snidal-zangl-orchestration-global-governance-2012',
+    'abbott-snidal-law-legalization-politics-2012',
+    'finnemore-toope-alternatives-legalization-2001',
+    'biermann-kanie-kim-global-governance-goal-setting-2017',
+    'lake-rightful-rules-global-governance-2010',
+    'carnegie-rules-of-order-global-governance-2023',
+    'cigi-institutional-collaboration-global-governance-2021',
+    'chatham-house-inclusive-global-governance-2021',
+  ];
+
+  for (const expectedId of expectedIds) {
+    assert.ok(theoryRecordIds.has(expectedId), `${expectedId} is linked to theories-rulemaking`);
+  }
+
+  assert.ok(theoryRecords.length >= 83, 'theories topic has at least eighty-three records');
+  assert.ok(
+    theoryRecords.filter((record) => ['academic-article', 'book-chapter'].includes(record.recordType)).length >= 78,
+    'theories topic has at least seventy-eight literature records',
+  );
+  assert.ok(
+    theoryRecords.filter((record) => ['think-tank', 'official-international-organization'].includes(record.sourceAuthority)).length >= 4,
+    'theories topic includes at least four policy or institutional governance items',
+  );
+  assert.ok(theoryRecordTypes.has('academic-article'), 'theories topic includes journal articles');
+  assert.ok(theoryRecordTypes.has('book-chapter'), 'theories topic includes books or chapters');
+  assert.ok(theoryRecordTypes.has('research-report'), 'theories topic includes policy or think tank reports');
+});
+
+test('britain and imperial rule-making shelf has a substantive mixed historical corpus', () => {
+  const expectedIds = [
+    'navigation-acts-repeal-1849',
+    'bank-charter-act-1844',
+    'declaration-paris-maritime-law-1856',
+    'cobden-chevalier-treaty-1860',
+    'general-act-berlin-conference-1885',
+    'bagehot-lombard-street-1873',
+    'hall-treatise-international-law-1880',
+    'oppenheim-international-law-1905',
+    'gallagher-robinson-imperialism-free-trade-1953',
+    'cain-hopkins-british-imperialism-1993',
+    'darwin-empire-project-2009',
+    'findlay-orourke-power-plenty-2007',
+  ];
+  const recordIds = new Set(records.map((record) => record.id));
+  const britainShelf = records.filter((record) => record.topics.includes('britain-imperial-rulemaking'));
+  const missingIds = expectedIds.filter((expectedId) => !recordIds.has(expectedId));
+  const issues = [];
+
+  if (missingIds.length > 0) {
+    issues.push(`missing Britain records: ${missingIds.join(', ')}`);
+  }
+
+  if (britainShelf.length < 18) {
+    issues.push(`britain shelf count is ${britainShelf.length}, expected at least 18`);
+  }
+  if (!britainShelf.some((record) => ['academic-article', 'book-chapter'].includes(record.recordType))) {
+    issues.push('britain shelf is missing scholarship');
+  }
+  if (
+    !britainShelf.some((record) =>
+      ['treaty-agreement', 'national-law-policy', 'institutional-document'].includes(record.recordType),
+    )
+  ) {
+    issues.push('britain shelf is missing primary or official historical materials');
+  }
+  if (!britainShelf.some((record) => record.topics.includes('great-powers'))) {
+    issues.push('britain shelf is missing great-powers propagation');
+  }
+  if (!britainShelf.some((record) => record.topics.includes('monetary-financial-regulation'))) {
+    issues.push('britain shelf is missing monetary-financial-regulation propagation');
+  }
+
+  assert.equal(issues.length, 0, issues.join('; '));
+});
+
+test('applied topic shelves beyond theory have broader documentary and literature coverage', () => {
+  const recordIds = new Set(records.map((record) => record.id));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+  const expectedIds = [
+    'china-wto-reform-proposal-2019',
+    'china-foreign-investment-law-2019',
+    'china-export-control-law-2020',
+    'aiib-articles-of-agreement-2015',
+    'brics-new-development-bank-agreement-2014',
+    'cmim-agreement-2010',
+    'amro-agreement-2016',
+    'unctad-investment-policy-framework-sustainable-development-2015',
+    'mauritius-convention-transparency-2014',
+    'us-model-bit-2012',
+    'schill-multilateralization-investment-law-2009',
+    'bonnitcha-poulsen-waibel-political-economy-investment-treaty-regime-2017',
+    'dodd-frank-act-2010',
+    'eu-us-data-privacy-framework-2023',
+    'european-digital-rights-principles-2022',
+    'ottawa-group-wto-reform-2019',
+    'global-cbpr-declaration-2022',
+    'asean-defa-leaders-statement-2023',
+    'unesco-recommendation-ethics-ai-2021',
+    'un-governing-ai-humanity-2024',
+    'seoul-declaration-ai-2024',
+  ];
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
+  }
+
+  assert.ok(byTopic.china.length >= 13, 'china topic has at least thirteen records');
+  assert.ok(new Set(byTopic.china.map((record) => record.recordType)).size >= 4, 'china topic spans at least four material types');
+  assert.ok(byTopic['international-investment'].length >= 13, 'international investment has at least thirteen records');
+  assert.ok(
+    byTopic['international-investment'].some((record) => ['academic-article', 'book-chapter'].includes(record.recordType)),
+    'international investment includes literature',
+  );
+  assert.ok(byTopic['united-states'].length >= 12, 'united states topic has at least twelve records');
+  assert.ok(byTopic['monetary-financial-regulation'].length >= 15, 'money and finance topic has at least fifteen records');
+  assert.ok(byTopic['middle-small-powers'].length >= 17, 'middle and small powers topic has at least seventeen records');
+  assert.ok(byTopic['ai-governance'].length >= 15, 'ai governance topic has at least fifteen records');
+  assert.ok(
+    byTopic['ai-governance'].some((record) => record.recordType === 'research-report'),
+    'ai governance includes report-style governance materials',
+  );
+  assert.ok(byTopic['european-union'].length >= 17, 'european union topic has at least seventeen records');
+  assert.ok(byTopic['cyber-data-governance'].length >= 24, 'cyber and data governance topic has at least twenty-four records');
+});
+
+test('thin-topic balance batch raises the weaker shelves with mixed-source additions', () => {
+  const unitedStatesIds = [
+    'us-national-cybersecurity-strategy-2023',
+    'declaration-future-internet-2022',
+    'us-ai-bill-of-rights-2022',
+    'political-declaration-responsible-military-ai-autonomy-2023',
+    'goldsmith-wu-who-controls-internet-2006',
+  ];
+  const chinaIds = [
+    'xi-high-level-dialogue-global-development-2022',
+    'gdi-concept-note-2022',
+    'vision-actions-belt-road-2015',
+    'china-anti-foreign-sanctions-law-2021',
+    'third-belt-road-forum-chairs-statement-2023',
+  ];
+  const investmentIds = [
+    'uncitral-code-conduct-adjudicators-isds-2023',
+    'world-bank-global-investment-competitiveness-report-2019-2020',
+    'world-bank-global-investment-competitiveness-report-2017-2018',
+    'unctad-investment-facilitation-iias-trends-policy-options-2023',
+    'unctad-facilitating-investment-sdgs-2022',
+  ];
+  const financeIds = [
+    'toward-integrated-policy-framework-2020',
+    'fsb-global-stablecoin-high-level-recommendations-2023',
+    'g20-common-framework-debt-treatments-2020',
+    'enhancing-cross-border-payments-roadmap-2020',
+    'tooze-crashed-decade-financial-crises-2018',
+  ];
+  const aiIds = [
+    'oecd-framework-classification-ai-systems-2022',
+    'un-ai-advisory-body-interim-report-2023',
+    'unesco-ai-readiness-assessment-methodology-2023',
+  ];
+
+  const expectedIds = [...unitedStatesIds, ...chinaIds, ...investmentIds, ...financeIds, ...aiIds];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordById.has(expectedId), `${expectedId} exists`);
+  }
+
+  for (const recordId of unitedStatesIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record, `${recordId} exists`);
+    assert.ok(record.topics.includes('united-states'), `${recordId} is linked to united-states`);
+  }
+
+  for (const recordId of chinaIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record, `${recordId} exists`);
+    assert.ok(record.topics.includes('china'), `${recordId} is linked to china`);
+  }
+
+  for (const recordId of investmentIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record, `${recordId} exists`);
+    assert.ok(record.topics.includes('international-investment'), `${recordId} is linked to international-investment`);
+  }
+
+  for (const recordId of financeIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record, `${recordId} exists`);
+    assert.ok(
+      record.topics.includes('monetary-financial-regulation'),
+      `${recordId} is linked to monetary-financial-regulation`,
+    );
+  }
+
+  for (const recordId of aiIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record, `${recordId} exists`);
+    assert.ok(record.topics.includes('ai-governance'), `${recordId} is linked to ai-governance`);
+  }
+
+  assert.ok(byTopic['united-states'].length >= 18, 'united states topic has at least eighteen records');
+  assert.ok(byTopic.china.length >= 19, 'china topic has at least nineteen records');
+  assert.ok(
+    byTopic['international-investment'].length >= 18,
+    'international investment topic has at least eighteen records',
+  );
+  assert.ok(
+    byTopic['monetary-financial-regulation'].length >= 20,
+    'money and finance topic has at least twenty records',
+  );
+  assert.ok(byTopic['ai-governance'].length >= 20, 'ai governance topic has at least twenty records');
+
+  assert.ok(
+    byTopic['united-states'].some((record) => ['academic-article', 'book-chapter'].includes(record.recordType)),
+    'united states shelf includes literature',
+  );
+  assert.ok(
+    byTopic.china.some((record) => ['official-statement', 'research-report'].includes(record.recordType)),
+    'china shelf includes statements or report-style materials',
+  );
+  assert.ok(
+    byTopic['international-investment'].some((record) => record.recordType === 'research-report'),
+    'international investment includes report-style reform materials',
+  );
+  assert.ok(
+    byTopic['monetary-financial-regulation'].some((record) => record.recordType === 'official-statement'),
+    'money and finance includes official statements',
+  );
+  assert.ok(
+    byTopic['ai-governance'].some((record) =>
+      ['academic-article', 'book-chapter', 'research-report'].includes(record.recordType),
+    ),
+    'ai governance includes literature or report-style governance materials',
   );
 });
 
@@ -308,6 +835,21 @@ test('search helpers include source-link labels in query text', () => {
   );
 });
 
+test('search helpers include authors and publishers in query text', () => {
+  assert.ok(
+    filterRecords(records, { query: 'Steinberg' }).some(
+      (record) => record.id === 'steinberg-shadow-law-power-gatt-wto-2002',
+    ),
+    'Steinberg query finds the structured-attribution record',
+  );
+  assert.ok(
+    filterRecords(records, { query: 'Oxford University Press' }).some(
+      (record) => record.id === 'bradford-brussels-effect-2020',
+    ),
+    'publisher query finds the Bradford record',
+  );
+});
+
 test('search helpers include related entity display labels in query text', () => {
   assert.ok(
     filterRecords(records, { query: 'World Trade Organization' }).some(
@@ -356,6 +898,7 @@ test('search helpers match multi-word queries across searchable fields', () => {
 test('format helpers provide readable labels and dates', () => {
   assert.equal(recordTypeLabel('negotiation-record'), 'Negotiation record');
   assert.equal(formatDate('2020-06-12'), 'Jun 12, 2020');
+  assert.equal(formatDate('2020-06'), 'Jun 2020');
   assert.equal(formatDate('2020'), '2020');
 });
 

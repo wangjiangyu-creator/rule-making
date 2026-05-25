@@ -1,6 +1,7 @@
 import { records } from '../data/records.js';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
+import { attributionDisplay } from '../lib/attribution.js';
 import { formatDate, recordTypeLabel } from '../lib/format.js';
 import { sortRecordsNewestFirst } from '../lib/search.js';
 
@@ -14,10 +15,13 @@ function escapeHtml(value) {
 }
 
 function renderRecentRecord(record) {
+  const attribution = attributionDisplay(record);
+
   return `
     <li class="record-row">
       <p class="eyebrow">${escapeHtml(recordTypeLabel(record.recordType))}</p>
       <h3><a href="#/records/${escapeHtml(record.id)}">${escapeHtml(record.title)}</a></h3>
+      ${attribution ? `<p class="record-attribution">${escapeHtml(attribution)}</p>` : ''}
       <p>${escapeHtml(record.summary)}</p>
     </li>
   `;
@@ -47,6 +51,7 @@ export function renderHome() {
   const recentRecords = sortRecordsNewestFirst(records).slice(0, 5);
   const digitalTradeTimeline = timeline
     .filter((entry) => entry.topicId === 'digital-trade-ecommerce')
+    .sort((left, right) => left.date.localeCompare(right.date))
     .slice(0, 5);
 
   return `
@@ -76,6 +81,20 @@ export function renderHome() {
       </div>
     </section>
 
+    <section class="feature-panel">
+      <p class="eyebrow">Research pathways</p>
+      <h2>Compare the portal by topic, dimension, or actor</h2>
+      <p>
+        Move between substantive issue areas, cross-cutting rule-making dimensions,
+        and actor profiles without leaving the structured database.
+      </p>
+      <div class="button-row">
+        <a class="button button-primary" href="#/topics">Browse by topic</a>
+        <a class="button button-secondary" href="#/dimensions">Browse by dimension</a>
+        <a class="button button-secondary" href="#/actors">Browse by actor</a>
+      </div>
+    </section>
+
     <section>
       <h2>Recent records</h2>
       <ol class="record-list">
@@ -92,6 +111,9 @@ export function renderHome() {
 
     <section>
       <h2>Digital trade timeline preview</h2>
+      <div class="button-row">
+        <a class="button button-secondary" href="#/timeline?topic=digital-trade-ecommerce">Open full timeline</a>
+      </div>
       <ol class="timeline-list">
         ${digitalTradeTimeline.map(renderTimelineItem).join('')}
       </ol>

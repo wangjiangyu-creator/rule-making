@@ -1,5 +1,33 @@
 export const timeline = [
   {
+    date: '1844-07-19',
+    title: 'Bank Charter Act reshapes British monetary rule-making',
+    tag: 'imperial-rulemaking',
+    topicId: 'britain-imperial-rulemaking',
+    relatedIds: ['bank-charter-act-1844'],
+  },
+  {
+    date: '1856-04-16',
+    title: 'Declaration of Paris codifies maritime law rules',
+    tag: 'imperial-rulemaking',
+    topicId: 'britain-imperial-rulemaking',
+    relatedIds: ['declaration-paris-maritime-law-1856'],
+  },
+  {
+    date: '1860-01-23',
+    title: 'Cobden-Chevalier Treaty lowers Anglo-French trade barriers',
+    tag: 'imperial-rulemaking',
+    topicId: 'britain-imperial-rulemaking',
+    relatedIds: ['cobden-chevalier-treaty-1860'],
+  },
+  {
+    date: '1885-02-26',
+    title: 'Berlin Conference General Act formalizes rules for imperial expansion',
+    tag: 'imperial-rulemaking',
+    topicId: 'britain-imperial-rulemaking',
+    relatedIds: ['general-act-berlin-conference-1885'],
+  },
+  {
     date: '1998-09-25',
     title: 'WTO establishes Work Programme on Electronic Commerce',
     tag: 'digital-trade',
