@@ -237,6 +237,21 @@ test('new batch records propagate to actor and institution pages', () => {
   assert.match(institutionHtml, /Integrated Policy Framework/);
 });
 
+test('actor detail pages expose topic distribution and the newest comparison materials', () => {
+  const unitedStatesHtml = renderActorDetail('united-states');
+  const europeHtml = renderTopicDetail('european-union');
+  const chinaHtml = renderTopicDetail('china');
+
+  assert.match(unitedStatesHtml, /Topic distribution/);
+  assert.match(unitedStatesHtml, /United States and International Rule-Making \(\d+\)/);
+  assert.match(unitedStatesHtml, /Cyber Governance and Global Data Governance \(\d+\)/);
+  assert.match(unitedStatesHtml, /U\.S\.-EU Trade and Technology Council Inaugural Joint Statement/);
+  assert.match(europeHtml, /A European Strategy for Data/);
+  assert.match(europeHtml, /White Paper on Artificial Intelligence/);
+  assert.match(chinaHtml, /Global Initiative on Data Security/);
+  assert.match(chinaHtml, /National Standardization Development Outline/);
+});
+
 test('britain shelf surfaces in topics, actor detail, and timeline views', () => {
   const issues = [];
   const topicsHtml = renderTopics();

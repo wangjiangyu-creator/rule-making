@@ -732,6 +732,62 @@ test('thin-topic balance batch raises the weaker shelves with mixed-source addit
   );
 });
 
+test('fifth content batch deepens the US, EU, and China comparison shelves', () => {
+  const unitedStatesIds = [
+    'us-eu-trade-technology-council-inaugural-joint-statement-2021',
+    'us-national-security-strategy-2022',
+    'cloud-act-2018',
+    'executive-order-14086-signals-intelligence-2022',
+  ];
+  const europeIds = [
+    'european-strategy-data-2020',
+    'eu-white-paper-artificial-intelligence-2020',
+    'eu-data-governance-act-2022',
+  ];
+  const chinaIds = [
+    'china-global-initiative-data-security-2020',
+    'china-international-strategy-cooperation-cyberspace-2017',
+    'china-national-standardization-development-outline-2021',
+    'china-outbound-data-transfer-security-assessment-measures-2022',
+  ];
+  const expectedIds = [...unitedStatesIds, ...europeIds, ...chinaIds];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordById.has(expectedId), `${expectedId} exists`);
+  }
+
+  for (const recordId of unitedStatesIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record.topics.includes('united-states'), `${recordId} is linked to united-states`);
+  }
+
+  for (const recordId of europeIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record.topics.includes('european-union'), `${recordId} is linked to european-union`);
+  }
+
+  for (const recordId of chinaIds) {
+    const record = recordById.get(recordId);
+    assert.ok(record.topics.includes('china'), `${recordId} is linked to china`);
+  }
+
+  assert.ok(byTopic['united-states'].length >= 22, 'united states topic has at least twenty-two records');
+  assert.ok(byTopic['european-union'].length >= 20, 'european union topic has at least twenty records');
+  assert.ok(byTopic.china.length >= 23, 'china topic has at least twenty-three records');
+  assert.ok(
+    byTopic['european-union'].some((record) => record.topics.includes('cyber-data-governance')),
+    'european union shelf intersects with cyber and data governance',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.topics.includes('cyber-data-governance')),
+    'china shelf intersects with cyber and data governance',
+  );
+});
+
 test('timeline entries resolve to topic and record ids', () => {
   const topicIds = new Set(topics.map((topic) => topic.id));
   const recordIds = new Set(records.map((record) => record.id));

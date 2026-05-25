@@ -856,4 +856,58 @@ export const recordDimensionsById = {
     'legitimacy-management',
     'norm-entrepreneurship-drafting-power',
   ],
+  'us-eu-trade-technology-council-inaugural-joint-statement-2021': [
+    'agenda-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'us-national-security-strategy-2022': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'cloud-act-2018': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'executive-order-14086-signals-intelligence-2022': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'european-strategy-data-2020': [
+    'objective-setting',
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-white-paper-artificial-intelligence-2020': [
+    'objective-setting',
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-data-governance-act-2022': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-global-initiative-data-security-2020': [
+    'legitimacy-management',
+    'agenda-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-international-strategy-cooperation-cyberspace-2017': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-national-standardization-development-outline-2021': [
+    'objective-setting',
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-outbound-data-transfer-security-assessment-measures-2022': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
 };
