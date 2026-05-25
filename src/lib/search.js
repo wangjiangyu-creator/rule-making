@@ -1,3 +1,11 @@
+import { actors } from '../data/actors.js';
+import { institutions } from '../data/institutions.js';
+import { topics } from '../data/topics.js';
+
+const actorById = new Map(actors.map((actor) => [actor.id, actor]));
+const institutionById = new Map(institutions.map((institution) => [institution.id, institution]));
+const topicById = new Map(topics.map((topic) => [topic.id, topic]));
+
 function normalizeText(value) {
   return String(value ?? '')
     .normalize('NFKD')
@@ -18,6 +26,13 @@ function sourceLinkLabels(sourceLinks) {
   );
 }
 
+function relatedEntityLabels(ids, lookup, fields) {
+  return asList(ids).flatMap((id) => {
+    const item = lookup.get(id);
+    return item ? fields.map((field) => item[field]) : [];
+  });
+}
+
 export function recordSearchText(record) {
   return [
     record.title,
@@ -28,9 +43,12 @@ export function recordSearchText(record) {
     record.languageStatus,
     record.year,
     ...asList(record.actors),
+    ...relatedEntityLabels(record.actors, actorById, ['name']),
     ...asList(record.jurisdictions),
     ...asList(record.institutions),
+    ...relatedEntityLabels(record.institutions, institutionById, ['name', 'shortName']),
     ...asList(record.topics),
+    ...relatedEntityLabels(record.topics, topicById, ['title', 'shortTitle']),
     ...asList(record.tags),
     ...sourceLinkLabels(record.sourceLinks),
   ]

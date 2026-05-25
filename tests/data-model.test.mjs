@@ -228,6 +228,27 @@ test('search helpers include source-link labels in query text', () => {
   );
 });
 
+test('search helpers include related entity display labels in query text', () => {
+  assert.ok(
+    filterRecords(records, { query: 'World Trade Organization' }).some(
+      (record) => record.id === 'wto-work-programme-electronic-commerce-1998',
+    ),
+    'World Trade Organization query finds WTO-linked records',
+  );
+  assert.ok(
+    filterRecords(records, { query: 'International Monetary Fund' }).some(
+      (record) => record.id === 'imf-institutional-view-capital-flows-2012',
+    ),
+    'International Monetary Fund query finds IMF-linked records',
+  );
+  assert.ok(
+    filterRecords(records, { query: 'Global AI Governance' }).some(
+      (record) => record.id === 'oecd-ai-principles-2019',
+    ),
+    'Global AI Governance query finds AI-governance topic records',
+  );
+});
+
 test('search helpers tolerate missing list fields when filtering', () => {
   const partialRecords = [
     {
