@@ -1,7 +1,7 @@
 import { dimensions } from '../data/dimensions.js';
 import { actors } from '../data/actors.js';
 import { institutions } from '../data/institutions.js';
-import { records } from '../data/records.js?v=20260526h';
+import { records } from '../data/records.js?v=20260526i';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
@@ -398,7 +398,7 @@ export function renderTopicDetail(topicId) {
         : ''
     }
 
-    <section>
+    <section data-topic-filter-results>
       <h2>Linked records</h2>
       <p>
         ${

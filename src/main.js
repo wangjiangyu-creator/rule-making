@@ -1,13 +1,14 @@
-import { renderActorDetail, renderActors } from './views/actors.js?v=20260526h';
-import { renderDatabase, renderRecordDetail } from './views/database.js?v=20260526h';
-import { renderDimensionDetail, renderDimensions } from './views/dimensions.js?v=20260526h';
-import { renderHome } from './views/home.js?v=20260526h';
-import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js?v=20260526h';
-import { renderSourcesMethod } from './views/sources.js?v=20260526h';
-import { renderTimelinePage } from './views/timeline.js?v=20260526h';
-import { renderTopicDetail, renderTopics } from './views/topics.js?v=20260526h';
+import { renderActorDetail, renderActors } from './views/actors.js?v=20260526i';
+import { renderDatabase, renderRecordDetail } from './views/database.js?v=20260526i';
+import { renderDimensionDetail, renderDimensions } from './views/dimensions.js?v=20260526i';
+import { renderHome } from './views/home.js?v=20260526i';
+import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js?v=20260526i';
+import { renderSourcesMethod } from './views/sources.js?v=20260526i';
+import { renderTimelinePage } from './views/timeline.js?v=20260526i';
+import { renderTopicDetail, renderTopics } from './views/topics.js?v=20260526i';
 
 const app = document.querySelector('#app');
+let keepTopicFilterResultsVisible = false;
 
 function pathParts() {
   const hash = globalThis.location?.hash ?? '#/';
@@ -71,9 +72,57 @@ function route() {
   }
 
   bindForms();
+
+  if (keepTopicFilterResultsVisible) {
+    keepTopicFilterResultsVisible = false;
+
+    if (scrollToTopicFilterResults()) return;
+  }
+
   app.focus({ preventScroll: true });
   window.scrollTo(0, 0);
   window.requestAnimationFrame?.(() => window.scrollTo(0, 0));
+}
+
+function scrollToTopicFilterResults() {
+  const target =
+    document.querySelector('[data-topic-filter-results]') ?? document.querySelector('form[data-topic-filter-form]');
+
+  if (target && typeof target.scrollIntoView === 'function') {
+    target.scrollIntoView({ block: 'start' });
+    return true;
+  }
+
+  return false;
+}
+
+function filterHashFromForm(form) {
+  const formData = new FormData(form);
+  const params = new URLSearchParams();
+  const filterBase =
+    typeof form.getAttribute === 'function' ? form.getAttribute('data-filter-base') || '#/database' : '#/database';
+
+  for (const [field, rawValue] of formData) {
+    const value = String(rawValue ?? '').trim();
+
+    if (field && value) params.set(field, value);
+  }
+
+  return params.toString() ? `${filterBase}?${params.toString()}` : filterBase;
+}
+
+function applyFilterForm(form) {
+  const nextHash = filterHashFromForm(form);
+  const isTopicFilter = form.hasAttribute('data-topic-filter-form');
+
+  if (isTopicFilter) keepTopicFilterResultsVisible = true;
+
+  if (globalThis.location.hash === nextHash) {
+    if (isTopicFilter) scrollToTopicFilterResults();
+    return;
+  }
+
+  globalThis.location.hash = nextHash;
 }
 
 function bindForms() {
@@ -98,21 +147,18 @@ function bindForms() {
       form.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const formData = new FormData(form);
-        const params = new URLSearchParams();
-        const filterBase =
-          typeof form.getAttribute === 'function'
-            ? form.getAttribute('data-filter-base') || '#/database'
-            : '#/database';
-
-        for (const [field, rawValue] of formData) {
-          const value = String(rawValue ?? '').trim();
-
-          if (field && value) params.set(field, value);
-        }
-
-        globalThis.location.hash = params.toString() ? `${filterBase}?${params.toString()}` : filterBase;
+        applyFilterForm(form);
       });
+
+      if (form.hasAttribute('data-topic-filter-form')) {
+        form.addEventListener('change', (event) => {
+          const target = event.target;
+
+          if (target?.matches?.('input[type="search"]')) return;
+
+          applyFilterForm(form);
+        });
+      }
     }
   }
 }

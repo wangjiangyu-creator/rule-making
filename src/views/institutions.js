@@ -1,6 +1,6 @@
 import { dimensionById, summarizeDimensions } from '../lib/dimensions.js';
 import { institutions } from '../data/institutions.js';
-import { records } from '../data/records.js?v=20260526h';
+import { records } from '../data/records.js?v=20260526i';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
 import { formatDate, humanizeId, recordTypeLabel } from '../lib/format.js';

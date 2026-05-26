@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526h';
+import { records } from '../src/data/records.js?v=20260526i';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526h"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526h"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526i"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526i"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
@@ -36,12 +36,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526h`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526i`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526h/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526i/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -633,6 +633,240 @@ test('topic filter form keeps users on the current topic page', async () => {
     submitHandler({ preventDefault() {} });
 
     assert.equal(globalThis.location.hash, '#/topics/china?q=AIIB&recordType=academic-article');
+  } finally {
+    if (originalDocument === undefined) {
+      delete globalThis.document;
+    } else {
+      globalThis.document = originalDocument;
+    }
+
+    if (originalWindow === undefined) {
+      delete globalThis.window;
+    } else {
+      globalThis.window = originalWindow;
+    }
+
+    if (originalLocation === undefined) {
+      delete globalThis.location;
+    } else {
+      globalThis.location = originalLocation;
+    }
+
+    if (originalFormData === undefined) {
+      delete globalThis.FormData;
+    } else {
+      globalThis.FormData = originalFormData;
+    }
+  }
+});
+
+test('topic filter dropdown changes apply without requiring a button click', async () => {
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  const originalLocation = globalThis.location;
+  const originalFormData = globalThis.FormData;
+  const formValues = {
+    q: '',
+    recordType: 'academic-article',
+    dimension: '',
+    actor: '',
+    institution: '',
+    sourceAuthority: '',
+    languageStatus: '',
+    year: '',
+  };
+  const app = {
+    innerHTML: '',
+    focus() {},
+  };
+  let changeHandler;
+  const filterForm = {
+    hasAttribute(attribute) {
+      return attribute === 'data-filter-form' || attribute === 'data-topic-filter-form';
+    },
+    getAttribute(attribute) {
+      return attribute === 'data-filter-base' ? '#/topics/china' : null;
+    },
+    addEventListener(event, handler) {
+      if (event === 'change') {
+        changeHandler = handler;
+      }
+    },
+  };
+
+  class FakeFormData {
+    constructor(form) {
+      assert.equal(form, filterForm);
+    }
+
+    entries() {
+      return Object.entries(formValues)[Symbol.iterator]();
+    }
+
+    [Symbol.iterator]() {
+      return this.entries();
+    }
+  }
+
+  globalThis.document = {
+    querySelector(selector) {
+      assert.equal(selector, '#app');
+      return app;
+    },
+    querySelectorAll(selector) {
+      assert.equal(selector, 'form');
+      return [filterForm];
+    },
+  };
+  globalThis.window = {
+    addEventListener() {},
+    scrollTo() {},
+    requestAnimationFrame(callback) {
+      callback();
+    },
+  };
+  globalThis.location = { hash: '#/topics/china' };
+  globalThis.FormData = FakeFormData;
+
+  try {
+    const moduleUrl = new URL('../src/main.js', import.meta.url);
+    moduleUrl.search = `topic-filter-change-smoke=${Date.now()}-${Math.random()}`;
+
+    await import(moduleUrl.href);
+    assert.equal(typeof changeHandler, 'function');
+
+    changeHandler({ target: { matches: () => false } });
+
+    assert.equal(globalThis.location.hash, '#/topics/china?recordType=academic-article');
+  } finally {
+    if (originalDocument === undefined) {
+      delete globalThis.document;
+    } else {
+      globalThis.document = originalDocument;
+    }
+
+    if (originalWindow === undefined) {
+      delete globalThis.window;
+    } else {
+      globalThis.window = originalWindow;
+    }
+
+    if (originalLocation === undefined) {
+      delete globalThis.location;
+    } else {
+      globalThis.location = originalLocation;
+    }
+
+    if (originalFormData === undefined) {
+      delete globalThis.FormData;
+    } else {
+      globalThis.FormData = originalFormData;
+    }
+  }
+});
+
+test('topic filter submissions keep linked records visible after rerender', async () => {
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  const originalLocation = globalThis.location;
+  const originalFormData = globalThis.FormData;
+  const formValues = {
+    q: '',
+    recordType: 'academic-article',
+    dimension: '',
+    actor: '',
+    institution: '',
+    sourceAuthority: '',
+    languageStatus: '',
+    year: '',
+  };
+  const app = {
+    innerHTML: '',
+    focus() {},
+  };
+  let submitHandler;
+  let hashChangeHandler;
+  let scrollCalls = 0;
+  let resultScrollCalls = 0;
+  const resultsSection = {
+    scrollIntoView(options) {
+      resultScrollCalls += 1;
+      assert.deepEqual(options, { block: 'start' });
+    },
+  };
+  const filterForm = {
+    hasAttribute(attribute) {
+      return attribute === 'data-filter-form' || attribute === 'data-topic-filter-form';
+    },
+    getAttribute(attribute) {
+      return attribute === 'data-filter-base' ? '#/topics/china' : null;
+    },
+    addEventListener(event, handler) {
+      if (event === 'submit') {
+        submitHandler = handler;
+      }
+    },
+  };
+
+  class FakeFormData {
+    constructor(form) {
+      assert.equal(form, filterForm);
+    }
+
+    entries() {
+      return Object.entries(formValues)[Symbol.iterator]();
+    }
+
+    [Symbol.iterator]() {
+      return this.entries();
+    }
+  }
+
+  globalThis.document = {
+    querySelector(selector) {
+      if (selector === '#app') return app;
+      if (selector === '[data-topic-filter-results]') return resultsSection;
+      if (selector === 'form[data-topic-filter-form]') return filterForm;
+      return null;
+    },
+    querySelectorAll(selector) {
+      assert.equal(selector, 'form');
+      return [filterForm];
+    },
+  };
+  globalThis.window = {
+    addEventListener(event, handler) {
+      if (event === 'hashchange') {
+        hashChangeHandler = handler;
+      }
+    },
+    scrollTo() {
+      scrollCalls += 1;
+    },
+    requestAnimationFrame(callback) {
+      callback();
+    },
+  };
+  globalThis.location = { hash: '#/topics/china' };
+  globalThis.FormData = FakeFormData;
+
+  try {
+    const moduleUrl = new URL('../src/main.js', import.meta.url);
+    moduleUrl.search = `topic-filter-scroll-smoke=${Date.now()}-${Math.random()}`;
+
+    await import(moduleUrl.href);
+    assert.equal(typeof submitHandler, 'function');
+    assert.equal(typeof hashChangeHandler, 'function');
+
+    scrollCalls = 0;
+    submitHandler({ preventDefault() {} });
+
+    assert.equal(globalThis.location.hash, '#/topics/china?recordType=academic-article');
+
+    hashChangeHandler();
+
+    assert.equal(scrollCalls, 0);
+    assert.equal(resultScrollCalls, 1);
   } finally {
     if (originalDocument === undefined) {
       delete globalThis.document;
