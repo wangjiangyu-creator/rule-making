@@ -904,6 +904,30 @@ export const recordDimensionsById = {
     'agenda-setting',
     'coalition-consensus-building',
   ],
+  'china-wto-ecommerce-negotiations-contribution-2023': [
+    'agenda-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-depa-accession-working-group-2022': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'china-depa-detroit-ministerial-2023': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-depa-fifth-chief-negotiators-meeting-2024': [
+    'coalition-consensus-building',
+  ],
+  'china-beijing-wto-ecommerce-agreement-pilot-2025': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'wto-national-workshop-digital-trade-china-2024': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
   'china-welcomes-wto-ecommerce-interim-arrangements-2026': [
     'legitimacy-management',
     'coalition-consensus-building',
@@ -1533,5 +1557,81 @@ export const recordDimensionsById = {
   'farrell-newman-underground-empire-2023': [
     'agenda-setting',
     'objective-setting',
+  ],
+  'china-possible-elements-investment-facilitation-2017': [
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'friends-ifd-informal-dialogue-proposal-2017': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'ifd-joint-ministerial-statement-mc11-2017': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'ifd-joint-ministerial-statement-shanghai-2019': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'ifd-joint-statement-mc12-work-plan-2021': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'china-turkey-businesspersons-investment-facilitation-2021': [
+    'norm-entrepreneurship-drafting-power',
+    'coalition-consensus-building',
+  ],
+  'ifd-text-substantially-concluded-china-mission-2022': [
+    'agenda-setting',
+    'legitimacy-management',
+  ],
+  'mofcom-ifd-agreement-benefits-china-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'state-council-china-key-role-ifd-text-2023': [
+    'legitimacy-management',
+    'agenda-setting',
+  ],
+  'china-wto-public-forum-ifd-session-2023': [
+    'legitimacy-management',
+    'agenda-setting',
+  ],
+  'wang-wentao-mc13-ifd-ministerial-statement-2024': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'ifd-mc13-annex4-request-2024': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'china-general-council-ifd-annex4-statement-2025': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'ifd-mc14-implementation-launch-mofcom-2026': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'foreign-investment-guide-china-ifd-2024': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'han-china-approach-investment-facilitation-2025': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'calvert-political-economy-ifda-brazil-india-china-2025': [
+    'coalition-consensus-building',
+    'agenda-setting',
+  ],
+  'polanco-ifda-actors-focused-approach-2025': [
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'zou-plurilateral-pathways-china-investment-practice-2026': [
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
   ],
 };

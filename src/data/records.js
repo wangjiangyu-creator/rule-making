@@ -1,6 +1,8 @@
 import { recordDimensionsById } from './record-dimensions.js';
 import { britainBatchRecords } from './records-britain-batch.js';
+import { chinaDigitalTradeRulemakingBatchRecords } from './records-china-digital-trade-batch.js';
 import { chinaInstitutionalPracticeBatch } from './records-china-institutions-batch.js';
+import { chinaIfdaBatchRecords } from './records-china-ifda-batch.js';
 import { chinaSecondBatchRecords } from './records-china-second-batch.js';
 import { chinaScholarshipBatchRecords } from './records-china-scholarship-batch.js';
 import { chinaThirdBatchRecords } from './records-china-third-batch.js';
@@ -23,7 +25,7 @@ const baseRecords = [
     actors: [],
     jurisdictions: ['WTO members'],
     institutions: ['wto'],
-    topics: ['digital-trade-ecommerce', 'wto-reform'],
+    topics: ['digital-trade-ecommerce', 'wto-reform', 'china'],
     summary:
       'The WTO General Council established a work programme to examine trade-related issues arising from global electronic commerce across WTO bodies.',
     sourceAuthority: 'official-international-organization',
@@ -60,7 +62,7 @@ const baseRecords = [
     actors: ['united-states', 'european-union', 'china', 'singapore'],
     jurisdictions: ['WTO members'],
     institutions: ['wto'],
-    topics: ['digital-trade-ecommerce', 'wto-reform'],
+    topics: ['digital-trade-ecommerce', 'wto-reform', 'china'],
     summary:
       'A group of WTO members confirmed their intention to launch negotiations on trade-related aspects of electronic commerce through a joint statement initiative.',
     sourceAuthority: 'official-international-organization',
@@ -454,7 +456,7 @@ const baseRecords = [
     actors: ['united-states', 'european-union', 'china', 'singapore', 'japan', 'australia'],
     jurisdictions: ['WTO members'],
     institutions: ['wto'],
-    topics: ['digital-trade-ecommerce', 'wto-reform'],
+    topics: ['china', 'digital-trade-ecommerce', 'wto-reform'],
     summary:
       'WTO Joint Statement Initiative participants circulated a concluded text for an Agreement on Electronic Commerce, making it a central record for plurilateral trade rule-making.',
     sourceAuthority: 'official-international-organization',
@@ -701,7 +703,7 @@ const baseRecords = [
     actors: ['china', 'european-union'],
     jurisdictions: ['WTO members'],
     institutions: ['wto'],
-    topics: ['international-investment', 'wto-reform'],
+    topics: ['international-investment', 'wto-reform', 'china'],
     summary:
       'Participating WTO members finalized an Investment Facilitation for Development Agreement, a major plurilateral rule-making effort on investment transparency and facilitation.',
     sourceAuthority: 'official-international-organization',
@@ -709,7 +711,15 @@ const baseRecords = [
     sourceLinks: [
       {
         label: 'WTO Investment Facilitation for Development page',
-        url: 'https://www.wto.org/english/tratop_e/invfac_public_e/invfac_e.htm',
+        url: 'https://www.wto.org/english/tratop_e/invfac_public_e/invfac_intro_e.htm',
+        linkType: 'official-page',
+        note: 'Official WTO overview of the IFD Agreement and its Annex 4 incorporation track.',
+      },
+      {
+        label: 'WTO key IFD documents',
+        url: 'https://www.wto.org/english/tratop_e/invfac_public_e/invfac_documentation_e.htm',
+        linkType: 'official-page',
+        note: 'Official WTO index of IFD agreement text, ministerial declarations, and Annex 4 documents.',
       },
     ],
     citation: 'WTO Investment Facilitation for Development Agreement, finalized by participating members at MC13 on 25 February 2024.',
@@ -822,8 +832,10 @@ const baseRecords = [
   ...fifthBatchRecords,
   ...standardsDataAiBatchRecords,
   ...digitalTradeComparisonBatchRecords,
+  ...chinaDigitalTradeRulemakingBatchRecords,
   ...usEuAiRebalanceBatchRecords,
   ...chinaInstitutionalPracticeBatch,
+  ...chinaIfdaBatchRecords,
   ...chinaSecondBatchRecords,
   ...chinaThirdBatchRecords,
   ...chinaScholarshipBatchRecords,

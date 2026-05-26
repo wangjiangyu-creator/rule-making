@@ -116,6 +116,37 @@ test('topics, actors, and institutions use stable unique ids', () => {
   assert.ok(institutions.some((institution) => institution.id === 'belt-road-forum'));
 });
 
+test('topic subtopics resolve to records and include China IFDA coverage', () => {
+  const recordIds = new Set(records.map((record) => record.id));
+  const subtopicIds = new Set();
+  const chinaTopic = topics.find((topic) => topic.id === 'china');
+  const investmentTopic = topics.find((topic) => topic.id === 'international-investment');
+  const chinaIfdaSubtopic = chinaTopic.subtopics.find((subtopic) => subtopic.id === 'china-ifda-leadership');
+  const investmentIfdaSubtopic = investmentTopic.subtopics.find((subtopic) => subtopic.id === 'investment-facilitation-for-development');
+
+  for (const topic of topics) {
+    for (const subtopic of topic.subtopics ?? []) {
+      assert.ok(!subtopicIds.has(subtopic.id), `${subtopic.id} is unique`);
+      subtopicIds.add(subtopic.id);
+      assert.ok(subtopic.title.length > 5, `${subtopic.id} has a title`);
+      assert.ok(subtopic.summary.length > 30, `${subtopic.id} has a summary`);
+      assert.ok(subtopic.recordIds.length >= 1, `${subtopic.id} links records`);
+
+      for (const recordId of subtopic.recordIds) {
+        assert.ok(recordIds.has(recordId), `${subtopic.id} references ${recordId}`);
+      }
+    }
+  }
+
+  assert.ok(chinaIfdaSubtopic, 'China topic has an IFDA leadership subtopic');
+  assert.ok(investmentIfdaSubtopic, 'international investment topic has an IFDA subtopic');
+  assert.ok(chinaIfdaSubtopic.recordIds.length >= 15, 'China IFDA subtopic has a substantive record shelf');
+  assert.ok(
+    investmentIfdaSubtopic.recordIds.includes('wto-investment-facilitation-development-agreement-2024'),
+    'investment IFDA subtopic links the agreement record',
+  );
+});
+
 test('records expose a stable dimensions classification layer', () => {
   assert.deepEqual(
     dimensions.map((dimension) => dimension.id).sort(),
@@ -1254,6 +1285,108 @@ test('cross-topic reinforcement batch materially expands weaker research shelves
   assert.ok(byTopic['wto-reform'].length >= 66, 'WTO reform reaches at least sixty-six records');
   assert.ok(byTopic['international-investment'].length >= 70, 'international investment reaches at least seventy records');
   assert.ok(byTopic['great-powers'].length >= 190, 'great-powers shelf reaches at least one hundred and ninety records');
+});
+
+test('China IFDA leadership batch adds official initiatives, statements, implementation records, and scholarship', () => {
+  const expectedIds = [
+    'china-possible-elements-investment-facilitation-2017',
+    'friends-ifd-informal-dialogue-proposal-2017',
+    'ifd-joint-ministerial-statement-mc11-2017',
+    'ifd-joint-ministerial-statement-shanghai-2019',
+    'ifd-joint-statement-mc12-work-plan-2021',
+    'china-turkey-businesspersons-investment-facilitation-2021',
+    'ifd-text-substantially-concluded-china-mission-2022',
+    'mofcom-ifd-agreement-benefits-china-2023',
+    'state-council-china-key-role-ifd-text-2023',
+    'china-wto-public-forum-ifd-session-2023',
+    'wang-wentao-mc13-ifd-ministerial-statement-2024',
+    'ifd-mc13-annex4-request-2024',
+    'china-general-council-ifd-annex4-statement-2025',
+    'ifd-mc14-implementation-launch-mofcom-2026',
+    'foreign-investment-guide-china-ifd-2024',
+    'han-china-approach-investment-facilitation-2025',
+    'calvert-political-economy-ifda-brazil-india-china-2025',
+    'polanco-ifda-actors-focused-approach-2025',
+    'zou-plurilateral-pathways-china-investment-practice-2026',
+  ];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const newRecords = expectedIds.map((id) => recordById.get(id));
+  const officialRecords = newRecords.filter((record) =>
+    ['official-government', 'official-international-organization'].includes(record.sourceAuthority),
+  );
+  const scholarshipRecords = newRecords.filter((record) =>
+    ['academic-article', 'book-chapter'].includes(record.recordType),
+  );
+  const chinaTopic = topics.find((topic) => topic.id === 'china');
+  const chinaIfdaSubtopic = chinaTopic.subtopics.find((subtopic) => subtopic.id === 'china-ifda-leadership');
+
+  for (const expectedId of expectedIds) {
+    const record = recordById.get(expectedId);
+    assert.ok(record, `${expectedId} exists`);
+    assert.ok(record.topics.includes('china'), `${expectedId} is linked to China topic`);
+    assert.ok(record.topics.includes('international-investment'), `${expectedId} is linked to international investment topic`);
+    assert.ok(record.actors.includes('china'), `${expectedId} identifies China as an actor`);
+    assert.ok(record.tags.includes('investment-facilitation'), `${expectedId} is tagged for investment facilitation`);
+    assert.ok(record.dimensions.length >= 1, `${expectedId} has analytical dimensions`);
+    assert.ok(chinaIfdaSubtopic.recordIds.includes(expectedId), `${expectedId} is in the China IFDA subtopic`);
+  }
+
+  assert.ok(records.length >= 390, 'database has at least three hundred and ninety records');
+  assert.ok(officialRecords.length >= 14, 'China IFDA batch is anchored in official records');
+  assert.ok(scholarshipRecords.length >= 4, 'China IFDA batch includes scholarship');
+  assert.ok(
+    recordById.get('wto-investment-facilitation-development-agreement-2024').topics.includes('china'),
+    'core WTO IFDA agreement is visible on the China topic',
+  );
+});
+
+test('China digital trade rule-making subtopic groups negotiation and implementation materials', () => {
+  const expectedIds = [
+    'wto-joint-statement-electronic-commerce-2019',
+    'wto-agreement-electronic-commerce-2024',
+    'china-wto-ecommerce-negotiations-contribution-2023',
+    'china-cosponsors-wto-ecommerce-annex4-request-2025',
+    'china-welcomes-wto-ecommerce-interim-arrangements-2026',
+    'china-beijing-wto-ecommerce-agreement-pilot-2025',
+    'wto-national-workshop-digital-trade-china-2024',
+    'china-depa-application-2021',
+    'china-depa-accession-working-group-2022',
+    'china-depa-detroit-ministerial-2023',
+    'china-depa-fifth-chief-negotiators-meeting-2024',
+    'china-depa-accession-ministerial-2024',
+    'rcep-electronic-commerce-chapter-2020',
+    'asean-china-digital-ecosystem-joint-statement-2024',
+    'acfta-3-upgrade-protocol-2025',
+    'gao-digital-or-trade-china-us-2018',
+    'zhang-china-digital-trade-evolution-2024',
+  ];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const chinaTopic = topics.find((topic) => topic.id === 'china');
+  const subtopic = chinaTopic.subtopics.find((item) => item.id === 'china-digital-trade-rulemaking');
+  const subtopicRecords = expectedIds.map((id) => recordById.get(id));
+  const officialRecords = subtopicRecords.filter((record) =>
+    ['official-government', 'official-international-organization'].includes(record.sourceAuthority),
+  );
+  const negotiationRecords = subtopicRecords.filter((record) =>
+    ['negotiation-record', 'official-statement', 'treaty-agreement', 'institutional-document'].includes(record.recordType),
+  );
+
+  assert.ok(subtopic, 'China topic has a digital trade rule-making subtopic');
+  assert.equal(subtopic.title, 'China and Digital Trade Rule-making');
+
+  for (const expectedId of expectedIds) {
+    const record = recordById.get(expectedId);
+    assert.ok(record, `${expectedId} exists`);
+    assert.ok(record.topics.includes('china'), `${expectedId} is linked to China topic`);
+    assert.ok(record.topics.includes('digital-trade-ecommerce'), `${expectedId} is linked to digital trade topic`);
+    assert.ok(record.actors.includes('china'), `${expectedId} identifies China as an actor`);
+    assert.ok(record.dimensions.length >= 1, `${expectedId} has analytical dimensions`);
+    assert.ok(subtopic.recordIds.includes(expectedId), `${expectedId} is in the China digital trade subtopic`);
+  }
+
+  assert.ok(subtopic.recordIds.length >= 17, 'China digital trade subtopic has a substantive record shelf');
+  assert.ok(officialRecords.length >= 14, 'China digital trade subtopic is anchored in official materials');
+  assert.ok(negotiationRecords.length >= 12, 'China digital trade subtopic mostly covers negotiation and implementation materials');
 });
 
 test('timeline entries resolve to topic and record ids', () => {

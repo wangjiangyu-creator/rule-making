@@ -398,6 +398,39 @@ main > section > h2 {
   text-align: center;
 }
 
+main > section.subtopic-section {
+  padding-bottom: 1.5rem;
+  border-top: 4px solid var(--color-accent);
+}
+
+.subtopic-list {
+  display: grid;
+  gap: 0;
+}
+
+.subtopic-group {
+  padding: 1.2rem 0 0;
+}
+
+.subtopic-heading {
+  margin-bottom: 1rem;
+}
+
+.subtopic-heading h3 {
+  margin: 0.35rem 0 0;
+  font-size: 1.35rem;
+}
+
+.subtopic-heading > p {
+  max-width: 72rem;
+}
+
+.subtopic-divider {
+  margin: 1.75rem 0 1.55rem;
+  border: 0;
+  border-top: 4px solid var(--color-accent);
+}
+
 .topic-card h3,
 .actor-card h3,
 .institution-card h3,

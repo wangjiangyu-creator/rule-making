@@ -1,0 +1,228 @@
+export const chinaDigitalTradeRulemakingBatchRecords = [
+  {
+    id: 'china-wto-ecommerce-negotiations-contribution-2023',
+    title: 'China Willing to Contribute to WTO Talks on E-Commerce',
+    alternateTitle: 'State Council account of China proposals in WTO e-commerce negotiations',
+    recordType: 'official-statement',
+    date: '2023-12-26',
+    year: 2023,
+    actors: ['china'],
+    jurisdictions: ['China', 'WTO members'],
+    institutions: ['wto'],
+    topics: ['china', 'digital-trade-ecommerce', 'wto-reform', 'great-powers'],
+    summary:
+      'China described itself as a key participant and proponent in WTO e-commerce negotiations, reporting nine proposals covering more than 20 issues and support for high-standard digital trade rules.',
+    sourceAuthority: 'official-government',
+    languageStatus: 'official-english',
+    authors: [
+      { name: "The State Council of the People's Republic of China", kind: 'institution' },
+    ],
+    publisher: "The State Council of the People's Republic of China",
+    sourceLinks: [
+      {
+        label: 'State Council English news release',
+        url: 'https://english.www.gov.cn/news/202312/26/content_WS658a7dabc6d0868f4e8e2884.html',
+        linkType: 'official-page',
+        languageStatus: 'official-english',
+        note: 'Official English government account of China participation and proposals in WTO e-commerce talks.',
+      },
+    ],
+    citation:
+      "The State Council of the People's Republic of China, China willing to contribute to WTO talks on e-commerce, 26 December 2023.",
+    relatedRecordIds: [
+      'wto-joint-statement-electronic-commerce-2019',
+      'wto-agreement-electronic-commerce-2024',
+      'china-cosponsors-wto-ecommerce-annex4-request-2025',
+    ],
+    tags: ['china', 'wto', 'e-commerce', 'digital-trade', 'proposals', 'negotiations'],
+  },
+  {
+    id: 'china-depa-accession-working-group-2022',
+    title: 'China-DEPA Accession Working Group Established',
+    alternateTitle: 'MOFCOM announcement launching China DEPA accession negotiations',
+    recordType: 'official-statement',
+    date: '2022-08-18',
+    year: 2022,
+    actors: ['china'],
+    jurisdictions: ['China', 'DEPA parties'],
+    institutions: [],
+    topics: ['china', 'digital-trade-ecommerce', 'great-powers', 'middle-small-powers'],
+    summary:
+      'MOFCOM reported that DEPA members established the working group for China accession, formally launching negotiations and recording earlier ministerial, chief negotiator, and technical consultations.',
+    sourceAuthority: 'official-government',
+    languageStatus: 'official-original',
+    authors: [
+      { name: "Ministry of Commerce of the People's Republic of China", kind: 'institution' },
+    ],
+    publisher: "Ministry of Commerce of the People's Republic of China",
+    sourceLinks: [
+      {
+        label: 'MOFCOM Chinese announcement',
+        url: 'https://dcj.mofcom.gov.cn/article/xwfb/xwrcxw/202208/20220803342152.shtml',
+        linkType: 'official-page',
+        languageStatus: 'official-original',
+        note: 'Official Chinese announcement that the China-DEPA accession working group was established.',
+      },
+      {
+        label: 'MOFCOM English Q&A on fifth chief negotiators meeting',
+        url: 'https://english.mofcom.gov.cn/PressConferenceHomepage/BiandMultilateralRelations/art/2024/art_976bb478631b4e888ccb29fb310938fe.html',
+        linkType: 'official-page',
+        languageStatus: 'official-english',
+        note: 'Official English Q&A restating the establishment of the accession working group and launch of negotiations.',
+      },
+    ],
+    citation:
+      "Ministry of Commerce of the People's Republic of China, China-DEPA accession working group established, 18 August 2022.",
+    relatedRecordIds: [
+      'china-depa-application-2021',
+      'china-depa-detroit-ministerial-2023',
+      'china-depa-accession-ministerial-2024',
+    ],
+    tags: ['china', 'depa', 'digital-economy-partnership-agreement', 'accession-working-group', 'negotiations'],
+  },
+  {
+    id: 'china-depa-detroit-ministerial-2023',
+    title: 'China-DEPA Ministerial Meeting at APEC Detroit',
+    alternateTitle: 'MOFCOM press conference account of digital trade cooperation and DEPA accession progress',
+    recordType: 'official-statement',
+    date: '2023-06-01',
+    year: 2023,
+    actors: ['china', 'singapore', 'new-zealand', 'chile'],
+    jurisdictions: ['China', 'Chile', 'New Zealand', 'Singapore'],
+    institutions: ['apec'],
+    topics: ['china', 'digital-trade-ecommerce', 'great-powers', 'middle-small-powers'],
+    summary:
+      'MOFCOM described the May 2023 China-DEPA ministerial meeting at APEC as progress in accession consultations, local alignment with DEPA, and practical digital-economy cooperation projects.',
+    sourceAuthority: 'official-government',
+    languageStatus: 'official-english',
+    authors: [
+      { name: "Ministry of Commerce of the People's Republic of China", kind: 'institution' },
+    ],
+    publisher: "Ministry of Commerce of the People's Republic of China",
+    sourceLinks: [
+      {
+        label: 'MOFCOM English press conference',
+        url: 'https://english.mofcom.gov.cn/News/PressConference/art/2023/art_56b84d5fe7cd495fbc33092e0b6f62c6.html',
+        linkType: 'official-page',
+        languageStatus: 'official-english',
+        note: 'Official press conference answer on the China-DEPA ministerial meeting during the APEC trade ministers meeting.',
+      },
+    ],
+    citation:
+      "Ministry of Commerce of the People's Republic of China, MOFCOM Regular Press Conference, 1 June 2023.",
+    relatedRecordIds: [
+      'china-depa-accession-working-group-2022',
+      'china-depa-accession-ministerial-2024',
+    ],
+    tags: ['china', 'depa', 'apec', 'digital-trade', 'accession-negotiations'],
+  },
+  {
+    id: 'china-depa-fifth-chief-negotiators-meeting-2024',
+    title: 'Fifth Chief Negotiators Meeting of China-DEPA Accession Working Group',
+    alternateTitle: 'MOFCOM Q&A on the Auckland chief negotiators meeting',
+    recordType: 'official-statement',
+    date: '2024-05-09',
+    year: 2024,
+    actors: ['china', 'singapore', 'new-zealand', 'chile'],
+    jurisdictions: ['China', 'Chile', 'New Zealand', 'Singapore', 'South Korea'],
+    institutions: [],
+    topics: ['china', 'digital-trade-ecommerce', 'great-powers', 'middle-small-powers'],
+    summary:
+      'MOFCOM reported that China and DEPA members held the fifth chief negotiators meeting in Auckland and exchanged views on negotiations and related accession issues.',
+    sourceAuthority: 'official-government',
+    languageStatus: 'official-english',
+    authors: [
+      { name: "Ministry of Commerce of the People's Republic of China", kind: 'institution' },
+    ],
+    publisher: "Ministry of Commerce of the People's Republic of China",
+    sourceLinks: [
+      {
+        label: 'MOFCOM English Q&A',
+        url: 'https://english.mofcom.gov.cn/PressConferenceHomepage/BiandMultilateralRelations/art/2024/art_976bb478631b4e888ccb29fb310938fe.html',
+        linkType: 'official-page',
+        languageStatus: 'official-english',
+        note: 'Official Q&A on the fifth meeting of chief negotiators of the China-DEPA accession working group.',
+      },
+    ],
+    citation:
+      "Ministry of Commerce of the People's Republic of China, Q&A on the fifth meeting of chief negotiators of the China-DEPA accession working group, 9 May 2024.",
+    relatedRecordIds: [
+      'china-depa-accession-working-group-2022',
+      'china-depa-accession-ministerial-2024',
+    ],
+    tags: ['china', 'depa', 'chief-negotiators', 'accession-negotiations', 'digital-economy'],
+  },
+  {
+    id: 'china-beijing-wto-ecommerce-agreement-pilot-2025',
+    title: 'China Supports Beijing to Pilot WTO E-Commerce Agreement',
+    alternateTitle: 'State Council account of pilot implementation of WTO digital trade rules',
+    recordType: 'official-statement',
+    date: '2025-09-12',
+    year: 2025,
+    actors: ['china'],
+    jurisdictions: ['China', 'WTO members'],
+    institutions: ['wto'],
+    topics: ['china', 'digital-trade-ecommerce', 'wto-reform', 'great-powers'],
+    summary:
+      'Chinese authorities issued a work plan for Beijing to pilot the WTO e-commerce agreement, linking negotiated digital trade rules to implementation, data governance, telecom transparency, and international cooperation.',
+    sourceAuthority: 'official-government',
+    languageStatus: 'official-english',
+    authors: [
+      { name: "The State Council of the People's Republic of China", kind: 'institution' },
+    ],
+    publisher: "The State Council of the People's Republic of China",
+    sourceLinks: [
+      {
+        label: 'State Council English news release',
+        url: 'https://english.www.gov.cn/news/202509/12/content_WS68c4125bc6d00fa19f7a2645.html',
+        linkType: 'official-page',
+        languageStatus: 'official-english',
+        note: 'Official English government account of the Beijing pilot work plan for the WTO e-commerce agreement.',
+      },
+    ],
+    citation:
+      "The State Council of the People's Republic of China, China supports Beijing to pilot WTO e-commerce agreement, 12 September 2025.",
+    relatedRecordIds: [
+      'wto-agreement-electronic-commerce-2024',
+      'china-cosponsors-wto-ecommerce-annex4-request-2025',
+      'china-welcomes-wto-ecommerce-interim-arrangements-2026',
+    ],
+    tags: ['china', 'wto', 'e-commerce-agreement', 'implementation', 'beijing-pilot'],
+  },
+  {
+    id: 'wto-national-workshop-digital-trade-china-2024',
+    title: 'WTO National Workshop on Digital Trade in China',
+    alternateTitle: 'WTO TAMS activity CHN24-1',
+    recordType: 'institutional-document',
+    date: '2024-10-28',
+    year: 2024,
+    actors: ['china'],
+    jurisdictions: ['China', 'WTO members'],
+    institutions: ['wto'],
+    topics: ['china', 'digital-trade-ecommerce', 'wto-reform', 'middle-small-powers'],
+    summary:
+      'The WTO technical-assistance record documents a Beijing workshop on digital trade rules, including JSI e-commerce negotiations and multilateral Work Programme discussions, for Chinese government officials.',
+    sourceAuthority: 'official-international-organization',
+    languageStatus: 'official-english',
+    authors: [
+      { name: 'World Trade Organization', kind: 'institution' },
+    ],
+    publisher: 'World Trade Organization',
+    sourceLinks: [
+      {
+        label: 'WTO TAMS activity page',
+        url: 'https://tams.wto.org/node/10288',
+        linkType: 'official-page',
+        languageStatus: 'official-english',
+        note: 'Official WTO Technical Assistance Management System page for the China digital trade workshop.',
+      },
+    ],
+    citation: 'World Trade Organization, WTO National Workshop on Digital Trade, TAMS activity CHN24-1, 28-30 October 2024.',
+    relatedRecordIds: [
+      'wto-joint-statement-electronic-commerce-2019',
+      'wto-agreement-electronic-commerce-2024',
+      'china-funded-wto-digital-trade-workshop-ldcs-2024',
+    ],
+    tags: ['china', 'wto', 'digital-trade', 'technical-assistance', 'e-commerce-negotiations'],
+  },
+];

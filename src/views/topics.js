@@ -1,7 +1,7 @@
 import { dimensions } from '../data/dimensions.js';
 import { actors } from '../data/actors.js';
 import { institutions } from '../data/institutions.js';
-import { records } from '../data/records.js?v=20260526o';
+import { records } from '../data/records.js?v=20260526p';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
@@ -246,6 +246,49 @@ function renderTopicResearchSnapshot(topic, linkedRecords) {
   `;
 }
 
+function recordsForSubtopic(subtopic) {
+  const recordById = new Map(records.map((record) => [record.id, record]));
+
+  return asList(subtopic.recordIds)
+    .map((recordId) => recordById.get(recordId))
+    .filter(Boolean);
+}
+
+function renderTopicSubtopics(topic) {
+  const subtopics = asList(topic.subtopics);
+  if (subtopics.length === 0) return '';
+
+  return `
+    <section class="subtopic-section">
+      <div class="section-heading">
+        <h2>Subtopics</h2>
+      </div>
+      <div class="subtopic-list">
+        ${subtopics
+          .map((subtopic, index) => {
+            const subtopicRecords = recordsForSubtopic(subtopic);
+            const headingId = `subtopic-${subtopic.id}-heading`;
+
+            return `
+              <section class="subtopic-group" aria-labelledby="${escapeHtml(headingId)}">
+                <div class="subtopic-heading">
+                  <p class="eyebrow">${subtopicRecords.length} focused record${subtopicRecords.length === 1 ? '' : 's'}</p>
+                  <h3 id="${escapeHtml(headingId)}">${escapeHtml(subtopic.title)}</h3>
+                  <p>${escapeHtml(subtopic.summary)}</p>
+                </div>
+                <div class="record-list">
+                  ${subtopicRecords.map(renderRecordRow).join('')}
+                </div>
+              </section>
+              ${index < subtopics.length - 1 ? '<hr class="subtopic-divider" aria-hidden="true">' : ''}
+            `;
+          })
+          .join('')}
+      </div>
+    </section>
+  `;
+}
+
 const chinaRecordTypeOrder = [
   'official-statement',
   'negotiation-record',
@@ -441,6 +484,8 @@ export function renderTopicDetail(topicId) {
     </section>
 
     ${renderTopicResearchSnapshot(topic, linkedRecords)}
+
+    ${renderTopicSubtopics(topic)}
 
     ${
       topicTimeline.length > 0

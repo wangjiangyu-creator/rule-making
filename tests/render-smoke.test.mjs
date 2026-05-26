@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526o';
+import { records } from '../src/data/records.js?v=20260526p';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526o"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526o"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526p"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526p"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /href="#\/topics">Topics<\/a>/);
   assert.doesNotMatch(html, /Digital Trade Pilot/);
@@ -39,12 +39,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526o`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526p`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526o/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526p/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -104,6 +104,23 @@ test('home and topic pages expose entry points into the full timeline view', () 
   assert.match(renderTopicDetail('digital-trade-ecommerce'), /#\/timeline\?topic=digital-trade-ecommerce/);
 });
 
+test('China topic renders subtopics as clearly divided record groups', async () => {
+  const html = renderTopicDetail('china');
+  const css = await readFile(new URL('../src/styles.css', import.meta.url), 'utf8');
+
+  assert.match(html, /<section class="subtopic-group" aria-labelledby="subtopic-china-ifda-leadership-heading">/);
+  assert.match(html, /<h3 id="subtopic-china-ifda-leadership-heading">China and IFDA<\/h3>/);
+  assert.match(html, /<section class="subtopic-group" aria-labelledby="subtopic-china-digital-trade-rulemaking-heading">/);
+  assert.match(html, /<h3 id="subtopic-china-digital-trade-rulemaking-heading">China and Digital Trade Rule-making<\/h3>/);
+  assert.match(
+    html,
+    /China and IFDA[\s\S]*<hr class="subtopic-divider" aria-hidden="true">[\s\S]*China and Digital Trade Rule-making/,
+  );
+  assert.match(css, /\.subtopic-group\b/);
+  assert.match(css, /\.subtopic-heading\b/);
+  assert.match(css, /\.subtopic-divider\s*{[\s\S]*border-top:\s*4px solid var\(--color-accent\)/);
+});
+
 test('database renderer includes jurisdiction and date filter controls', () => {
   const html = renderDatabase();
 
@@ -122,6 +139,8 @@ test('stylesheet includes database interface selectors', async () => {
   assert.match(css, /\.timeline-list\b/);
   assert.match(css, /\.topic-stat-grid\b/);
   assert.match(css, /\.topic-type-chip\b/);
+  assert.match(css, /main\s*>\s*section\.subtopic-section/);
+  assert.match(css, /\.subtopic-divider\s*{[\s\S]*border-top:\s*4px solid var\(--color-accent\)/);
   assert.match(css, /overflow-wrap\s*:/);
 });
 
@@ -461,6 +480,65 @@ test('cross-topic reinforcement records surface on their topic and detail pages'
   }
   if (!/AI Diffusion Framework/.test(renderRecordDetail('us-bis-ai-diffusion-framework-2025'))) {
     issues.push('missing AI diffusion record detail');
+  }
+
+  assert.deepEqual(issues, []);
+});
+
+test('China IFDA subtopic surfaces official and scholarly materials on topic pages', () => {
+  const chinaHtml = renderTopicDetail('china');
+  const investmentHtml = renderTopicDetail('international-investment');
+  const issues = [];
+
+  if (!/China and IFDA/.test(chinaHtml)) {
+    issues.push('missing China and IFDA subtopic title on China page');
+  }
+  if (!/class="[^"]*subtopic-section[^"]*"/.test(chinaHtml) || !/class="[^"]*subtopic-divider[^"]*"/.test(chinaHtml)) {
+    issues.push('missing visible subtopic division on China page');
+  }
+  if (/China and IFDA Leadership/.test(chinaHtml)) {
+    issues.push('old China IFDA leadership title is still visible');
+  }
+  if (!/Possible Elements of Investment Facilitation/.test(chinaHtml)) {
+    issues.push('missing China 2017 IFDA proposal on China page');
+  }
+  if (!/China&#39;s Approach to Investment Facilitation/.test(chinaHtml)) {
+    issues.push('missing China IFDA scholarship on China page');
+  }
+  if (!/Investment Facilitation for Development \(IFDA\)/.test(investmentHtml)) {
+    issues.push('missing IFDA subtopic on investment page');
+  }
+  if (!/MC14 Implementation Launch of the IFD Agreement/.test(investmentHtml)) {
+    issues.push('missing MC14 implementation record on investment page');
+  }
+  if (!/China and Turkey Joint Communication on Businesspersons/.test(renderRecordDetail('china-turkey-businesspersons-investment-facilitation-2021'))) {
+    issues.push('missing China-Turkey communication detail page');
+  }
+
+  assert.deepEqual(issues, []);
+});
+
+test('China digital trade subtopic surfaces negotiation materials on the China page', () => {
+  const chinaHtml = renderTopicDetail('china');
+  const issues = [];
+
+  if (!/China and Digital Trade Rule-making/.test(chinaHtml)) {
+    issues.push('missing China digital trade subtopic title on China page');
+  }
+  if (!/China Willing to Contribute to WTO Talks on E-Commerce/.test(chinaHtml)) {
+    issues.push('missing China WTO e-commerce negotiation contribution record');
+  }
+  if (!/China-DEPA Accession Working Group Established/.test(chinaHtml)) {
+    issues.push('missing China-DEPA accession working group record');
+  }
+  if (!/WTO National Workshop on Digital Trade in China/.test(chinaHtml)) {
+    issues.push('missing WTO China digital trade workshop record');
+  }
+  if (!/China and IFDA/.test(chinaHtml) || !/China and Digital Trade Rule-making/.test(chinaHtml)) {
+    issues.push('China subtopics are not both visible');
+  }
+  if (chinaHtml.indexOf('China and IFDA') > chinaHtml.indexOf('China and Digital Trade Rule-making')) {
+    issues.push('China digital trade subtopic should follow the IFDA subtopic');
   }
 
   assert.deepEqual(issues, []);
