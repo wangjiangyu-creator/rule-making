@@ -1289,4 +1289,52 @@ export const recordDimensionsById = {
     'legitimacy-management',
     'norm-entrepreneurship-drafting-power',
   ],
+  'un-global-digital-compact-2024': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'oecd-ai-principles-revised-2024': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'asean-expanded-guide-generative-ai-2025': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-cross-border-data-flow-provisions-2024': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-global-cross-border-data-flow-cooperation-initiative-2024': [
+    'agenda-setting',
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'china-shanghai-declaration-global-ai-governance-2024': [
+    'agenda-setting',
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'china-network-data-security-management-regulations-2024': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'nist-cybersecurity-framework-2-2024': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-cyber-resilience-act-2024': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'ipef-supply-chain-agreement-2023': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'eu-chips-act-2023': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
 };

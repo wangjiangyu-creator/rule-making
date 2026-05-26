@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526i';
+import { records } from '../src/data/records.js?v=20260526j';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526i"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526i"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526j"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526j"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
@@ -36,12 +36,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526i`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526j`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526i/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526j/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -78,6 +78,8 @@ test('stylesheet includes database interface selectors', async () => {
   assert.match(css, /\.filters\b/);
   assert.match(css, /\.record-row\b/);
   assert.match(css, /\.timeline-list\b/);
+  assert.match(css, /\.topic-stat-grid\b/);
+  assert.match(css, /\.topic-type-chip\b/);
   assert.match(css, /overflow-wrap\s*:/);
 });
 
@@ -355,6 +357,25 @@ test('US, EU, and AI rebalance records propagate through topic and institution p
   assert.match(aiHtml, /ISO\/IEC 42001/);
   assert.match(nistHtml, /National Standards Strategy/);
   assert.match(unescoHtml, /Recommendation on the Ethics of Artificial Intelligence/);
+});
+
+test('new standards, data, and AI records propagate through topic pages', () => {
+  const chinaHtml = renderTopicDetail('china');
+  const aiHtml = renderTopicDetail('ai-governance');
+  const cyberHtml = renderTopicDetail('cyber-data-governance');
+  const unitedStatesHtml = renderTopicDetail('united-states');
+  const europeHtml = renderTopicDetail('european-union');
+
+  assert.match(chinaHtml, /Research snapshot/);
+  assert.match(chinaHtml, /topic-stat-grid/);
+  assert.match(chinaHtml, /Global Cross-Border Data Flow Cooperation Initiative/);
+  assert.match(chinaHtml, /Regulations on Network Data Security Management/);
+  assert.match(aiHtml, /Expanded ASEAN Guide on AI Governance and Ethics/);
+  assert.match(aiHtml, /Shanghai Declaration on Global AI Governance/);
+  assert.match(cyberHtml, /Global Digital Compact/);
+  assert.match(cyberHtml, /Cyber Resilience Act/);
+  assert.match(unitedStatesHtml, /NIST Cybersecurity Framework \(CSF\) 2\.0/);
+  assert.match(europeHtml, /European Union Chips Act/);
 });
 
 test('britain shelf surfaces in topics, actor detail, and timeline views', () => {

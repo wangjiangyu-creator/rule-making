@@ -1092,6 +1092,55 @@ test('China scholarship batch adds a broad academic shelf across trade, investme
   );
 });
 
+test('standards, data, and AI governance batch adds current official materials across key shelves', () => {
+  const expectedIds = [
+    'un-global-digital-compact-2024',
+    'oecd-ai-principles-revised-2024',
+    'asean-expanded-guide-generative-ai-2025',
+    'china-cross-border-data-flow-provisions-2024',
+    'china-global-cross-border-data-flow-cooperation-initiative-2024',
+    'china-shanghai-declaration-global-ai-governance-2024',
+    'china-network-data-security-management-regulations-2024',
+    'nist-cybersecurity-framework-2-2024',
+    'eu-cyber-resilience-act-2024',
+    'ipef-supply-chain-agreement-2023',
+    'eu-chips-act-2023',
+  ];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordById.has(expectedId), `${expectedId} exists`);
+    assert.ok(recordById.get(expectedId).dimensions.length >= 1, `${expectedId} has analytical dimensions`);
+  }
+
+  assert.ok(byTopic.china.length >= 103, 'china topic has at least one hundred and three records');
+  assert.ok(byTopic['digital-trade-ecommerce'].length >= 58, 'digital trade topic has at least fifty-eight records');
+  assert.ok(byTopic['cyber-data-governance'].length >= 53, 'cyber and data topic has at least fifty-three records');
+  assert.ok(byTopic['ai-governance'].length >= 41, 'ai governance topic has at least forty-one records');
+  assert.ok(byTopic['united-states'].length >= 30, 'united states topic has at least thirty records');
+  assert.ok(byTopic['european-union'].length >= 33, 'european union topic has at least thirty-three records');
+  assert.ok(byTopic['middle-small-powers'].length >= 66, 'middle and small powers topic has at least sixty-six records');
+  assert.ok(
+    byTopic.china.filter((record) => record.year >= 2024).length >= 31,
+    'china topic includes a thicker current official-practice shelf',
+  );
+  assert.ok(
+    expectedIds.every((id) => recordById.get(id).sourceLinks.some((sourceLink) => sourceLink.url.startsWith('https://'))),
+    'new batch records use HTTPS source links',
+  );
+  assert.ok(
+    expectedIds.some((id) => recordById.get(id).sourceAuthority === 'official-international-organization'),
+    'new batch includes intergovernmental sources',
+  );
+  assert.ok(
+    expectedIds.some((id) => recordById.get(id).sourceAuthority === 'official-government'),
+    'new batch includes government sources',
+  );
+});
+
 test('timeline entries resolve to topic and record ids', () => {
   const topicIds = new Set(topics.map((topic) => topic.id));
   const recordIds = new Set(records.map((record) => record.id));

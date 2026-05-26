@@ -1,7 +1,7 @@
 import { dimensions } from '../data/dimensions.js';
 import { actors } from '../data/actors.js';
 import { institutions } from '../data/institutions.js';
-import { records } from '../data/records.js?v=20260526i';
+import { records } from '../data/records.js?v=20260526j';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
@@ -169,6 +169,80 @@ function renderTopicFilterForm(topic, linkedRecords, filters) {
         <a class="button button-secondary" href="#/topics/${escapeHtml(topic.id)}">Clear topic filters</a>
       </div>
     </form>
+  `;
+}
+
+function countRecords(recordsToCount, predicate) {
+  return recordsToCount.filter(predicate).length;
+}
+
+function renderTopicStat(label, value, note) {
+  return `
+    <article class="topic-stat">
+      <p class="topic-stat-value">${escapeHtml(value)}</p>
+      <h3>${escapeHtml(label)}</h3>
+      <p>${escapeHtml(note)}</p>
+    </article>
+  `;
+}
+
+function renderTopicTypeChips(topic, linkedRecords) {
+  const typeCounts = new Map();
+
+  for (const record of linkedRecords) {
+    typeCounts.set(record.recordType, (typeCounts.get(record.recordType) ?? 0) + 1);
+  }
+
+  return [...typeCounts.entries()]
+    .sort((left, right) => right[1] - left[1] || recordTypeLabel(left[0]).localeCompare(recordTypeLabel(right[0])))
+    .map(
+      ([recordType, count]) => `
+        <a class="topic-type-chip" href="#/topics/${escapeHtml(topic.id)}?recordType=${escapeHtml(recordType)}">
+          <span>${escapeHtml(recordTypeLabel(recordType))}</span>
+          <strong>${count}</strong>
+        </a>
+      `,
+    )
+    .join('');
+}
+
+function renderTopicResearchSnapshot(topic, linkedRecords) {
+  const officialCount = countRecords(linkedRecords, (record) =>
+    [
+      'official-government',
+      'official-regulator',
+      'official-international-organization',
+      'official-court-tribunal',
+      'treaty-depository',
+    ].includes(record.sourceAuthority),
+  );
+  const researchCount = countRecords(linkedRecords, (record) =>
+    ['academic-article', 'book-chapter', 'research-report'].includes(record.recordType),
+  );
+  const currentCount = countRecords(linkedRecords, (record) => Number(record.year) >= 2024);
+  const chinaLinkedCount = topic.id === 'china'
+    ? linkedRecords.length
+    : countRecords(linkedRecords, isChinaRelatedRecord);
+
+  return `
+    <section class="topic-snapshot">
+      <div class="section-heading">
+        <h2>Research snapshot</h2>
+      </div>
+      <div class="topic-stat-grid">
+        ${renderTopicStat('Linked records', linkedRecords.length, 'Materials currently indexed for this topic.')}
+        ${renderTopicStat('Official materials', officialCount, 'Government, regulator, court, treaty, or IO sources.')}
+        ${renderTopicStat('Research shelf', researchCount, 'Reports, academic articles, books, and chapters.')}
+        ${renderTopicStat(topic.id === 'china' ? 'China records' : 'China-linked', chinaLinkedCount, 'Records connecting this topic to China.')}
+        ${renderTopicStat('Current since 2024', currentCount, 'Recent rule-making and implementation materials.')}
+      </div>
+      <div class="topic-type-strip">
+        <p class="eyebrow">Browse this topic by category</p>
+        <div class="topic-type-chip-list">
+          ${renderTopicTypeChips(topic, linkedRecords)}
+        </div>
+      </div>
+    </section>
   `;
 }
 
@@ -365,6 +439,8 @@ export function renderTopicDetail(topicId) {
       <h2>Relevant dimensions</h2>
       <p>${renderDimensionLinks(topic.dimensionIds)}</p>
     </section>
+
+    ${renderTopicResearchSnapshot(topic, linkedRecords)}
 
     ${
       topicTimeline.length > 0
