@@ -1,11 +1,11 @@
-import { renderActorDetail, renderActors } from './views/actors.js';
-import { renderDatabase, renderRecordDetail } from './views/database.js';
-import { renderDimensionDetail, renderDimensions } from './views/dimensions.js';
-import { renderHome } from './views/home.js?v=20260526c';
-import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js';
-import { renderSourcesMethod } from './views/sources.js';
-import { renderTimelinePage } from './views/timeline.js';
-import { renderTopicDetail, renderTopics } from './views/topics.js';
+import { renderActorDetail, renderActors } from './views/actors.js?v=20260526d';
+import { renderDatabase, renderRecordDetail } from './views/database.js?v=20260526d';
+import { renderDimensionDetail, renderDimensions } from './views/dimensions.js?v=20260526d';
+import { renderHome } from './views/home.js?v=20260526d';
+import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js?v=20260526d';
+import { renderSourcesMethod } from './views/sources.js?v=20260526d';
+import { renderTimelinePage } from './views/timeline.js?v=20260526d';
+import { renderTopicDetail, renderTopics } from './views/topics.js?v=20260526d';
 
 const app = document.querySelector('#app');
 

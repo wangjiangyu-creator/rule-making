@@ -9,18 +9,40 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js';
+import { records } from '../src/data/records.js?v=20260526d';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526c"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526c"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526d"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526d"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
   assert.doesNotMatch(html, /class="site-header-attribution"/);
+});
+
+test('public module graph cache-busts route and records modules', async () => {
+  const mainJs = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  const viewFiles = [
+    '../src/views/actors.js',
+    '../src/views/database.js',
+    '../src/views/dimensions.js',
+    '../src/views/home.js',
+    '../src/views/institutions.js',
+    '../src/views/timeline.js',
+    '../src/views/topics.js',
+  ];
+
+  for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526d`), `${view} view import is cache-busted`);
+  }
+
+  for (const viewFile of viewFiles) {
+    const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526d/, `${viewFile} records import is cache-busted`);
+  }
 });
 
 test('view renderers include core portal sections', () => {
