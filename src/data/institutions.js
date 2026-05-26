@@ -29,7 +29,7 @@ export const institutions = [
     type: 'forum',
     summary:
       'High-level forum where major economies coordinate financial, digital economy, development, and trade-governance agendas.',
-    topicIds: ['monetary-financial-regulation', 'digital-trade-ecommerce', 'ai-governance'],
+    topicIds: ['great-powers', 'monetary-financial-regulation', 'digital-trade-ecommerce', 'ai-governance', 'international-investment'],
   },
   {
     id: 'uncitral',

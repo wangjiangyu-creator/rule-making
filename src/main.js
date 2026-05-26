@@ -1,11 +1,11 @@
-import { renderActorDetail, renderActors } from './views/actors.js?v=20260526d';
-import { renderDatabase, renderRecordDetail } from './views/database.js?v=20260526d';
-import { renderDimensionDetail, renderDimensions } from './views/dimensions.js?v=20260526d';
-import { renderHome } from './views/home.js?v=20260526d';
-import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js?v=20260526d';
-import { renderSourcesMethod } from './views/sources.js?v=20260526d';
-import { renderTimelinePage } from './views/timeline.js?v=20260526d';
-import { renderTopicDetail, renderTopics } from './views/topics.js?v=20260526d';
+import { renderActorDetail, renderActors } from './views/actors.js?v=20260526e';
+import { renderDatabase, renderRecordDetail } from './views/database.js?v=20260526e';
+import { renderDimensionDetail, renderDimensions } from './views/dimensions.js?v=20260526e';
+import { renderHome } from './views/home.js?v=20260526e';
+import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js?v=20260526e';
+import { renderSourcesMethod } from './views/sources.js?v=20260526e';
+import { renderTimelinePage } from './views/timeline.js?v=20260526e';
+import { renderTopicDetail, renderTopics } from './views/topics.js?v=20260526e';
 
 const app = document.querySelector('#app');
 

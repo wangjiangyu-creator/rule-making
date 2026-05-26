@@ -1,5 +1,5 @@
 import { dimensions } from '../data/dimensions.js';
-import { records } from '../data/records.js?v=20260526d';
+import { records } from '../data/records.js?v=20260526e';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
 import { formatDate, recordTypeLabel } from '../lib/format.js';

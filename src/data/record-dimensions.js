@@ -1031,6 +1031,39 @@ export const recordDimensionsById = {
     'coalition-consensus-building',
     'agenda-setting',
   ],
+  'g20-digital-economy-development-cooperation-initiative-2016': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'g20-strategy-global-trade-growth-2016': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'g20-guiding-principles-global-investment-policymaking-2016': [
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'asean-china-digital-ecosystem-joint-statement-2024': [
+    'coalition-consensus-building',
+    'agenda-setting',
+  ],
+  'acfta-3-upgrade-protocol-2025': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-ai-capacity-building-action-plan-good-for-all-2024': [
+    'objective-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-global-ai-governance-action-plan-2025': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
   'brics-xiamen-declaration-2017': [
     'agenda-setting',
     'coalition-consensus-building',

@@ -910,6 +910,50 @@ test('second China official-source batch adds participation, proposal, and perfo
   );
 });
 
+test('third China official-source batch deepens G20, ASEAN, and UN AI governance links', () => {
+  const expectedIds = [
+    'g20-digital-economy-development-cooperation-initiative-2016',
+    'g20-strategy-global-trade-growth-2016',
+    'g20-guiding-principles-global-investment-policymaking-2016',
+    'asean-china-digital-ecosystem-joint-statement-2024',
+    'acfta-3-upgrade-protocol-2025',
+    'china-ai-capacity-building-action-plan-good-for-all-2024',
+    'china-global-ai-governance-action-plan-2025',
+  ];
+  const recordIds = new Set(records.map((record) => record.id));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
+  }
+
+  assert.ok(byTopic.china.length >= 73, 'china topic has at least seventy-three records');
+  assert.ok(byTopic['digital-trade-ecommerce'].length >= 32, 'digital trade topic has at least thirty-two records');
+  assert.ok(
+    byTopic['international-investment'].length >= 36,
+    'international investment topic has at least thirty-six records',
+  );
+  assert.ok(byTopic['ai-governance'].length >= 23, 'ai governance topic has at least twenty-three records');
+  assert.ok(
+    byTopic.china.filter((record) => record.institutions.includes('g20')).length >= 4,
+    'china topic includes a deeper G20-linked shelf',
+  );
+  assert.ok(
+    byTopic.china.filter((record) => record.institutions.includes('asean')).length >= 3,
+    'china topic includes a deeper ASEAN-linked shelf',
+  );
+  assert.ok(
+    byTopic.china.filter((record) => record.institutions.includes('un')).length >= 6,
+    'china topic includes a deeper UN-linked shelf',
+  );
+  assert.ok(
+    byTopic.china.filter((record) => record.topics.includes('ai-governance')).length >= 4,
+    'china topic includes a thicker AI-governance shelf',
+  );
+});
+
 test('timeline entries resolve to topic and record ids', () => {
   const topicIds = new Set(topics.map((topic) => topic.id));
   const recordIds = new Set(records.map((record) => record.id));

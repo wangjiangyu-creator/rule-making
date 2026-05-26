@@ -2,6 +2,7 @@ import { recordDimensionsById } from './record-dimensions.js';
 import { britainBatchRecords } from './records-britain-batch.js';
 import { chinaInstitutionalPracticeBatch } from './records-china-institutions-batch.js';
 import { chinaSecondBatchRecords } from './records-china-second-batch.js';
+import { chinaThirdBatchRecords } from './records-china-third-batch.js';
 import { thirdBatchRecords } from './records-third-batch.js';
 import { fourthBatchRecords } from './records-fourth-batch.js';
 import { fifthBatchRecords } from './records-fifth-batch.js';
@@ -816,6 +817,7 @@ const baseRecords = [
   ...fifthBatchRecords,
   ...chinaInstitutionalPracticeBatch,
   ...chinaSecondBatchRecords,
+  ...chinaThirdBatchRecords,
 ];
 
 export const records = baseRecords.map((record) => ({
