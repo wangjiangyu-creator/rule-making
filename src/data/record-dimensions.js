@@ -1225,4 +1225,68 @@ export const recordDimensionsById = {
     'legitimacy-management',
     'norm-entrepreneurship-drafting-power',
   ],
+  'us-ai-action-plan-2025': [
+    'objective-setting',
+    'agenda-setting',
+  ],
+  'us-executive-order-14179-ai-leadership-2025': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'us-national-standards-strategy-cet-2023': [
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'us-outbound-investment-final-rule-2024': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'us-bis-advanced-computing-export-controls-2022': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-economic-security-strategy-2023': [
+    'objective-setting',
+    'agenda-setting',
+  ],
+  'eu-anti-coercion-instrument-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-carbon-border-adjustment-mechanism-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-critical-raw-materials-act-2024': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-standardisation-strategy-2022': [
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'iso-iec-42001-ai-management-system-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'international-ai-safety-report-2025': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'international-network-ai-safety-institutes-2024': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'paris-ai-action-summit-statement-2025': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'smuha-race-ai-regulation-2021': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'veale-borgesius-demystifying-eu-ai-act-2021': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
 };

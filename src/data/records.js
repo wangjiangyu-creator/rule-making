@@ -7,6 +7,7 @@ import { chinaThirdBatchRecords } from './records-china-third-batch.js';
 import { thirdBatchRecords } from './records-third-batch.js';
 import { fourthBatchRecords } from './records-fourth-batch.js';
 import { fifthBatchRecords } from './records-fifth-batch.js';
+import { usEuAiRebalanceBatchRecords } from './records-us-eu-ai-rebalance-batch.js';
 
 const baseRecords = [
   {
@@ -816,6 +817,7 @@ const baseRecords = [
   ...thirdBatchRecords,
   ...fourthBatchRecords,
   ...fifthBatchRecords,
+  ...usEuAiRebalanceBatchRecords,
   ...chinaInstitutionalPracticeBatch,
   ...chinaSecondBatchRecords,
   ...chinaThirdBatchRecords,

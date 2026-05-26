@@ -792,6 +792,72 @@ test('fifth content batch deepens the US, EU, and China comparison shelves', () 
   );
 });
 
+test('US, EU, and AI rebalance batch deepens the remaining thin shelves', () => {
+  const unitedStatesIds = [
+    'us-ai-action-plan-2025',
+    'us-executive-order-14179-ai-leadership-2025',
+    'us-national-standards-strategy-cet-2023',
+    'us-outbound-investment-final-rule-2024',
+    'us-bis-advanced-computing-export-controls-2022',
+  ];
+  const europeIds = [
+    'eu-economic-security-strategy-2023',
+    'eu-anti-coercion-instrument-2023',
+    'eu-carbon-border-adjustment-mechanism-2023',
+    'eu-critical-raw-materials-act-2024',
+    'eu-standardisation-strategy-2022',
+  ];
+  const aiGovernanceIds = [
+    'iso-iec-42001-ai-management-system-2023',
+    'international-ai-safety-report-2025',
+    'international-network-ai-safety-institutes-2024',
+    'paris-ai-action-summit-statement-2025',
+    'smuha-race-ai-regulation-2021',
+    'veale-borgesius-demystifying-eu-ai-act-2021',
+  ];
+  const expectedIds = [...unitedStatesIds, ...europeIds, ...aiGovernanceIds];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+  const expectedAuthorityMix = new Set([
+    'official-government',
+    'official-international-organization',
+    'academic-publisher',
+  ]);
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordById.has(expectedId), `${expectedId} exists`);
+  }
+
+  for (const recordId of unitedStatesIds) {
+    assert.ok(recordById.get(recordId).topics.includes('united-states'), `${recordId} is linked to united-states`);
+  }
+
+  for (const recordId of europeIds) {
+    assert.ok(recordById.get(recordId).topics.includes('european-union'), `${recordId} is linked to european-union`);
+  }
+
+  for (const recordId of aiGovernanceIds) {
+    assert.ok(recordById.get(recordId).topics.includes('ai-governance'), `${recordId} is linked to ai-governance`);
+  }
+
+  assert.ok(byTopic['united-states'].length >= 27, 'united states topic has at least twenty-seven records');
+  assert.ok(byTopic['european-union'].length >= 27, 'european union topic has at least twenty-seven records');
+  assert.ok(byTopic['ai-governance'].length >= 31, 'ai governance topic has at least thirty-one records');
+  assert.ok(
+    [...expectedAuthorityMix].every((authority) =>
+      expectedIds.some((recordId) => recordById.get(recordId).sourceAuthority === authority),
+    ),
+    'rebalance batch includes official, intergovernmental, and academic sources',
+  );
+  assert.ok(
+    byTopic['ai-governance'].filter((record) => ['academic-article', 'research-report'].includes(record.recordType))
+      .length >= 5,
+    'ai governance includes a deeper scholarship and report shelf',
+  );
+});
+
 test('china institutional-practice batch materially deepens the China shelf', () => {
   const expectedIds = [
     'wto-trade-policy-review-china-secretariat-report-2024',
