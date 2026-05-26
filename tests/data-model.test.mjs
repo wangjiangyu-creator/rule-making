@@ -1180,6 +1180,82 @@ test('digital trade expansion adds China, US, and EU official records and schola
   assert.ok(newRecords.some((record) => record.actors.includes('european-union')), 'new records include the European Union');
 });
 
+test('cross-topic reinforcement batch materially expands weaker research shelves', () => {
+  const expectedIds = [
+    'uk-colonial-laws-validity-act-1865',
+    'uk-government-of-india-act-1858',
+    'uk-bills-of-exchange-act-1882',
+    'uk-merchant-shipping-act-1894',
+    'benton-law-colonial-cultures-2002',
+    'stern-company-state-2011',
+    'eu-foreign-subsidies-regulation-2022',
+    'eu-net-zero-industry-act-2024',
+    'eu-international-procurement-instrument-2022',
+    'eu-mica-regulation-2023',
+    'eu-deforestation-regulation-2023',
+    'eu-ecodesign-sustainable-products-regulation-2024',
+    'scott-extraterritoriality-territorial-extension-eu-law-2014',
+    'wto-agreement-fisheries-subsidies-2022',
+    'wto-mc13-dispute-settlement-reform-decision-2024',
+    'unctad-world-investment-report-2024',
+    'oecd-fdi-qualities-policy-toolkit-2022',
+    'imf-institutional-view-capital-flows-review-2022',
+    'basel-core-principles-effective-banking-supervision-2024',
+    'iosco-crypto-digital-assets-policy-recommendations-2023',
+    'cpmi-iosco-stablecoin-pfmi-guidance-2022',
+    'g20-cross-border-payments-priority-actions-2023',
+    'imf-world-bank-bali-fintech-agenda-2018',
+    'bis-blueprint-future-monetary-system-2023',
+    'helleiner-states-reemergence-global-finance-1994',
+    'abdelal-capital-rules-2007',
+    'brummer-soft-law-global-financial-system-2012',
+    'g7-dfft-institutional-arrangement-partnership-2023',
+    'budapest-convention-second-additional-protocol-2022',
+    'un-oewg-cyber-final-report-2021',
+    'us-ai-national-security-memorandum-2024',
+    'us-commerce-connected-vehicles-final-rule-2025',
+    'us-bis-ai-diffusion-framework-2025',
+    'us-bis-ai-diffusion-rescission-2025',
+    'us-omb-m-25-21-federal-ai-use-2025',
+    'us-omb-m-25-22-ai-acquisition-2025',
+    'farrell-newman-underground-empire-2023',
+  ];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+  const newRecords = expectedIds.map((id) => recordById.get(id));
+  const officialRecords = newRecords.filter((record) =>
+    [
+      'official-government',
+      'official-international-organization',
+      'official-regulator',
+      'treaty-depository',
+    ].includes(record.sourceAuthority),
+  );
+  const scholarlyRecords = newRecords.filter((record) =>
+    ['academic-article', 'book-chapter'].includes(record.recordType),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordById.has(expectedId), `${expectedId} exists`);
+    assert.ok(recordById.get(expectedId).dimensions.length >= 1, `${expectedId} has analytical dimensions`);
+  }
+
+  assert.ok(records.length >= 370, 'database has at least three hundred and seventy records');
+  assert.ok(officialRecords.length >= 27, 'cross-topic batch is anchored mostly in official records');
+  assert.ok(scholarlyRecords.length >= 7, 'cross-topic batch adds scholarly interpretation');
+  assert.ok(byTopic['britain-imperial-rulemaking'].length >= 28, 'Britain and imperial rulemaking reaches at least twenty-eight records');
+  assert.ok(byTopic['united-states'].length >= 42, 'United States shelf reaches at least forty-two records');
+  assert.ok(byTopic['european-union'].length >= 45, 'European Union shelf reaches at least forty-five records');
+  assert.ok(byTopic['ai-governance'].length >= 46, 'AI governance shelf reaches at least forty-six records');
+  assert.ok(byTopic['monetary-financial-regulation'].length >= 62, 'monetary and financial regulation reaches at least sixty-two records');
+  assert.ok(byTopic['cyber-data-governance'].length >= 66, 'cyber and data governance reaches at least sixty-six records');
+  assert.ok(byTopic['wto-reform'].length >= 66, 'WTO reform reaches at least sixty-six records');
+  assert.ok(byTopic['international-investment'].length >= 70, 'international investment reaches at least seventy records');
+  assert.ok(byTopic['great-powers'].length >= 190, 'great-powers shelf reaches at least one hundred and ninety records');
+});
+
 test('timeline entries resolve to topic and record ids', () => {
   const topicIds = new Set(topics.map((topic) => topic.id));
   const recordIds = new Set(records.map((record) => record.id));

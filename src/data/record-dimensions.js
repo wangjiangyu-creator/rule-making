@@ -1381,4 +1381,157 @@ export const recordDimensionsById = {
     'objective-setting',
     'legitimacy-management',
   ],
+  'uk-colonial-laws-validity-act-1865': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'uk-government-of-india-act-1858': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'uk-bills-of-exchange-act-1882': [
+    'norm-entrepreneurship-drafting-power',
+    'legitimacy-management',
+  ],
+  'uk-merchant-shipping-act-1894': [
+    'norm-entrepreneurship-drafting-power',
+    'objective-setting',
+  ],
+  'benton-law-colonial-cultures-2002': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'stern-company-state-2011': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'eu-foreign-subsidies-regulation-2022': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-net-zero-industry-act-2024': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-international-procurement-instrument-2022': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-mica-regulation-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-deforestation-regulation-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-ecodesign-sustainable-products-regulation-2024': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'scott-extraterritoriality-territorial-extension-eu-law-2014': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'wto-agreement-fisheries-subsidies-2022': [
+    'coalition-consensus-building',
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'wto-mc13-dispute-settlement-reform-decision-2024': [
+    'objective-setting',
+    'coalition-consensus-building',
+  ],
+  'unctad-world-investment-report-2024': [
+    'agenda-setting',
+    'objective-setting',
+  ],
+  'oecd-fdi-qualities-policy-toolkit-2022': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'imf-institutional-view-capital-flows-review-2022': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'basel-core-principles-effective-banking-supervision-2024': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'iosco-crypto-digital-assets-policy-recommendations-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'cpmi-iosco-stablecoin-pfmi-guidance-2022': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'g20-cross-border-payments-priority-actions-2023': [
+    'agenda-setting',
+    'objective-setting',
+    'coalition-consensus-building',
+  ],
+  'imf-world-bank-bali-fintech-agenda-2018': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'bis-blueprint-future-monetary-system-2023': [
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'helleiner-states-reemergence-global-finance-1994': [
+    'objective-setting',
+    'agenda-setting',
+  ],
+  'abdelal-capital-rules-2007': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'brummer-soft-law-global-financial-system-2012': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'g7-dfft-institutional-arrangement-partnership-2023': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'budapest-convention-second-additional-protocol-2022': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'un-oewg-cyber-final-report-2021': [
+    'objective-setting',
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'us-ai-national-security-memorandum-2024': [
+    'objective-setting',
+    'agenda-setting',
+    'legitimacy-management',
+  ],
+  'us-commerce-connected-vehicles-final-rule-2025': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'us-bis-ai-diffusion-framework-2025': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'us-bis-ai-diffusion-rescission-2025': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'us-omb-m-25-21-federal-ai-use-2025': [
+    'legitimacy-management',
+    'objective-setting',
+  ],
+  'us-omb-m-25-22-ai-acquisition-2025': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'farrell-newman-underground-empire-2023': [
+    'agenda-setting',
+    'objective-setting',
+  ],
 };

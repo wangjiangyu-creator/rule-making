@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526n';
+import { records } from '../src/data/records.js?v=20260526o';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526n"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526n"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526o"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526o"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /href="#\/topics">Topics<\/a>/);
   assert.doesNotMatch(html, /Digital Trade Pilot/);
@@ -39,12 +39,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526n`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526o`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526n/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526o/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -434,6 +434,36 @@ test('expanded digital trade records surface China, US, and EU materials on topi
   assert.match(chinaHtml, /DEPA Ministerial Meeting on China Accession/);
   assert.match(unitedStatesHtml, /2025 National Trade Estimate Report on Foreign Trade Barriers/);
   assert.match(europeHtml, /European Union-United States Data Privacy Framework Adequacy Decision/);
+});
+
+test('cross-topic reinforcement records surface on their topic and detail pages', () => {
+  const britainHtml = renderTopicDetail('britain-imperial-rulemaking');
+  const euHtml = renderTopicDetail('european-union');
+  const moneyHtml = renderTopicDetail('monetary-financial-regulation');
+  const cyberHtml = renderTopicDetail('cyber-data-governance');
+  const usHtml = renderTopicDetail('united-states');
+  const issues = [];
+
+  if (!/Colonial Laws Validity Act/.test(britainHtml)) {
+    issues.push('missing Colonial Laws Validity Act on Britain topic page');
+  }
+  if (!/Foreign Subsidies Regulation/.test(euHtml)) {
+    issues.push('missing Foreign Subsidies Regulation on EU topic page');
+  }
+  if (!/Basel Core Principles/.test(moneyHtml)) {
+    issues.push('missing Basel Core Principles on finance topic page');
+  }
+  if (!/Second Additional Protocol to the Budapest Convention/.test(cyberHtml)) {
+    issues.push('missing Budapest second protocol on cyber topic page');
+  }
+  if (!/National Security Memorandum on Artificial Intelligence/.test(usHtml)) {
+    issues.push('missing AI national security memorandum on US topic page');
+  }
+  if (!/AI Diffusion Framework/.test(renderRecordDetail('us-bis-ai-diffusion-framework-2025'))) {
+    issues.push('missing AI diffusion record detail');
+  }
+
+  assert.deepEqual(issues, []);
 });
 
 test('britain shelf surfaces in topics, actor detail, and timeline views', () => {
