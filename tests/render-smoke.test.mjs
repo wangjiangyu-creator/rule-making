@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526p';
+import { records } from '../src/data/records.js?v=20260527a';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526p"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526p"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260527a"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260527a"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /href="#\/topics">Topics<\/a>/);
   assert.doesNotMatch(html, /Digital Trade Pilot/);
@@ -39,12 +39,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526p`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260527a`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526p/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260527a/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -539,6 +539,45 @@ test('China digital trade subtopic surfaces negotiation materials on the China p
   }
   if (chinaHtml.indexOf('China and IFDA') > chinaHtml.indexOf('China and Digital Trade Rule-making')) {
     issues.push('China digital trade subtopic should follow the IFDA subtopic');
+  }
+
+  assert.deepEqual(issues, []);
+});
+
+test('China financial system reform subtopic surfaces monetary and regulatory materials on the China page', () => {
+  const chinaHtml = renderTopicDetail('china');
+  const moneyHtml = renderTopicDetail('monetary-financial-regulation');
+  const issues = [];
+
+  if (!/China and International Financial System Reform/.test(chinaHtml)) {
+    issues.push('missing China financial system reform subtopic title on China page');
+  }
+  if (!/Zhou Xiaochuan: Reform the International Monetary System/.test(chinaHtml)) {
+    issues.push('missing PBOC international monetary system reform record');
+  }
+  if (!/Historic Quota and Governance Reforms Become Effective/.test(chinaHtml)) {
+    issues.push('missing IMF quota governance reform record');
+  }
+  if (!/Chinese Renminbi Officially Included in the SDR/.test(chinaHtml)) {
+    issues.push('missing RMB SDR inclusion record');
+  }
+  if (!/FSB Peer Review of China/.test(chinaHtml)) {
+    issues.push('missing FSB peer review of China record');
+  }
+  if (!/Expansion of Membership Announced by the Basel Committee/.test(chinaHtml)) {
+    issues.push('missing Basel Committee China membership record');
+  }
+  if (!/Treaty for the Establishment of a BRICS Contingent Reserve Arrangement/.test(chinaHtml)) {
+    issues.push('missing BRICS CRA record');
+  }
+  if (!/China and Digital Trade Rule-making/.test(chinaHtml) || !/China and International Financial System Reform/.test(chinaHtml)) {
+    issues.push('China digital trade and financial system subtopics are not both visible');
+  }
+  if (chinaHtml.indexOf('China and Digital Trade Rule-making') > chinaHtml.indexOf('China and International Financial System Reform')) {
+    issues.push('China financial system reform subtopic should follow the digital trade subtopic');
+  }
+  if (!/Zhou Xiaochuan: Reform the International Monetary System/.test(moneyHtml)) {
+    issues.push('missing PBOC monetary reform record on money and finance topic page');
   }
 
   assert.deepEqual(issues, []);

@@ -1363,7 +1363,7 @@ test('China digital trade rule-making subtopic groups negotiation and implementa
   const recordById = new Map(records.map((record) => [record.id, record]));
   const chinaTopic = topics.find((topic) => topic.id === 'china');
   const subtopic = chinaTopic.subtopics.find((item) => item.id === 'china-digital-trade-rulemaking');
-  const subtopicRecords = expectedIds.map((id) => recordById.get(id));
+  const subtopicRecords = expectedIds.map((id) => recordById.get(id)).filter(Boolean);
   const officialRecords = subtopicRecords.filter((record) =>
     ['official-government', 'official-international-organization'].includes(record.sourceAuthority),
   );
@@ -1387,6 +1387,64 @@ test('China digital trade rule-making subtopic groups negotiation and implementa
   assert.ok(subtopic.recordIds.length >= 17, 'China digital trade subtopic has a substantive record shelf');
   assert.ok(officialRecords.length >= 14, 'China digital trade subtopic is anchored in official materials');
   assert.ok(negotiationRecords.length >= 12, 'China digital trade subtopic mostly covers negotiation and implementation materials');
+});
+
+test('China international financial system reform subtopic covers monetary and financial regulation materials', () => {
+  const expectedIds = [
+    'zhou-reform-international-monetary-system-2009',
+    'basel-committee-expansion-china-2009',
+    'cmim-agreement-2010',
+    'brics-contingent-reserve-arrangement-2014',
+    'brics-new-development-bank-agreement-2014',
+    'imf-quota-governance-reforms-effective-2016',
+    'pbc-rmb-sdr-inclusion-2016',
+    'aiib-articles-of-agreement-2015',
+    'fsb-peer-review-china-2015',
+    'amro-agreement-2016',
+    'g20-hangzhou-communique-2016',
+    'imfc-statement-pan-gongsheng-2024',
+    'imfc-statement-pan-gongsheng-2026',
+    'bri-debt-sustainability-framework-participating-countries-2019',
+    'bri-debt-sustainability-framework-market-access-countries-2023',
+    'aiib-corporate-strategy-2021-2030',
+    'ndb-general-strategy-2022-2026',
+    'brics-kazan-declaration-2024',
+    'wu-remaking-bretton-woods-aiib-2018',
+    'zeng-chinese-views-global-economic-governance-2019',
+  ];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const chinaTopic = topics.find((topic) => topic.id === 'china');
+  const subtopic = chinaTopic.subtopics.find((item) => item.id === 'china-international-financial-system-reform');
+  const subtopicRecords = expectedIds.map((id) => recordById.get(id)).filter(Boolean);
+  const officialRecords = subtopicRecords.filter((record) =>
+    ['official-government', 'official-international-organization', 'official-regulator'].includes(record.sourceAuthority),
+  );
+  const monetaryRecords = subtopicRecords.filter((record) =>
+    record.tags.some((tag) => ['international-monetary-system', 'sdr', 'reserve-currency', 'quota-reform'].includes(tag)),
+  );
+  const financialRegulationRecords = subtopicRecords.filter((record) =>
+    record.tags.some((tag) =>
+      ['financial-stability', 'financial-regulation', 'macroprudential-policy', 'banking-supervision', 'development-finance'].includes(tag),
+    ),
+  );
+
+  assert.ok(subtopic, 'China topic has an international financial system reform subtopic');
+  assert.equal(subtopic.title, 'China and International Financial System Reform');
+
+  for (const expectedId of expectedIds) {
+    const record = recordById.get(expectedId);
+    assert.ok(record, `${expectedId} exists`);
+    assert.ok(record.topics.includes('china'), `${expectedId} is linked to China topic`);
+    assert.ok(record.topics.includes('monetary-financial-regulation'), `${expectedId} is linked to monetary and financial regulation`);
+    assert.ok(record.actors.includes('china'), `${expectedId} identifies China as an actor`);
+    assert.ok(record.dimensions.length >= 1, `${expectedId} has analytical dimensions`);
+    assert.ok(subtopic.recordIds.includes(expectedId), `${expectedId} is in the China financial system reform subtopic`);
+  }
+
+  assert.ok(subtopic.recordIds.length >= 20, 'China financial system reform subtopic has a substantive record shelf');
+  assert.ok(officialRecords.length >= 16, 'China financial system reform subtopic is anchored in official materials');
+  assert.ok(monetaryRecords.length >= 4, 'subtopic covers international monetary system reform');
+  assert.ok(financialRegulationRecords.length >= 6, 'subtopic covers international financial regulation and stability');
 });
 
 test('timeline entries resolve to topic and record ids', () => {

@@ -904,6 +904,32 @@ export const recordDimensionsById = {
     'agenda-setting',
     'coalition-consensus-building',
   ],
+  'zhou-reform-international-monetary-system-2009': [
+    'objective-setting',
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'basel-committee-expansion-china-2009': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'brics-contingent-reserve-arrangement-2014': [
+    'objective-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'fsb-peer-review-china-2015': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'imf-quota-governance-reforms-effective-2016': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'pbc-rmb-sdr-inclusion-2016': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
   'china-wto-ecommerce-negotiations-contribution-2023': [
     'agenda-setting',
     'coalition-consensus-building',

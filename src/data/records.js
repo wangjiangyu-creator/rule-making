@@ -1,6 +1,7 @@
 import { recordDimensionsById } from './record-dimensions.js';
 import { britainBatchRecords } from './records-britain-batch.js';
 import { chinaDigitalTradeRulemakingBatchRecords } from './records-china-digital-trade-batch.js';
+import { chinaFinancialSystemReformBatchRecords } from './records-china-financial-system-batch.js';
 import { chinaInstitutionalPracticeBatch } from './records-china-institutions-batch.js';
 import { chinaIfdaBatchRecords } from './records-china-ifda-batch.js';
 import { chinaSecondBatchRecords } from './records-china-second-batch.js';
@@ -833,6 +834,7 @@ const baseRecords = [
   ...standardsDataAiBatchRecords,
   ...digitalTradeComparisonBatchRecords,
   ...chinaDigitalTradeRulemakingBatchRecords,
+  ...chinaFinancialSystemReformBatchRecords,
   ...usEuAiRebalanceBatchRecords,
   ...chinaInstitutionalPracticeBatch,
   ...chinaIfdaBatchRecords,
