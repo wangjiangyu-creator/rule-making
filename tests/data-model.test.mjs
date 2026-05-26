@@ -110,6 +110,10 @@ test('topics, actors, and institutions use stable unique ids', () => {
   assertUniqueIds(actors, 'actor');
   assertUniqueIds(institutions, 'institution');
   assert.ok(topics.some((topic) => topic.id === 'digital-trade-ecommerce' && topic.pilot));
+  assert.ok(institutions.some((institution) => institution.id === 'aiib'));
+  assert.ok(institutions.some((institution) => institution.id === 'new-development-bank'));
+  assert.ok(institutions.some((institution) => institution.id === 'brics'));
+  assert.ok(institutions.some((institution) => institution.id === 'belt-road-forum'));
 });
 
 test('records expose a stable dimensions classification layer', () => {
@@ -785,6 +789,72 @@ test('fifth content batch deepens the US, EU, and China comparison shelves', () 
   assert.ok(
     byTopic.china.some((record) => record.topics.includes('cyber-data-governance')),
     'china shelf intersects with cyber and data governance',
+  );
+});
+
+test('china institutional-practice batch materially deepens the China shelf', () => {
+  const expectedIds = [
+    'wto-trade-policy-review-china-secretariat-report-2024',
+    'wto-trade-policy-review-china-government-report-2024',
+    'wto-china-round-table-accessions-2026',
+    'wto-investment-facilitation-workshop-2017',
+    'china-welcomes-wto-ecommerce-interim-arrangements-2026',
+    'imfc-statement-pan-gongsheng-2024',
+    'imfc-statement-pan-gongsheng-2026',
+    'world-bank-china-country-partnership-framework-2020-2025',
+    'china-wbg-global-center-ecological-systems-transitions-2024',
+    'aiib-corporate-strategy-2021-2030',
+    'ndb-general-strategy-2022-2026',
+    'global-development-initiative-building-on-2030-sdgs-2021',
+    'group-friends-global-development-initiative-launch-2022',
+    'gdi-ministerial-meeting-un-desa-statement-2022',
+    'un-china-sustainable-development-cooperation-framework-2021-2025',
+    'unctad-invest-china-building-prosperous-future-2023',
+    'g20-hangzhou-communique-2016',
+    'apec-beijing-agenda-2014',
+    'apec-accord-innovative-development-economic-reform-growth-2014',
+    'brics-xiamen-declaration-2017',
+    'brics-beijing-declaration-2022',
+    'bri-debt-sustainability-framework-participating-countries-2019',
+    'bri-debt-sustainability-framework-market-access-countries-2023',
+    'second-belt-road-forum-joint-communique-2019',
+    'beijing-initiative-belt-road-green-development-2023',
+    'beijing-declaration-belt-road-ceo-conference-2023',
+  ];
+
+  const recordIds = new Set(records.map((record) => record.id));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
+  }
+
+  assert.ok(byTopic.china.length >= 45, 'china topic has at least forty-five records');
+  assert.ok(
+    new Set(byTopic.china.map((record) => record.recordType)).size >= 6,
+    'china topic spans at least six material types',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('wto')),
+    'china topic includes WTO-linked records',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('imf')),
+    'china topic includes IMF-linked records',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('world-bank')),
+    'china topic includes World Bank-linked records',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('g20')),
+    'china topic includes G20-linked records',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('apec')),
+    'china topic includes APEC-linked records',
   );
 });
 

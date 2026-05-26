@@ -202,4 +202,40 @@ export const institutions = [
       'Conducts US diplomacy on cyberspace, digital policy, data governance, technology standards, and international institutional coordination.',
     topicIds: ['united-states', 'cyber-data-governance', 'ai-governance'],
   },
+  {
+    id: 'aiib',
+    name: 'Asian Infrastructure Investment Bank',
+    shortName: 'AIIB',
+    type: 'international-organization',
+    summary:
+      'China-backed multilateral development bank focused on infrastructure, connectivity, sustainable development, and cross-border financing rules.',
+    topicIds: ['china', 'international-investment', 'monetary-financial-regulation', 'great-powers'],
+  },
+  {
+    id: 'new-development-bank',
+    name: 'New Development Bank',
+    shortName: 'NDB',
+    type: 'international-organization',
+    summary:
+      'BRICS-created development bank that channels infrastructure and sustainable-development finance through an emerging-powers institutional framework.',
+    topicIds: ['china', 'monetary-financial-regulation', 'international-investment', 'great-powers'],
+  },
+  {
+    id: 'brics',
+    name: 'BRICS',
+    shortName: 'BRICS',
+    type: 'forum',
+    summary:
+      'Coalition forum through which China and other major emerging economies coordinate development, financial, and institutional reform agendas.',
+    topicIds: ['china', 'great-powers', 'monetary-financial-regulation', 'middle-small-powers'],
+  },
+  {
+    id: 'belt-road-forum',
+    name: 'Belt and Road Forum for International Cooperation',
+    shortName: 'BRF',
+    type: 'forum',
+    summary:
+      'China-led forum that consolidates Belt and Road policy coordination, development-finance cooperation, connectivity, and implementation commitments.',
+    topicIds: ['china', 'international-investment', 'middle-small-powers', 'great-powers'],
+  },
 ];

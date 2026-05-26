@@ -4,7 +4,7 @@ import { records } from '../data/records.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
 import { formatDate, humanizeId, recordTypeLabel } from '../lib/format.js';
-import { sortRecordsNewestFirst } from '../lib/search.js';
+import { isChinaRelatedRecord, sortRecordsForContext } from '../lib/search.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -20,7 +20,10 @@ function asList(value) {
 }
 
 function recordsForInstitution(institutionId) {
-  return sortRecordsNewestFirst(records.filter((record) => asList(record.institutions).includes(institutionId)));
+  return sortRecordsForContext(
+    records.filter((record) => asList(record.institutions).includes(institutionId)),
+    { promoteChina: true },
+  );
 }
 
 function renderTopicLinks(topicIds) {
@@ -116,6 +119,7 @@ export function renderInstitutionDetail(institutionId) {
 
   const linkedRecords = recordsForInstitution(institution.id);
   const linkedDimensions = summarizeDimensions(linkedRecords);
+  const chinaLinkedRecords = linkedRecords.filter((record) => isChinaRelatedRecord(record));
 
   return `
     <section class="page-hero">
@@ -131,6 +135,19 @@ export function renderInstitutionDetail(institutionId) {
       <h2>Rule-making dimensions</h2>
       <p>${renderDimensionLinks(linkedDimensions)}</p>
     </section>
+    ${
+      chinaLinkedRecords.length > 0
+        ? `
+          <section>
+            <h2>China in this institution</h2>
+            <p>${chinaLinkedRecords.length} China-linked record${chinaLinkedRecords.length === 1 ? '' : 's'} highlighted for this institution.</p>
+            <div class="record-list">
+              ${chinaLinkedRecords.slice(0, 8).map(renderRecordRow).join('')}
+            </div>
+          </section>
+        `
+        : ''
+    }
     <section>
       <h2>Linked records</h2>
       <p>${linkedRecords.length} records linked to this institution.</p>

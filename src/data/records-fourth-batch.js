@@ -8,7 +8,7 @@ export const fourthBatchRecords = [
     year: 2023,
     actors: ['united-states'],
     jurisdictions: ['United States'],
-    institutions: [],
+    institutions: ['belt-road-forum'],
     topics: ['united-states', 'cyber-data-governance', 'great-powers'],
     summary:
       'The White House strategy sets US priorities on critical infrastructure, software liability, disruption of malicious actors, and international cyber cooperation, making it a major statement of US digital order preferences.',
@@ -112,7 +112,7 @@ export const fourthBatchRecords = [
     year: 2022,
     actors: ['united-states'],
     jurisdictions: ['United States'],
-    institutions: [],
+    institutions: ['belt-road-forum'],
     topics: ['united-states', 'ai-governance'],
     summary:
       'OSTP set out a non-binding framework of five protections for the design, deployment, and governance of automated systems, giving the United States a rights-based AI governance reference point.',

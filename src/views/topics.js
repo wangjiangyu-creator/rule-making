@@ -4,7 +4,7 @@ import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
 import { formatDate, recordTypeLabel } from '../lib/format.js';
-import { sortRecordsNewestFirst } from '../lib/search.js';
+import { isChinaRelatedRecord, sortRecordsForContext } from '../lib/search.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -42,7 +42,10 @@ function renderRecordDimensionLinks(ids) {
 }
 
 function recordsForTopic(topicId) {
-  return sortRecordsNewestFirst(records.filter((record) => asList(record.topics).includes(topicId)));
+  return sortRecordsForContext(
+    records.filter((record) => asList(record.topics).includes(topicId)),
+    { promoteChina: topicId !== 'china' },
+  );
 }
 
 function renderTopicCard(topic) {
@@ -119,6 +122,9 @@ export function renderTopicDetail(topicId) {
   const topicTimeline = timeline
     .filter((entry) => entry.topicId === topic.id)
     .sort((left, right) => left.date.localeCompare(right.date));
+  const chinaLinkedRecords = topic.id === 'china'
+    ? linkedRecords
+    : linkedRecords.filter((record) => isChinaRelatedRecord(record));
 
   return `
     <section class="page-hero">
@@ -159,6 +165,20 @@ export function renderTopicDetail(topicId) {
             <ol class="timeline-list">
               ${topicTimeline.map(renderTimeline).join('')}
             </ol>
+          </section>
+        `
+        : ''
+    }
+
+    ${
+      topic.id !== 'china' && chinaLinkedRecords.length > 0
+        ? `
+          <section>
+            <h2>China in this topic</h2>
+            <p>${chinaLinkedRecords.length} China-linked record${chinaLinkedRecords.length === 1 ? '' : 's'} highlighted for this topic.</p>
+            <div class="record-list">
+              ${chinaLinkedRecords.slice(0, 8).map(renderRecordRow).join('')}
+            </div>
           </section>
         `
         : ''

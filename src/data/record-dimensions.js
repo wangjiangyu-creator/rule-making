@@ -889,6 +889,114 @@ export const recordDimensionsById = {
     'legitimacy-management',
     'norm-entrepreneurship-drafting-power',
   ],
+  'wto-trade-policy-review-china-secretariat-report-2024': [
+    'legitimacy-management',
+    'agenda-setting',
+  ],
+  'wto-trade-policy-review-china-government-report-2024': [
+    'legitimacy-management',
+  ],
+  'wto-china-round-table-accessions-2026': [
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'wto-investment-facilitation-workshop-2017': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'china-welcomes-wto-ecommerce-interim-arrangements-2026': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'imfc-statement-pan-gongsheng-2024': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'imfc-statement-pan-gongsheng-2026': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'world-bank-china-country-partnership-framework-2020-2025': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'china-wbg-global-center-ecological-systems-transitions-2024': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'aiib-corporate-strategy-2021-2030': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'ndb-general-strategy-2022-2026': [
+    'objective-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'global-development-initiative-building-on-2030-sdgs-2021': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'group-friends-global-development-initiative-launch-2022': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'gdi-ministerial-meeting-un-desa-statement-2022': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'un-china-sustainable-development-cooperation-framework-2021-2025': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'unctad-invest-china-building-prosperous-future-2023': [
+    'agenda-setting',
+    'legitimacy-management',
+  ],
+  'g20-hangzhou-communique-2016': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'apec-beijing-agenda-2014': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'apec-accord-innovative-development-economic-reform-growth-2014': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'brics-xiamen-declaration-2017': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'brics-beijing-declaration-2022': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'bri-debt-sustainability-framework-participating-countries-2019': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'bri-debt-sustainability-framework-market-access-countries-2023': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'second-belt-road-forum-joint-communique-2019': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'beijing-initiative-belt-road-green-development-2023': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'beijing-declaration-belt-road-ceo-conference-2023': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
   'china-global-initiative-data-security-2020': [
     'legitimacy-management',
     'agenda-setting',

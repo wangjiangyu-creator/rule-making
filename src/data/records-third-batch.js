@@ -8,7 +8,7 @@ export const thirdBatchRecords = [
     year: 1982,
     actors: [],
     jurisdictions: ['Global'],
-    institutions: [],
+    institutions: ['aiib'],
     topics: ['theories-rulemaking', 'great-powers'],
     summary:
       'Krasner defines international regimes as principles, norms, rules, and decision-making procedures, making the article a foundational reference for rule-making theory.',
@@ -38,7 +38,7 @@ export const thirdBatchRecords = [
     year: 2000,
     actors: [],
     jurisdictions: ['Global'],
-    institutions: [],
+    institutions: ['new-development-bank', 'brics'],
     topics: ['theories-rulemaking'],
     summary:
       'Goldstein, Kahler, Keohane, and Slaughter frame legalization through obligation, precision, and delegation, giving the portal a core international-law and IR bridge.',

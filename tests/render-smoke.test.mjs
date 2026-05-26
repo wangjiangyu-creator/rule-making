@@ -242,6 +242,19 @@ test('new batch records propagate to actor and institution pages', () => {
   assert.match(institutionHtml, /Integrated Policy Framework/);
 });
 
+test('china-linked records are promoted on mixed topic and institution pages', () => {
+  const chinaTopicHtml = renderTopicDetail('china');
+  const wtoHtml = renderTopicDetail('wto-reform');
+  const worldBankHtml = renderInstitutionDetail('world-bank');
+
+  assert.match(chinaTopicHtml, /China and International Rule-Making/);
+  assert.match(wtoHtml, /China in this topic/);
+  assert.match(worldBankHtml, /China in this institution/);
+  assert.match(wtoHtml, /Trade Policy Review: China 2024/);
+  assert.match(worldBankHtml, /Country Partnership Framework for China/);
+  assert.ok(wtoHtml.indexOf('Trade Policy Review: China 2024') < wtoHtml.indexOf('Ottawa Group and WTO Reform'));
+});
+
 test('actor detail pages expose topic distribution and the newest comparison materials', () => {
   const unitedStatesHtml = renderActorDetail('united-states');
   const europeHtml = renderTopicDetail('european-union');

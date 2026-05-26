@@ -115,6 +115,25 @@ function sortableDateValue(record) {
   return String(value);
 }
 
+export function isChinaRelatedRecord(record) {
+  return asList(record.topics).includes('china') || asList(record.actors).includes('china');
+}
+
 export function sortRecordsNewestFirst(records) {
   return [...records].sort((left, right) => sortableDateValue(right).localeCompare(sortableDateValue(left)));
+}
+
+export function sortRecordsForContext(records, { promoteChina = false } = {}) {
+  return [...records].sort((left, right) => {
+    if (promoteChina) {
+      const leftChina = isChinaRelatedRecord(left) ? 1 : 0;
+      const rightChina = isChinaRelatedRecord(right) ? 1 : 0;
+
+      if (rightChina !== leftChina) {
+        return rightChina - leftChina;
+      }
+    }
+
+    return sortableDateValue(right).localeCompare(sortableDateValue(left));
+  });
 }
