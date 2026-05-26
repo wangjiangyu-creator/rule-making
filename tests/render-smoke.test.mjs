@@ -15,8 +15,8 @@ test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526b"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526b"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526c"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526c"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
