@@ -18,9 +18,9 @@ test('index renders the static app mount and asset links', async () => {
   assert.match(html, /href="\.\/src\/styles\.css"/);
   assert.match(html, /src="\.\/src\/main\.js"/);
   assert.match(html, /Great Powers and Rule-Making/);
-  assert.match(html, /class="site-header-attribution"/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
+  assert.doesNotMatch(html, /class="site-header-attribution"/);
 });
 
 test('view renderers include core portal sections', () => {
@@ -28,6 +28,8 @@ test('view renderers include core portal sections', () => {
   assert.match(renderDimensionDetail('agenda-setting'), /Agenda-Setting/);
   assert.match(renderHome(), /Digital Trade/);
   assert.match(renderHome(), /Browse by dimension/);
+  assert.match(renderHome(), /class="home-attribution"/);
+  assert.match(renderHome(), /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
   assert.match(renderTopics(), /Research Topics/);
   assert.match(renderDatabase(), /Rule-Making Records/);
   assert.match(renderSourcesMethod(), /Analytical dimensions/);

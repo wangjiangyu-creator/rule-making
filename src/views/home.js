@@ -58,6 +58,7 @@ export function renderHome() {
     <section class="page-hero">
       <p class="eyebrow">International economic governance</p>
       <h1>Great Powers and Rule-Making</h1>
+      <p class="home-attribution">This website was created with Codex by Professor Wang Jiangyu of CityUHK.</p>
       <p class="lede">
         A research portal and structured database on how great powers shape rules,
         institutions, and bargaining agendas in the international economic system.
