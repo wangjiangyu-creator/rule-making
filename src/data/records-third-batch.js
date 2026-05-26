@@ -3330,7 +3330,7 @@ export const thirdBatchRecords = [
     year: 2015,
     actors: ['china'],
     jurisdictions: ['AIIB members'],
-    institutions: [],
+    institutions: ['aiib'],
     topics: ['china', 'great-powers', 'monetary-financial-regulation'],
     summary:
       'The AIIB founding treaty created a new China-backed multilateral development bank and is essential for tracing how institutional design, voting structure, and development-finance governance can become tools of rule-making.',
@@ -3359,7 +3359,7 @@ export const thirdBatchRecords = [
     year: 2014,
     actors: ['china'],
     jurisdictions: ['BRICS members'],
-    institutions: [],
+    institutions: ['new-development-bank', 'brics'],
     topics: ['china', 'great-powers', 'monetary-financial-regulation'],
     summary:
       'The New Development Bank agreement established a BRICS-led development bank, making it a core text for studying how emerging powers institutionalize alternative financing and governance arrangements.',

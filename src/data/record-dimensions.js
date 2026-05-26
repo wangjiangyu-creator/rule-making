@@ -909,6 +909,24 @@ export const recordDimensionsById = {
     'coalition-consensus-building',
     'norm-entrepreneurship-drafting-power',
   ],
+  'china-mc12-statement-wto-reform-2022': [
+    'objective-setting',
+    'legitimacy-management',
+    'agenda-setting',
+  ],
+  'australia-china-thailand-small-steps-wto-reform-2023': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'china-cosponsors-wto-ecommerce-annex4-request-2025': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+    'legitimacy-management',
+  ],
+  'china-funded-wto-digital-trade-workshop-ldcs-2024': [
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
   'imfc-statement-pan-gongsheng-2024': [
     'objective-setting',
     'legitimacy-management',
@@ -916,6 +934,14 @@ export const recordDimensionsById = {
   'imfc-statement-pan-gongsheng-2026': [
     'objective-setting',
     'legitimacy-management',
+  ],
+  'imf-china-2025-article-iv-consultation-2026': [
+    'legitimacy-management',
+    'objective-setting',
+  ],
+  'imf-china-2023-article-iv-executive-board-2024': [
+    'legitimacy-management',
+    'objective-setting',
   ],
   'world-bank-china-country-partnership-framework-2020-2025': [
     'objective-setting',
@@ -925,14 +951,42 @@ export const recordDimensionsById = {
     'agenda-setting',
     'coalition-consensus-building',
   ],
+  'world-bank-china-country-climate-development-report-2022': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'china-world-bank-kcp-contribution-2026': [
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'china-wbg-global-center-collaboration-space-2026': [
+    'coalition-consensus-building',
+    'agenda-setting',
+  ],
   'aiib-corporate-strategy-2021-2030': [
     'objective-setting',
     'norm-entrepreneurship-drafting-power',
+  ],
+  'china-hosts-aiib-annual-meeting-2025': [
+    'legitimacy-management',
+    'agenda-setting',
+  ],
+  'aiib-annual-meeting-beijing-2025': [
+    'agenda-setting',
+    'coalition-consensus-building',
   ],
   'ndb-general-strategy-2022-2026': [
     'objective-setting',
     'coalition-consensus-building',
     'norm-entrepreneurship-drafting-power',
+  ],
+  'ndb-bank-huzhou-sustainable-infrastructure-china-2024': [
+    'norm-entrepreneurship-drafting-power',
+    'legitimacy-management',
+  ],
+  'ndb-bank-china-haitong-green-projects-china-2025': [
+    'norm-entrepreneurship-drafting-power',
+    'coalition-consensus-building',
   ],
   'global-development-initiative-building-on-2030-sdgs-2021': [
     'objective-setting',
@@ -955,6 +1009,10 @@ export const recordDimensionsById = {
     'agenda-setting',
     'legitimacy-management',
   ],
+  'unctad-china-investment-fair-opening-2025': [
+    'legitimacy-management',
+    'agenda-setting',
+  ],
   'g20-hangzhou-communique-2016': [
     'objective-setting',
     'agenda-setting',
@@ -969,6 +1027,10 @@ export const recordDimensionsById = {
     'objective-setting',
     'norm-entrepreneurship-drafting-power',
   ],
+  'china-apec-digitalization-green-transitions-fund-2024': [
+    'coalition-consensus-building',
+    'agenda-setting',
+  ],
   'brics-xiamen-declaration-2017': [
     'agenda-setting',
     'coalition-consensus-building',
@@ -976,6 +1038,16 @@ export const recordDimensionsById = {
   'brics-beijing-declaration-2022': [
     'agenda-setting',
     'coalition-consensus-building',
+  ],
+  'xi-16th-brics-summit-statement-2024': [
+    'objective-setting',
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'brics-kazan-declaration-2024': [
+    'objective-setting',
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
   ],
   'bri-debt-sustainability-framework-participating-countries-2019': [
     'legitimacy-management',

@@ -255,6 +255,17 @@ test('china-linked records are promoted on mixed topic and institution pages', (
   assert.ok(wtoHtml.indexOf('Trade Policy Review: China 2024') < wtoHtml.indexOf('Ottawa Group and WTO Reform'));
 });
 
+test('second China batch propagates to WTO, AIIB, and APEC entry pages', () => {
+  const chinaHtml = renderTopicDetail('china');
+  const aiibHtml = renderInstitutionDetail('aiib');
+  const apecHtml = renderInstitutionDetail('apec');
+
+  assert.match(chinaHtml, /People&#39;s Republic of China: 2025 Article IV Consultation/);
+  assert.match(chinaHtml, /China Deepens Partnership with the World Bank&#39;s Knowledge for Change Program/);
+  assert.match(aiibHtml, /2025 AIIB Annual Meeting/);
+  assert.match(apecHtml, /China Contributes Funding to Promote Digitalization for Green Transitions/);
+});
+
 test('actor detail pages expose topic distribution and the newest comparison materials', () => {
   const unitedStatesHtml = renderActorDetail('united-states');
   const europeHtml = renderTopicDetail('european-union');

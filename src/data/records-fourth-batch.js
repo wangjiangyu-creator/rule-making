@@ -256,7 +256,7 @@ export const fourthBatchRecords = [
     year: 2015,
     actors: ['china'],
     jurisdictions: ['China', 'Partner countries'],
-    institutions: [],
+    institutions: ['belt-road-forum'],
     topics: ['china', 'middle-small-powers', 'international-investment'],
     summary:
       'The 2015 Vision and Actions document gave the Belt and Road Initiative its first authoritative implementation blueprint, linking infrastructure, trade, investment, financial integration, and people-to-people connectivity to China-led agenda-setting.',
@@ -325,7 +325,7 @@ export const fourthBatchRecords = [
     year: 2023,
     actors: ['china'],
     jurisdictions: ['Global'],
-    institutions: [],
+    institutions: ['belt-road-forum'],
     topics: ['china', 'middle-small-powers', 'international-investment'],
     summary:
       "The chair's statement consolidates the 2023 Belt and Road Forum outcomes around connectivity, digital economy, green development, and implementation deliverables, showing how China organizes coalition-based rule-shaping around the BRI.",

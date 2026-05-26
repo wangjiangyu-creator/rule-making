@@ -858,6 +858,58 @@ test('china institutional-practice batch materially deepens the China shelf', ()
   );
 });
 
+test('second China official-source batch adds participation, proposal, and performance materials', () => {
+  const expectedIds = [
+    'china-mc12-statement-wto-reform-2022',
+    'australia-china-thailand-small-steps-wto-reform-2023',
+    'china-cosponsors-wto-ecommerce-annex4-request-2025',
+    'china-funded-wto-digital-trade-workshop-ldcs-2024',
+    'imf-china-2025-article-iv-consultation-2026',
+    'imf-china-2023-article-iv-executive-board-2024',
+    'world-bank-china-country-climate-development-report-2022',
+    'china-world-bank-kcp-contribution-2026',
+    'china-wbg-global-center-collaboration-space-2026',
+    'china-hosts-aiib-annual-meeting-2025',
+    'aiib-annual-meeting-beijing-2025',
+    'ndb-bank-huzhou-sustainable-infrastructure-china-2024',
+    'ndb-bank-china-haitong-green-projects-china-2025',
+    'china-apec-digitalization-green-transitions-fund-2024',
+    'unctad-china-investment-fair-opening-2025',
+    'xi-16th-brics-summit-statement-2024',
+    'brics-kazan-declaration-2024',
+  ];
+  const recordIds = new Set(records.map((record) => record.id));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
+  }
+
+  assert.ok(byTopic.china.length >= 60, 'china topic has at least sixty records');
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('aiib')),
+    'china topic includes AIIB-linked records',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('new-development-bank')),
+    'china topic includes NDB-linked records',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('unctad')),
+    'china topic includes UNCTAD-linked records',
+  );
+  assert.ok(
+    byTopic.china.some((record) => record.institutions.includes('brics')),
+    'china topic includes BRICS-linked records',
+  );
+  assert.ok(
+    byTopic.china.filter((record) => record.year >= 2024).length >= 20,
+    'china topic includes a substantial current-practice shelf from 2024 onward',
+  );
+});
+
 test('timeline entries resolve to topic and record ids', () => {
   const topicIds = new Set(topics.map((topic) => topic.id));
   const recordIds = new Set(records.map((record) => record.id));
