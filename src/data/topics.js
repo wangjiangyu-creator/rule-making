@@ -147,8 +147,8 @@ export const topics = [
     title: 'Digital Trade and E-Commerce',
     shortTitle: 'Digital Trade',
     summary:
-      'The deep pilot topic covering WTO e-commerce work, digital trade chapters, data flows, localization, paperless trade, platform rules, source code, and digital economy agreements.',
-    pilot: true,
+      'A topic covering WTO e-commerce work, digital trade chapters, data flows, localization, paperless trade, platform rules, source code, and digital economy agreements.',
+    pilot: false,
     questions: [
       'How do digital trade rules allocate regulatory space and market-access commitments?',
       'How do US, EU, Chinese, and middle-power approaches differ?',

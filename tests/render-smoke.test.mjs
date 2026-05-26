@@ -9,15 +9,18 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526k';
+import { records } from '../src/data/records.js?v=20260526l';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526k"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526k"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526l"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526l"/);
   assert.match(html, /Great Powers and Rule-Making/);
+  assert.match(html, /href="#\/topics">Topics<\/a>/);
+  assert.doesNotMatch(html, /Digital Trade Pilot/);
+  assert.doesNotMatch(html, /href="#\/topics\/digital-trade-ecommerce">Digital Trade/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
   assert.doesNotMatch(html, /class="site-header-attribution"/);
@@ -36,12 +39,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526k`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526l`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526k/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526l/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -49,12 +52,29 @@ test('view renderers include core portal sections', () => {
   assert.match(renderDimensions(), /Rule-Making Dimensions/);
   assert.match(renderDimensionDetail('agenda-setting'), /Agenda-Setting/);
   assert.match(renderHome(), /Digital Trade/);
+  assert.doesNotMatch(renderHome(), /Digital Trade and E-commerce pilot/);
+  assert.doesNotMatch(renderHome(), /Open Digital Trade Pilot/);
   assert.match(renderHome(), /Browse by dimension/);
   assert.match(renderHome(), /class="home-attribution"/);
   assert.match(renderHome(), /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
   assert.match(renderTopics(), /Research Topics/);
   assert.match(renderDatabase(), /Rule-Making Records/);
   assert.match(renderSourcesMethod(), /Analytical dimensions/);
+});
+
+test('digital trade is presented as a normal topic rather than a top-level pilot', () => {
+  const homeHtml = renderHome();
+  const topicsHtml = renderTopics();
+  const topicHtml = renderTopicDetail('digital-trade-ecommerce');
+  const timelineHtml = renderTimelinePage();
+
+  assert.doesNotMatch(homeHtml, /Pilot research module|Open Digital Trade Pilot|Digital Trade and E-commerce pilot/);
+  assert.match(homeHtml, /Digital Trade and E-Commerce/);
+  assert.match(topicsHtml, /Digital Trade and E-Commerce/);
+  assert.doesNotMatch(topicsHtml, /Pilot topic/);
+  assert.match(topicHtml, /Research topic/);
+  assert.doesNotMatch(topicHtml, /Pilot topic/);
+  assert.doesNotMatch(timelineHtml, /Open Digital Trade Pilot/);
 });
 
 test('home and topic pages expose entry points into the full timeline view', () => {
@@ -376,6 +396,22 @@ test('new standards, data, and AI records propagate through topic pages', () => 
   assert.match(cyberHtml, /Cyber Resilience Act/);
   assert.match(unitedStatesHtml, /NIST Cybersecurity Framework \(CSF\) 2\.0/);
   assert.match(europeHtml, /European Union Chips Act/);
+});
+
+test('expanded digital trade records surface China, US, and EU materials on topic pages', () => {
+  const digitalHtml = renderTopicDetail('digital-trade-ecommerce');
+  const chinaHtml = renderTopicDetail('china');
+  const unitedStatesHtml = renderTopicDetail('united-states');
+  const europeHtml = renderTopicDetail('european-union');
+
+  assert.match(digitalHtml, /DEPA Ministerial Meeting on China Accession/);
+  assert.match(digitalHtml, /USTR Statement on WTO E-Commerce Negotiations/);
+  assert.match(digitalHtml, /EU-Singapore Digital Trade Agreement/);
+  assert.match(digitalHtml, /Digital or Trade\? The Contrasting Approaches of China and US to Digital Trade/);
+  assert.match(digitalHtml, /Comparative Analysis of Digital Trade Development Strategies and Governance Approaches/);
+  assert.match(chinaHtml, /DEPA Ministerial Meeting on China Accession/);
+  assert.match(unitedStatesHtml, /2025 National Trade Estimate Report on Foreign Trade Barriers/);
+  assert.match(europeHtml, /European Union-United States Data Privacy Framework Adequacy Decision/);
 });
 
 test('britain shelf surfaces in topics, actor detail, and timeline views', () => {

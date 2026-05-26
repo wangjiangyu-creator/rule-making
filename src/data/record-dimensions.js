@@ -1337,4 +1337,48 @@ export const recordDimensionsById = {
     'objective-setting',
     'norm-entrepreneurship-drafting-power',
   ],
+  'china-depa-application-2021': [
+    'objective-setting',
+    'agenda-setting',
+  ],
+  'china-depa-accession-ministerial-2024': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'ustr-wto-ecommerce-negotiations-statement-2023': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'ustr-2025-nte-digital-trade-barriers': [
+    'agenda-setting',
+    'legitimacy-management',
+  ],
+  'eu-singapore-digital-trade-agreement-2026': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'eu-japan-data-flows-protocol-2024': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'gao-digital-or-trade-china-us-2018': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'zhang-china-digital-trade-evolution-2024': [
+    'objective-setting',
+    'agenda-setting',
+  ],
+  'chen-gao-comparative-digital-trade-governance-2023': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'burri-callo-muller-kugler-evolution-digital-trade-law-taped-2024': [
+    'agenda-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'bradford-digital-empires-2023': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
 };

@@ -1,7 +1,7 @@
 import { dimensions } from '../data/dimensions.js';
 import { actors } from '../data/actors.js';
 import { institutions } from '../data/institutions.js';
-import { records } from '../data/records.js?v=20260526k';
+import { records } from '../data/records.js?v=20260526l';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
@@ -329,7 +329,7 @@ function renderTopicCard(topic) {
 
   return `
     <article class="topic-card">
-      <p class="eyebrow">${topic.pilot ? 'Pilot topic' : `${linkedRecords.length} linked records`}</p>
+      <p class="eyebrow">${linkedRecords.length} linked records</p>
       <h3><a href="#/topics/${escapeHtml(topic.id)}">${escapeHtml(topic.title)}</a></h3>
       <p>${escapeHtml(topic.summary)}</p>
     </article>
@@ -416,7 +416,7 @@ export function renderTopicDetail(topicId) {
 
   return `
     <section class="page-hero">
-      <p class="eyebrow">${topic.pilot ? 'Pilot topic' : 'Research topic'}</p>
+      <p class="eyebrow">Research topic</p>
       <h1>${escapeHtml(topic.title)}</h1>
       <p class="lede">${escapeHtml(topic.summary)}</p>
       <div class="button-row">

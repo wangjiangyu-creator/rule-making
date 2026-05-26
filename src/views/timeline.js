@@ -1,4 +1,4 @@
-import { records } from '../data/records.js?v=20260526k';
+import { records } from '../data/records.js?v=20260526l';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { formatDate } from '../lib/format.js';
@@ -98,7 +98,7 @@ export function renderTimelinePage() {
               <a class="button button-secondary" href="#/timeline">View Full Timeline</a>
             `
             : `
-              <a class="button button-primary" href="#/topics/digital-trade-ecommerce">Open Digital Trade Pilot</a>
+              <a class="button button-primary" href="#/topics">Browse Topics</a>
               <a class="button button-secondary" href="#/database">Open Database</a>
             `
         }

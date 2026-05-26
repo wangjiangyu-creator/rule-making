@@ -4,6 +4,7 @@ import { chinaInstitutionalPracticeBatch } from './records-china-institutions-ba
 import { chinaSecondBatchRecords } from './records-china-second-batch.js';
 import { chinaScholarshipBatchRecords } from './records-china-scholarship-batch.js';
 import { chinaThirdBatchRecords } from './records-china-third-batch.js';
+import { digitalTradeComparisonBatchRecords } from './records-digital-trade-comparison-batch.js';
 import { thirdBatchRecords } from './records-third-batch.js';
 import { fourthBatchRecords } from './records-fourth-batch.js';
 import { fifthBatchRecords } from './records-fifth-batch.js';
@@ -819,6 +820,7 @@ const baseRecords = [
   ...fourthBatchRecords,
   ...fifthBatchRecords,
   ...standardsDataAiBatchRecords,
+  ...digitalTradeComparisonBatchRecords,
   ...usEuAiRebalanceBatchRecords,
   ...chinaInstitutionalPracticeBatch,
   ...chinaSecondBatchRecords,

@@ -109,7 +109,7 @@ test('topics, actors, and institutions use stable unique ids', () => {
   assertUniqueIds(topics, 'topic');
   assertUniqueIds(actors, 'actor');
   assertUniqueIds(institutions, 'institution');
-  assert.ok(topics.some((topic) => topic.id === 'digital-trade-ecommerce' && topic.pilot));
+  assert.ok(topics.some((topic) => topic.id === 'digital-trade-ecommerce' && topic.pilot === false));
   assert.ok(institutions.some((institution) => institution.id === 'aiib'));
   assert.ok(institutions.some((institution) => institution.id === 'new-development-bank'));
   assert.ok(institutions.some((institution) => institution.id === 'brics'));
@@ -221,10 +221,10 @@ test('every topic has at least one linked record', () => {
   }
 });
 
-test('pilot corpus covers digital trade plus investment and financial rulemaking', () => {
+test('digital trade topic covers digital trade plus investment and financial rulemaking', () => {
   const digitalTradeRecords = records.filter((record) => record.topics.includes('digital-trade-ecommerce'));
 
-  assert.ok(digitalTradeRecords.length >= 7, 'digital trade pilot has at least seven records');
+  assert.ok(digitalTradeRecords.length >= 7, 'digital trade topic has at least seven records');
   assert.ok(
     records.some((record) => record.topics.includes('international-investment')),
     'corpus includes international investment record',
@@ -264,7 +264,7 @@ test('second content batch adds official rulemaking materials across the portal 
     assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
   }
 
-  assert.ok(digitalTradeRecords.length >= 13, 'digital trade pilot has at least thirteen records');
+  assert.ok(digitalTradeRecords.length >= 13, 'digital trade topic has at least thirteen records');
   assert.equal(officialOrCourtRecords.length, expectedIds.length);
   assert.ok(
     officialOrCourtRecords.every((record) =>
@@ -1139,6 +1139,45 @@ test('standards, data, and AI governance batch adds current official materials a
     expectedIds.some((id) => recordById.get(id).sourceAuthority === 'official-government'),
     'new batch includes government sources',
   );
+});
+
+test('digital trade expansion adds China, US, and EU official records and scholarship', () => {
+  const expectedIds = [
+    'china-depa-accession-ministerial-2024',
+    'china-depa-application-2021',
+    'ustr-wto-ecommerce-negotiations-statement-2023',
+    'ustr-2025-nte-digital-trade-barriers',
+    'eu-us-data-privacy-framework-2023',
+    'eu-singapore-digital-trade-agreement-2026',
+    'eu-japan-data-flows-protocol-2024',
+    'gao-digital-or-trade-china-us-2018',
+    'zhang-china-digital-trade-evolution-2024',
+    'chen-gao-comparative-digital-trade-governance-2023',
+    'burri-callo-muller-kugler-evolution-digital-trade-law-taped-2024',
+    'bradford-digital-empires-2023',
+  ];
+  const recordById = new Map(records.map((record) => [record.id, record]));
+  const digitalTradeRecords = records.filter((record) => record.topics.includes('digital-trade-ecommerce'));
+  const newRecords = expectedIds.map((id) => recordById.get(id));
+  const officialRecords = newRecords.filter((record) =>
+    ['official-government', 'official-international-organization'].includes(record.sourceAuthority),
+  );
+  const scholarlyRecords = newRecords.filter((record) =>
+    ['academic-article', 'book-chapter'].includes(record.recordType),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordById.has(expectedId), `${expectedId} exists`);
+    assert.ok(recordById.get(expectedId).topics.includes('digital-trade-ecommerce'), `${expectedId} is a digital trade record`);
+    assert.ok(recordById.get(expectedId).dimensions.length >= 1, `${expectedId} has analytical dimensions`);
+  }
+
+  assert.ok(digitalTradeRecords.length >= 70, 'digital trade topic has at least seventy records');
+  assert.ok(officialRecords.length >= 7, 'digital trade expansion includes official records');
+  assert.ok(scholarlyRecords.length >= 5, 'digital trade expansion includes scholarly analysis');
+  assert.ok(newRecords.some((record) => record.actors.includes('china')), 'new records include China');
+  assert.ok(newRecords.some((record) => record.actors.includes('united-states')), 'new records include the United States');
+  assert.ok(newRecords.some((record) => record.actors.includes('european-union')), 'new records include the European Union');
 });
 
 test('timeline entries resolve to topic and record ids', () => {

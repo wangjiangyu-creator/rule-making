@@ -3615,7 +3615,7 @@ export const thirdBatchRecords = [
     actors: ['european-union', 'united-states'],
     jurisdictions: ['European Union', 'United States'],
     institutions: [],
-    topics: ['european-union', 'united-states', 'cyber-data-governance'],
+    topics: ['european-union', 'united-states', 'cyber-data-governance', 'digital-trade-ecommerce'],
     summary:
       'The EU adequacy decision on the EU-U.S. Data Privacy Framework rebuilt a transatlantic data-transfer mechanism after Schrems II and is a core rule-making document on privacy, surveillance safeguards, and regulatory interoperability.',
     sourceAuthority: 'official-government',

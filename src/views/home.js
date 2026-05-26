@@ -1,4 +1,4 @@
-import { records } from '../data/records.js?v=20260526k';
+import { records } from '../data/records.js?v=20260526l';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
@@ -30,7 +30,7 @@ function renderRecentRecord(record) {
 function renderTopicCard(topic) {
   return `
     <article class="topic-card">
-      <p class="eyebrow">${topic.pilot ? 'Pilot topic' : 'Research topic'}</p>
+      <p class="eyebrow">Research topic</p>
       <h3><a href="#/topics/${escapeHtml(topic.id)}">${escapeHtml(topic.title)}</a></h3>
       <p>${escapeHtml(topic.summary)}</p>
     </article>
@@ -73,11 +73,11 @@ export function renderHome() {
     </section>
 
     <section class="feature-panel">
-      <p class="eyebrow">Pilot research module</p>
-      <h2>Digital Trade and E-commerce pilot</h2>
+      <p class="eyebrow">Featured topic</p>
+      <h2>Digital Trade and E-Commerce</h2>
       <p>${escapeHtml(digitalTradeTopic?.summary ?? '')}</p>
       <div class="button-row">
-        <a class="button button-primary" href="#/topics/digital-trade-ecommerce">Open Digital Trade Pilot</a>
+        <a class="button button-primary" href="#/topics/digital-trade-ecommerce">Open Digital Trade Topic</a>
         <a class="button button-secondary" href="#/database?topic=digital-trade-ecommerce">Filter Database</a>
       </div>
     </section>
