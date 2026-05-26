@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526j';
+import { records } from '../src/data/records.js?v=20260526k';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526j"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526j"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526k"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526k"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
@@ -36,12 +36,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526j`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526k`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526j/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526k/, `${viewFile} records import is cache-busted`);
   }
 });
 
