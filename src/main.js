@@ -1,11 +1,11 @@
-import { renderActorDetail, renderActors } from './views/actors.js?v=20260526g';
-import { renderDatabase, renderRecordDetail } from './views/database.js?v=20260526g';
-import { renderDimensionDetail, renderDimensions } from './views/dimensions.js?v=20260526g';
-import { renderHome } from './views/home.js?v=20260526g';
-import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js?v=20260526g';
-import { renderSourcesMethod } from './views/sources.js?v=20260526g';
-import { renderTimelinePage } from './views/timeline.js?v=20260526g';
-import { renderTopicDetail, renderTopics } from './views/topics.js?v=20260526g';
+import { renderActorDetail, renderActors } from './views/actors.js?v=20260526h';
+import { renderDatabase, renderRecordDetail } from './views/database.js?v=20260526h';
+import { renderDimensionDetail, renderDimensions } from './views/dimensions.js?v=20260526h';
+import { renderHome } from './views/home.js?v=20260526h';
+import { renderInstitutionDetail, renderInstitutions } from './views/institutions.js?v=20260526h';
+import { renderSourcesMethod } from './views/sources.js?v=20260526h';
+import { renderTimelinePage } from './views/timeline.js?v=20260526h';
+import { renderTopicDetail, renderTopics } from './views/topics.js?v=20260526h';
 
 const app = document.querySelector('#app');
 
@@ -100,6 +100,10 @@ function bindForms() {
 
         const formData = new FormData(form);
         const params = new URLSearchParams();
+        const filterBase =
+          typeof form.getAttribute === 'function'
+            ? form.getAttribute('data-filter-base') || '#/database'
+            : '#/database';
 
         for (const [field, rawValue] of formData) {
           const value = String(rawValue ?? '').trim();
@@ -107,7 +111,7 @@ function bindForms() {
           if (field && value) params.set(field, value);
         }
 
-        globalThis.location.hash = params.toString() ? `#/database?${params.toString()}` : '#/database';
+        globalThis.location.hash = params.toString() ? `${filterBase}?${params.toString()}` : filterBase;
       });
     }
   }

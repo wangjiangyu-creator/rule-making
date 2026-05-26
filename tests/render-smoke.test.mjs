@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526g';
+import { records } from '../src/data/records.js?v=20260526h';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526g"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526g"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526h"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526h"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
@@ -36,12 +36,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526g`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526h`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526g/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526h/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -490,6 +490,149 @@ test('database filter form submits named jurisdiction and date fields', async ()
     assert.equal(params.get('dateFrom'), '2020-01-01');
     assert.equal(params.get('dateTo'), '2020-12-31');
     assert.equal(params.get('year'), '2020');
+  } finally {
+    if (originalDocument === undefined) {
+      delete globalThis.document;
+    } else {
+      globalThis.document = originalDocument;
+    }
+
+    if (originalWindow === undefined) {
+      delete globalThis.window;
+    } else {
+      globalThis.window = originalWindow;
+    }
+
+    if (originalLocation === undefined) {
+      delete globalThis.location;
+    } else {
+      globalThis.location = originalLocation;
+    }
+
+    if (originalFormData === undefined) {
+      delete globalThis.FormData;
+    } else {
+      globalThis.FormData = originalFormData;
+    }
+  }
+});
+
+test('topic detail pages expose local search and category filters', () => {
+  const html = renderTopicDetail('china');
+
+  assert.match(html, /data-topic-filter-form/);
+  assert.match(html, /data-filter-base="#\/topics\/china"/);
+  assert.match(html, /name="q"/);
+  assert.match(html, /name="recordType"/);
+  assert.match(html, /name="dimension"/);
+  assert.match(html, /name="actor"/);
+  assert.match(html, /name="institution"/);
+  assert.match(html, /name="sourceAuthority"/);
+  assert.match(html, /name="year"/);
+  assert.match(html, /Academic articles/);
+  assert.match(html, /Clear topic filters/);
+});
+
+test('topic detail filters records within the current topic', () => {
+  const originalLocation = globalThis.location;
+  globalThis.location = { hash: '#/topics/china?q=AIIB&recordType=academic-article' };
+
+  try {
+    const html = renderTopicDetail('china');
+
+    assert.match(html, /filtered from \d+ total records linked to this topic/);
+    assert.match(html, /China challenges global governance\? Chinese international development finance and the AIIB/);
+    assert.doesNotMatch(html, /People&#39;s Republic of China: 2025 Article IV Consultation/);
+  } finally {
+    if (originalLocation === undefined) {
+      delete globalThis.location;
+    } else {
+      globalThis.location = originalLocation;
+    }
+  }
+});
+
+test('topic filter form keeps users on the current topic page', async () => {
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  const originalLocation = globalThis.location;
+  const originalFormData = globalThis.FormData;
+  const formValues = {
+    q: 'AIIB',
+    recordType: 'academic-article',
+    dimension: '',
+    actor: '',
+    institution: '',
+    sourceAuthority: '',
+    year: '',
+  };
+  const app = {
+    innerHTML: '',
+    focus() {},
+  };
+  let submitHandler;
+  const filterForm = {
+    hasAttribute(attribute) {
+      return attribute === 'data-filter-form' || attribute === 'data-topic-filter-form';
+    },
+    getAttribute(attribute) {
+      return attribute === 'data-filter-base' ? '#/topics/china' : null;
+    },
+    addEventListener(event, handler) {
+      if (event === 'submit') {
+        submitHandler = handler;
+      }
+    },
+  };
+
+  class FakeFormData {
+    constructor(form) {
+      assert.equal(form, filterForm);
+    }
+
+    get(field) {
+      return formValues[field] ?? '';
+    }
+
+    entries() {
+      return Object.entries(formValues)[Symbol.iterator]();
+    }
+
+    [Symbol.iterator]() {
+      return this.entries();
+    }
+  }
+
+  globalThis.document = {
+    querySelector(selector) {
+      assert.equal(selector, '#app');
+      return app;
+    },
+    querySelectorAll(selector) {
+      assert.equal(selector, 'form');
+      return [filterForm];
+    },
+  };
+  globalThis.window = {
+    addEventListener() {},
+    scrollTo() {},
+    requestAnimationFrame(callback) {
+      callback();
+    },
+  };
+  globalThis.location = { hash: '#/topics/china' };
+  globalThis.FormData = FakeFormData;
+
+  try {
+    const moduleUrl = new URL('../src/main.js', import.meta.url);
+    moduleUrl.search = `topic-filter-form-smoke=${Date.now()}`;
+
+    await import(moduleUrl.href);
+    assert.equal(typeof submitHandler, 'function');
+
+    submitHandler({ preventDefault() {} });
+
+    assert.equal(globalThis.location.hash, '#/topics/china?q=AIIB&recordType=academic-article');
   } finally {
     if (originalDocument === undefined) {
       delete globalThis.document;

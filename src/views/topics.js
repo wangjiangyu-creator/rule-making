@@ -1,10 +1,12 @@
 import { dimensions } from '../data/dimensions.js';
-import { records } from '../data/records.js?v=20260526g';
+import { actors } from '../data/actors.js';
+import { institutions } from '../data/institutions.js';
+import { records } from '../data/records.js?v=20260526h';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
-import { formatDate, recordTypeLabel } from '../lib/format.js';
-import { isChinaRelatedRecord, sortRecordsForContext } from '../lib/search.js';
+import { authorityLabel, formatDate, humanizeId, recordTypeLabel } from '../lib/format.js';
+import { filterRecords, isChinaRelatedRecord, sortRecordsForContext } from '../lib/search.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -17,6 +19,61 @@ function escapeHtml(value) {
 
 function asList(value) {
   return Array.isArray(value) ? value : [];
+}
+
+function findById(items, id) {
+  return items.find((item) => item.id === id);
+}
+
+function currentHashParams() {
+  const hash = globalThis.location?.hash ?? '';
+  const queryStart = hash.indexOf('?');
+
+  return new URLSearchParams(queryStart === -1 ? '' : hash.slice(queryStart + 1));
+}
+
+function currentTopicFilters() {
+  const params = currentHashParams();
+
+  return {
+    query: params.get('q') ?? '',
+    recordType: params.get('recordType') ?? '',
+    dimension: params.get('dimension') ?? '',
+    actor: params.get('actor') ?? '',
+    institution: params.get('institution') ?? '',
+    sourceAuthority: params.get('sourceAuthority') ?? '',
+    languageStatus: params.get('languageStatus') ?? '',
+    year: params.get('year') ?? '',
+  };
+}
+
+function hasActiveTopicFilters(filters) {
+  return Object.values(filters).some((value) => String(value ?? '').trim() !== '');
+}
+
+function uniqueSortedOptions(values, labelForValue = (value) => value, sort = (left, right) =>
+  left.label.localeCompare(right.label)) {
+  return [...new Set(values.map((value) => String(value ?? '').trim()).filter(Boolean))]
+    .map((value) => ({ value, label: labelForValue(value) }))
+    .sort(sort);
+}
+
+function renderOption(value, label, selectedValue) {
+  const selected = value === selectedValue ? ' selected' : '';
+
+  return `<option value="${escapeHtml(value)}"${selected}>${escapeHtml(label)}</option>`;
+}
+
+function renderSelect(name, label, options, selectedValue, emptyLabel) {
+  return `
+    <label>
+      <span>${escapeHtml(label)}</span>
+      <select name="${escapeHtml(name)}">
+        ${renderOption('', emptyLabel, selectedValue)}
+        ${options.map((option) => renderOption(option.value, option.label, selectedValue)).join('')}
+      </select>
+    </label>
+  `;
 }
 
 function renderDimensionLinks(ids) {
@@ -46,6 +103,73 @@ function recordsForTopic(topicId) {
     records.filter((record) => asList(record.topics).includes(topicId)),
     { promoteChina: topicId !== 'china' },
   );
+}
+
+function renderTopicFilterForm(topic, linkedRecords, filters) {
+  const recordTypeOptions = uniqueSortedOptions(
+    linkedRecords.map((record) => record.recordType),
+    recordTypeLabel,
+  );
+  const dimensionOptions = uniqueSortedOptions(
+    linkedRecords.flatMap((record) => asList(record.dimensions)),
+    (dimensionId) => findById(dimensions, dimensionId)?.title ?? dimensionId,
+  );
+  const actorOptions = uniqueSortedOptions(
+    linkedRecords.flatMap((record) => asList(record.actors)),
+    (actorId) => findById(actors, actorId)?.name ?? humanizeId(actorId),
+  );
+  const institutionOptions = uniqueSortedOptions(
+    linkedRecords.flatMap((record) => asList(record.institutions)),
+    (institutionId) => {
+      const institution = findById(institutions, institutionId);
+      return institution?.shortName ?? institution?.name ?? humanizeId(institutionId);
+    },
+  );
+  const sourceAuthorityOptions = uniqueSortedOptions(
+    linkedRecords.map((record) => record.sourceAuthority),
+    authorityLabel,
+  );
+  const languageStatusOptions = uniqueSortedOptions(
+    linkedRecords.map((record) => record.languageStatus),
+    humanizeId,
+  );
+  const yearOptions = uniqueSortedOptions(
+    linkedRecords.map((record) => record.year),
+    (year) => year,
+    (left, right) => right.label.localeCompare(left.label),
+  );
+
+  return `
+    <form class="filter-form topic-filter-form" data-filter-form data-topic-filter-form data-filter-base="#/topics/${escapeHtml(topic.id)}">
+      <label>
+        <span>Search this topic</span>
+        <input name="q" type="search" autocomplete="off" value="${escapeHtml(filters.query)}">
+      </label>
+      ${renderSelect('recordType', 'Category', recordTypeOptions, filters.recordType, 'All categories')}
+      ${renderSelect('dimension', 'Dimension', dimensionOptions, filters.dimension, 'All dimensions')}
+      ${renderSelect('actor', 'Actor', actorOptions, filters.actor, 'All actors')}
+      ${renderSelect('institution', 'Institution', institutionOptions, filters.institution, 'All institutions')}
+      ${renderSelect(
+        'sourceAuthority',
+        'Source authority',
+        sourceAuthorityOptions,
+        filters.sourceAuthority,
+        'All source authorities',
+      )}
+      ${renderSelect(
+        'languageStatus',
+        'Language status',
+        languageStatusOptions,
+        filters.languageStatus,
+        'All language statuses',
+      )}
+      ${renderSelect('year', 'Year', yearOptions, filters.year, 'All years')}
+      <div class="button-row">
+        <button class="button button-primary" type="submit">Apply topic filters</button>
+        <a class="button button-secondary" href="#/topics/${escapeHtml(topic.id)}">Clear topic filters</a>
+      </div>
+    </form>
+  `;
 }
 
 const chinaRecordTypeOrder = [
@@ -197,6 +321,18 @@ export function renderTopicDetail(topicId) {
   }
 
   const linkedRecords = recordsForTopic(topic.id);
+  const filters = currentTopicFilters();
+  const filteredRecords = filterRecords(linkedRecords, {
+    query: filters.query,
+    recordType: filters.recordType,
+    dimension: filters.dimension,
+    actor: filters.actor,
+    institution: filters.institution,
+    sourceAuthority: filters.sourceAuthority,
+    languageStatus: filters.languageStatus,
+    year: filters.year,
+  });
+  const activeFilters = hasActiveTopicFilters(filters);
   const topicTimeline = timeline
     .filter((entry) => entry.topicId === topic.id)
     .sort((left, right) => left.date.localeCompare(right.date));
@@ -264,19 +400,26 @@ export function renderTopicDetail(topicId) {
 
     <section>
       <h2>Linked records</h2>
-      <p>${
-        topic.id === 'china'
-          ? `${linkedRecords.length} records linked to this topic, grouped under the current category model.`
-          : `${linkedRecords.length} records linked to this topic.`
-      }</p>
+      <p>
+        ${
+          activeFilters
+            ? `${filteredRecords.length} record${filteredRecords.length === 1 ? '' : 's'} shown, filtered from ${linkedRecords.length} total records linked to this topic.`
+            : topic.id === 'china'
+              ? `${linkedRecords.length} records linked to this topic, grouped under the current category model.`
+              : `${linkedRecords.length} records linked to this topic.`
+        }
+      </p>
+      ${renderTopicFilterForm(topic, linkedRecords, filters)}
       ${
-        topic.id === 'china'
-          ? renderChinaRecordSections(linkedRecords)
-          : `
-            <div class="record-list">
-              ${linkedRecords.map(renderRecordRow).join('')}
-            </div>
-          `
+        filteredRecords.length > 0
+          ? topic.id === 'china'
+            ? renderChinaRecordSections(filteredRecords)
+            : `
+              <div class="record-list">
+                ${filteredRecords.map(renderRecordRow).join('')}
+              </div>
+            `
+          : '<p>No records match the current topic filters.</p>'
       }
     </section>
   `;
