@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526e';
+import { records } from '../src/data/records.js?v=20260526f';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526e"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526e"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526f"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526f"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /class="site-footer"/);
   assert.match(html, /This website was created with Codex by Professor Wang Jiangyu of CityUHK\./);
@@ -36,12 +36,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526e`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526f`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526e/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526f/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -305,6 +305,27 @@ test('third China batch propagates to G20, ASEAN, and AI-governance entry pages'
   assert.match(aiHtml, /Artificial Intelligence Capacity-Building Action Plan for Good and for All/);
   assert.match(aiHtml, /Global AI Governance Action Plan/);
   assert.ok(aiHtml.indexOf('Global AI Governance Action Plan') < aiHtml.indexOf('OECD AI Principles'));
+});
+
+test('China topic page groups linked records by current categories with divider lines', () => {
+  const chinaHtml = renderTopicDetail('china');
+  const wtoHtml = renderInstitutionDetail('wto');
+  const aiibHtml = renderInstitutionDetail('aiib');
+  const digitalHtml = renderTopicDetail('digital-trade-ecommerce');
+
+  assert.match(chinaHtml, /grouped under the current category model/);
+  assert.match(chinaHtml, /Official statements/);
+  assert.match(chinaHtml, /Institutional documents/);
+  assert.match(chinaHtml, /Research reports/);
+  assert.match(chinaHtml, /Academic articles/);
+  assert.match(chinaHtml, /Books and chapters/);
+  assert.match(chinaHtml, /record-category-divider/);
+  assert.match(chinaHtml, /Different Paths to Power: The Rise of Brazil, India and China at the World Trade Organization/);
+  assert.match(chinaHtml, /Shaping AI&#39;s Future\? China in Global AI Governance/);
+  assert.match(wtoHtml, /China in this institution/);
+  assert.match(wtoHtml, /Different Paths to Power: The Rise of Brazil, India and China at the World Trade Organization/);
+  assert.match(aiibHtml, /China challenges global governance\? Chinese international development finance and the AIIB/);
+  assert.doesNotMatch(digitalHtml, /record-category-divider/);
 });
 
 test('actor detail pages expose topic distribution and the newest comparison materials', () => {

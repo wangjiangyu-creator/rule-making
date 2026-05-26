@@ -153,6 +153,10 @@ The search and resulting batch should be organized across several analytical clu
 
 ### China and Multilateral Trade Rule-Making
 
+#### Focus
+
+Scholarship on China's role in trade negotiations, WTO reform, and trade-governance strategy.
+
 This cluster should include scholarship on:
 
 - WTO accession and post-accession positioning
@@ -161,7 +165,13 @@ This cluster should include scholarship on:
 - investment facilitation and development framing
 - coalition politics inside or around WTO processes
 
+---
+
 ### China and International Economic Law
+
+#### Focus
+
+Scholarship on how China engages international economic law as user, reformer, interpreter, and institutional actor.
 
 This cluster should include scholarship on:
 
@@ -171,7 +181,13 @@ This cluster should include scholarship on:
 - rule interpretation
 - institutional contestation within international economic law
 
+---
+
 ### China and Political Economy of Rule-Making
+
+#### Focus
+
+Scholarship on power, leverage, regulatory strategy, and institutional competition in China's rule-making behavior.
 
 This cluster should include scholarship on:
 
@@ -181,7 +197,13 @@ This cluster should include scholarship on:
 - market size, supply chains, and regulatory leverage
 - state capitalism and rule export where it links directly to governance design
 
+---
+
 ### China and Development / Development Finance Governance
+
+#### Focus
+
+Scholarship on BRI, development finance, and the governance implications of China's development-facing institutional activity.
 
 This cluster should include scholarship on:
 
@@ -191,7 +213,13 @@ This cluster should include scholarship on:
 - World Bank or IMF engagement
 - South-South framing and development-cooperation rule-making
 
+---
+
 ### China and Technology / Digital / AI Governance
+
+#### Focus
+
+Scholarship on cyber, data, digital, and AI rule-making strategies connected to China.
 
 This cluster should include scholarship on:
 
@@ -202,7 +230,13 @@ This cluster should include scholarship on:
 - standards and technical rule-making
 - competing governance models involving China
 
+---
+
 ### China and Comparative Institutional Strategy
+
+#### Focus
+
+Scholarship comparing China's institutional choices, coalition behavior, and governance pathways with other actors and forums.
 
 This cluster should include scholarship on:
 

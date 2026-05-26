@@ -1,5 +1,5 @@
 import { dimensions } from '../data/dimensions.js';
-import { records } from '../data/records.js?v=20260526e';
+import { records } from '../data/records.js?v=20260526f';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
@@ -46,6 +46,84 @@ function recordsForTopic(topicId) {
     records.filter((record) => asList(record.topics).includes(topicId)),
     { promoteChina: topicId !== 'china' },
   );
+}
+
+const chinaRecordTypeOrder = [
+  'official-statement',
+  'negotiation-record',
+  'institutional-document',
+  'treaty-agreement',
+  'national-law-policy',
+  'case-dispute-award',
+  'research-report',
+  'academic-article',
+  'book-chapter',
+];
+
+const chinaRecordTypeSectionLabels = {
+  'official-statement': 'Official statements',
+  'negotiation-record': 'Negotiation records',
+  'institutional-document': 'Institutional documents',
+  'treaty-agreement': 'Treaties and agreements',
+  'national-law-policy': 'National law and policy',
+  'case-dispute-award': 'Cases, disputes, and awards',
+  'research-report': 'Research reports',
+  'academic-article': 'Academic articles',
+  'book-chapter': 'Books and chapters',
+};
+
+function groupedChinaRecords(linkedRecords) {
+  const grouped = [];
+  const seen = new Set();
+
+  for (const recordType of chinaRecordTypeOrder) {
+    const recordsForType = linkedRecords.filter((record) => record.recordType === recordType);
+    if (recordsForType.length === 0) continue;
+
+    grouped.push({
+      recordType,
+      label: chinaRecordTypeSectionLabels[recordType] ?? recordTypeLabel(recordType),
+      records: recordsForType,
+    });
+    seen.add(recordType);
+  }
+
+  for (const record of linkedRecords) {
+    if (seen.has(record.recordType)) continue;
+
+    const existingGroup = grouped.find((group) => group.recordType === record.recordType);
+    if (existingGroup) {
+      existingGroup.records.push(record);
+      continue;
+    }
+
+    grouped.push({
+      recordType: record.recordType,
+      label: recordTypeLabel(record.recordType),
+      records: [record],
+    });
+  }
+
+  return grouped;
+}
+
+function renderChinaRecordSections(linkedRecords) {
+  const groups = groupedChinaRecords(linkedRecords);
+
+  return groups
+    .map(
+      (group, index) => `
+        <section class="record-category">
+          <h3 class="record-category-heading">${escapeHtml(group.label)}</h3>
+          <p class="record-category-count">${group.records.length} record${group.records.length === 1 ? '' : 's'} in this category.</p>
+          <div class="record-list">
+            ${group.records.map(renderRecordRow).join('')}
+          </div>
+        </section>
+        ${index < groups.length - 1 ? '<hr class="record-category-divider">' : ''}
+      `,
+    )
+    .join('');
 }
 
 function renderTopicCard(topic) {
@@ -186,10 +264,20 @@ export function renderTopicDetail(topicId) {
 
     <section>
       <h2>Linked records</h2>
-      <p>${linkedRecords.length} records linked to this topic.</p>
-      <div class="record-list">
-        ${linkedRecords.map(renderRecordRow).join('')}
-      </div>
+      <p>${
+        topic.id === 'china'
+          ? `${linkedRecords.length} records linked to this topic, grouped under the current category model.`
+          : `${linkedRecords.length} records linked to this topic.`
+      }</p>
+      ${
+        topic.id === 'china'
+          ? renderChinaRecordSections(linkedRecords)
+          : `
+            <div class="record-list">
+              ${linkedRecords.map(renderRecordRow).join('')}
+            </div>
+          `
+      }
     </section>
   `;
 }

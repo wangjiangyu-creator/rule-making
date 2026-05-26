@@ -1123,4 +1123,106 @@ export const recordDimensionsById = {
     'legitimacy-management',
     'norm-entrepreneurship-drafting-power',
   ],
+  'hopewell-rise-brazil-india-china-wto-2014': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'breslin-embedded-socialist-compromise-wto-2003': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'qin-wto-plus-obligations-china-accession-2003': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'zhou-gao-bai-wto-inspired-soe-reform-2019': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'bishop-zhang-reluctant-leader-wto-2019': [
+    'agenda-setting',
+    'legitimacy-management',
+  ],
+  'scott-china-threat-evidence-wto-2013': [
+    'legitimacy-management',
+    'coalition-consensus-building',
+  ],
+  'antkiewicz-whalley-china-regional-trade-agreements-2005': [
+    'coalition-consensus-building',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'pearson-china-geneva-early-years-wto-2006': [
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'kong-chinese-approach-practice-bits-2003': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'cai-china-us-bit-negotiations-2009': [
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'cohen-schneiderman-chinese-bit-policy-2017': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'blanchard-zeng-global-economic-governance-bits-2020': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'gu-humphrey-messner-rise-china-global-governance-2007': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'chin-thakur-change-rules-global-order-2010': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'hameiri-jones-china-challenges-global-governance-aiib-2018': [
+    'legitimacy-management',
+    'objective-setting',
+  ],
+  'wu-remaking-bretton-woods-aiib-2018': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'hooijmaaijers-brics-limitations-global-economic-governance-2019': [
+    'coalition-consensus-building',
+    'legitimacy-management',
+  ],
+  'zeng-chinese-views-global-economic-governance-2019': [
+    'agenda-setting',
+    'objective-setting',
+  ],
+  'ji-lim-chinese-way-reforming-global-economic-governance-g20-2021': [
+    'agenda-setting',
+    'coalition-consensus-building',
+  ],
+  'hearson-prichard-china-tax-rules-global-governance-2018': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'creemers-cyber-sovereignty-rhetoric-realization-2020': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'hong-goodnight-think-about-cyber-sovereignty-china-2019': [
+    'objective-setting',
+    'legitimacy-management',
+  ],
+  'borgogno-zangrandi-data-governance-trade-policy-2024': [
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'cheng-zeng-china-global-ai-governance-2022': [
+    'agenda-setting',
+    'objective-setting',
+    'norm-entrepreneurship-drafting-power',
+  ],
+  'roberts-moraes-ferguson-geoeconomic-order-2019': [
+    'objective-setting',
+    'legitimacy-management',
+    'norm-entrepreneurship-drafting-power',
+  ],
 };

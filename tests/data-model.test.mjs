@@ -954,6 +954,78 @@ test('third China official-source batch deepens G20, ASEAN, and UN AI governance
   );
 });
 
+test('China scholarship batch adds a broad academic shelf across trade, investment, governance, and technology', () => {
+  const expectedIds = [
+    'hopewell-rise-brazil-india-china-wto-2014',
+    'breslin-embedded-socialist-compromise-wto-2003',
+    'qin-wto-plus-obligations-china-accession-2003',
+    'zhou-gao-bai-wto-inspired-soe-reform-2019',
+    'bishop-zhang-reluctant-leader-wto-2019',
+    'scott-china-threat-evidence-wto-2013',
+    'antkiewicz-whalley-china-regional-trade-agreements-2005',
+    'pearson-china-geneva-early-years-wto-2006',
+    'kong-chinese-approach-practice-bits-2003',
+    'cai-china-us-bit-negotiations-2009',
+    'cohen-schneiderman-chinese-bit-policy-2017',
+    'blanchard-zeng-global-economic-governance-bits-2020',
+    'gu-humphrey-messner-rise-china-global-governance-2007',
+    'chin-thakur-change-rules-global-order-2010',
+    'hameiri-jones-china-challenges-global-governance-aiib-2018',
+    'wu-remaking-bretton-woods-aiib-2018',
+    'hooijmaaijers-brics-limitations-global-economic-governance-2019',
+    'zeng-chinese-views-global-economic-governance-2019',
+    'ji-lim-chinese-way-reforming-global-economic-governance-g20-2021',
+    'hearson-prichard-china-tax-rules-global-governance-2018',
+    'creemers-cyber-sovereignty-rhetoric-realization-2020',
+    'hong-goodnight-think-about-cyber-sovereignty-china-2019',
+    'borgogno-zangrandi-data-governance-trade-policy-2024',
+    'cheng-zeng-china-global-ai-governance-2022',
+    'roberts-moraes-ferguson-geoeconomic-order-2019',
+  ];
+  const recordIds = new Set(records.map((record) => record.id));
+  const byTopic = Object.fromEntries(
+    topics.map((topic) => [topic.id, records.filter((record) => record.topics.includes(topic.id))]),
+  );
+
+  for (const expectedId of expectedIds) {
+    assert.ok(recordIds.has(expectedId), `${expectedId} exists`);
+  }
+
+  assert.ok(byTopic.china.length >= 95, 'china topic has at least ninety-five records');
+  assert.ok(
+    byTopic.china.filter((record) => record.recordType === 'academic-article').length >= 20,
+    'china topic includes a deep academic-article shelf',
+  );
+  assert.ok(
+    byTopic.china.filter((record) => record.recordType === 'book-chapter').length >= 2,
+    'china topic includes book or chapter coverage',
+  );
+  assert.ok(
+    byTopic['wto-reform'].some((record) => record.id === 'hopewell-rise-brazil-india-china-wto-2014'),
+    'wto reform topic includes the new China scholarship shelf',
+  );
+  assert.ok(
+    byTopic['international-investment'].some((record) => record.id === 'cai-china-us-bit-negotiations-2009'),
+    'international investment topic includes the new China treaty literature',
+  );
+  assert.ok(
+    byTopic['monetary-financial-regulation'].some(
+      (record) => record.id === 'hameiri-jones-china-challenges-global-governance-aiib-2018',
+    ),
+    'money and finance topic includes China governance scholarship',
+  );
+  assert.ok(
+    byTopic['cyber-data-governance'].some(
+      (record) => record.id === 'borgogno-zangrandi-data-governance-trade-policy-2024',
+    ),
+    'cyber and data topic includes new China scholarship',
+  );
+  assert.ok(
+    byTopic['ai-governance'].some((record) => record.id === 'cheng-zeng-china-global-ai-governance-2022'),
+    'AI governance topic includes new China scholarship',
+  );
+});
+
 test('timeline entries resolve to topic and record ids', () => {
   const topicIds = new Set(topics.map((topic) => topic.id));
   const recordIds = new Set(records.map((record) => record.id));
