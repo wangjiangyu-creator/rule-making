@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526l';
+import { records } from '../src/data/records.js?v=20260526m';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526l"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526l"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526m"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526m"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /href="#\/topics">Topics<\/a>/);
   assert.doesNotMatch(html, /Digital Trade Pilot/);
@@ -39,12 +39,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526l`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526m`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526l/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526m/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -60,6 +60,18 @@ test('view renderers include core portal sections', () => {
   assert.match(renderTopics(), /Research Topics/);
   assert.match(renderDatabase(), /Rule-Making Records/);
   assert.match(renderSourcesMethod(), /Analytical dimensions/);
+});
+
+test('home page shows the live total record count below the title section', () => {
+  const homeHtml = renderHome();
+  const heroEndIndex = homeHtml.indexOf('</section>');
+  const countBoxIndex = homeHtml.indexOf('class="record-count-box"');
+  const firstFeaturePanelIndex = homeHtml.indexOf('class="feature-panel"');
+
+  assert.ok(countBoxIndex > heroEndIndex, 'record-count box appears below the title section');
+  assert.ok(countBoxIndex < firstFeaturePanelIndex, 'record-count box appears before the feature panels');
+  assert.match(homeHtml, /Total records/);
+  assert.match(homeHtml, new RegExp(`>${records.length.toLocaleString('en-US')}<`));
 });
 
 test('digital trade is presented as a normal topic rather than a top-level pilot', () => {

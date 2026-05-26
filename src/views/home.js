@@ -1,4 +1,4 @@
-import { records } from '../data/records.js?v=20260526l';
+import { records } from '../data/records.js?v=20260526m';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
@@ -49,6 +49,7 @@ function renderTimelineItem(entry) {
 export function renderHome() {
   const digitalTradeTopic = topics.find((topic) => topic.id === 'digital-trade-ecommerce');
   const recentRecords = sortRecordsNewestFirst(records).slice(0, 5);
+  const totalRecordCount = records.length.toLocaleString('en-US');
   const digitalTradeTimeline = timeline
     .filter((entry) => entry.topicId === 'digital-trade-ecommerce')
     .sort((left, right) => left.date.localeCompare(right.date))
@@ -70,6 +71,14 @@ export function renderHome() {
           <button class="button button-primary" type="submit">Search</button>
         </div>
       </form>
+    </section>
+
+    <section class="record-count-box" aria-label="Portal record count">
+      <div>
+        <p class="eyebrow">Database size</p>
+        <p>Structured source records currently available for search, topic pages, and actor comparisons.</p>
+      </div>
+      <p class="record-count-value"><span>${escapeHtml(totalRecordCount)}</span> Total records</p>
     </section>
 
     <section class="feature-panel">
