@@ -9,14 +9,14 @@ import { renderTopicDetail, renderTopics } from '../src/views/topics.js';
 import { renderTimelinePage } from '../src/views/timeline.js';
 import { renderSourcesMethod } from '../src/views/sources.js';
 import { renderDatabase, renderRecordDetail } from '../src/views/database.js';
-import { records } from '../src/data/records.js?v=20260526m';
+import { records } from '../src/data/records.js?v=20260526n';
 
 test('index renders the static app mount and asset links', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /<main\s+id="app"/);
-  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526m"/);
-  assert.match(html, /src="\.\/src\/main\.js\?v=20260526m"/);
+  assert.match(html, /href="\.\/src\/styles\.css\?v=20260526n"/);
+  assert.match(html, /src="\.\/src\/main\.js\?v=20260526n"/);
   assert.match(html, /Great Powers and Rule-Making/);
   assert.match(html, /href="#\/topics">Topics<\/a>/);
   assert.doesNotMatch(html, /Digital Trade Pilot/);
@@ -39,12 +39,12 @@ test('public module graph cache-busts route and records modules', async () => {
   ];
 
   for (const view of ['actors', 'database', 'dimensions', 'home', 'institutions', 'timeline', 'topics']) {
-    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526m`), `${view} view import is cache-busted`);
+    assert.match(mainJs, new RegExp(`\\.\\/views\\/${view}\\.js\\?v=20260526n`), `${view} view import is cache-busted`);
   }
 
   for (const viewFile of viewFiles) {
     const viewJs = await readFile(new URL(viewFile, import.meta.url), 'utf8');
-    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526m/, `${viewFile} records import is cache-busted`);
+    assert.match(viewJs, /\.\.\/data\/records\.js\?v=20260526n/, `${viewFile} records import is cache-busted`);
   }
 });
 
@@ -72,6 +72,16 @@ test('home page shows the live total record count below the title section', () =
   assert.ok(countBoxIndex < firstFeaturePanelIndex, 'record-count box appears before the feature panels');
   assert.match(homeHtml, /Total records/);
   assert.match(homeHtml, new RegExp(`>${records.length.toLocaleString('en-US')}<`));
+});
+
+test('home hero title and top spacing stay compact on laptop screens', async () => {
+  const homeHtml = renderHome();
+  const css = await readFile(new URL('../src/styles.css', import.meta.url), 'utf8');
+
+  assert.match(homeHtml, /<h1 class="home-title">Great Powers and Rule-Making<\/h1>/);
+  assert.match(css, /main\s*\{\s*width:[^}]+padding:\s*clamp\(1rem,\s*3vw,\s*2rem\)\s+0\s+clamp\(2\.5rem,\s*8vw,\s*6rem\);/s);
+  assert.match(css, /\.home-title\s*\{[^}]*max-width:\s*none;[^}]*font-size:\s*clamp\(2\.6rem,\s*5vw,\s*3\.35rem\);[^}]*white-space:\s*nowrap;[^}]*\}/s);
+  assert.match(css, /@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*\.home-title\s*\{[^}]*white-space:\s*normal;[^}]*\}/);
 });
 
 test('digital trade is presented as a normal topic rather than a top-level pilot', () => {

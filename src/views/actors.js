@@ -1,6 +1,6 @@
 import { dimensionById, summarizeDimensions } from '../lib/dimensions.js';
 import { actors } from '../data/actors.js';
-import { records } from '../data/records.js?v=20260526m';
+import { records } from '../data/records.js?v=20260526n';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
 import { formatDate, humanizeId, recordTypeLabel } from '../lib/format.js';

@@ -1,7 +1,7 @@
 import { dimensions } from '../data/dimensions.js';
 import { actors } from '../data/actors.js';
 import { institutions } from '../data/institutions.js';
-import { records } from '../data/records.js?v=20260526m';
+import { records } from '../data/records.js?v=20260526n';
 import { timeline } from '../data/timeline.js';
 import { topics } from '../data/topics.js';
 import { attributionDisplay } from '../lib/attribution.js';
